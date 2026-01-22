@@ -7,9 +7,13 @@ import Footer from './components/Footer';
 import TiredOf from './components/TiredOf';
 import Loader from './components/Loader';
 import Cursor from './components/Cursor';
+import About from './components/About';
+import ServicesPage from './components/ServicesPage';
+import ContactPage from './components/ContactPage';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState('home');
 
   // Prevent scrolling while loading
   useEffect(() => {
@@ -20,18 +24,51 @@ const App: React.FC = () => {
     }
   }, [loading]);
 
+  const handleNavigation = (page: string) => {
+    if (page === currentPage) return;
+    
+    // Trigger loader for page transition effect
+    setLoading(true);
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+
+    // Change content after a brief delay to allow loader to appear
+    setTimeout(() => {
+        setCurrentPage(page);
+    }, 100);
+  };
+
   return (
-    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none">
+    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none min-h-screen flex flex-col">
       <Cursor />
       {loading && <Loader onComplete={() => setLoading(false)} />}
       
-      <Navbar />
-      <main>
-        <Hero />
-        <Work />
-        <TiredOf />
-        <Manifesto />
+      <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
+      
+      <main className="flex-grow">
+        {currentPage === 'home' && (
+          <>
+            <Hero />
+            <Work />
+            <TiredOf />
+            <Manifesto />
+          </>
+        )}
+
+        {currentPage === 'about' && (
+          <About />
+        )}
+
+        {currentPage === 'services' && (
+          <ServicesPage />
+        )}
+
+        {currentPage === 'contact' && (
+          <ContactPage />
+        )}
       </main>
+      
       <Footer />
     </div>
   );

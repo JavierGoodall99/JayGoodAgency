@@ -78,7 +78,7 @@ const Work: React.FC = () => {
       <div className="block md:hidden py-20 px-6">
         <div className="mb-12">
             <h2 className="font-display font-bold text-5xl text-white leading-none mb-4">
-                SELECTED <span className="text-brand-lime">WORKS</span>
+                LATEST <span className="text-brand-lime">WORK</span>
             </h2>
              <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
                 Case Studies
@@ -125,7 +125,7 @@ const Work: React.FC = () => {
           <div className="container mx-auto px-6 pt-24 md:pt-32 flex justify-between items-end shrink-0 relative z-20">
               <div>
                   <h2 className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-none">
-                      SELECTED <span className="text-brand-lime">WORKS</span>
+                      LATEST <span className="text-brand-lime">WORK</span>
                   </h2>
               </div>
               <div className="hidden md:block text-right">

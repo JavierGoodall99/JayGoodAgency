@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onNavigate: (page: string) => void;
+  currentPage: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLinkIndex, setHoveredLinkIndex] = useState<number | null>(null);
   const [time, setTime] = useState<string>('');
@@ -22,18 +27,34 @@ const Navbar: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, pageName?: string) => {
     e.preventDefault();
-    const targetId = href.replace('#', '');
-    const element = document.getElementById(targetId);
-    
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else if (href === '#') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    
     setIsOpen(false);
+
+    // If it's a page navigation
+    if (pageName) {
+        onNavigate(pageName);
+        return;
+    }
+
+    // If it's an anchor link (like #work)
+    if (href.startsWith('#')) {
+        // If we are not on home, go home first, then scroll (simple approach: just go home)
+        if (currentPage !== 'home') {
+            onNavigate('home');
+            // Optional: You could pass a 'section' param to App to handle scrolling after load
+            return;
+        }
+
+        // If we are on home, smooth scroll
+        const targetId = href.replace('#', '');
+        const element = document.getElementById(targetId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        } else if (href === '#') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
   };
 
   const navLinks = [
@@ -41,7 +62,29 @@ const Navbar: React.FC = () => {
       name: 'Work', 
       href: '#work', 
       id: '01',
+      page: 'home', // Navigate to home then scroll
       image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop'
+    },
+    { 
+      name: 'About', 
+      href: '/about', 
+      id: '02',
+      page: 'about',
+      image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop'
+    },
+    { 
+      name: 'Services', 
+      href: '/services', 
+      id: '03',
+      page: 'services',
+      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop'
+    },
+    { 
+      name: 'Contact', 
+      href: '/contact', 
+      id: '04',
+      page: 'contact',
+      image: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?q=80&w=2670&auto=format&fit=crop'
     },
   ];
 
@@ -55,7 +98,7 @@ const Navbar: React.FC = () => {
             {/* Logo */}
             <a 
               href="#" 
-              onClick={(e) => scrollToSection(e, '#')} 
+              onClick={(e) => handleLinkClick(e, '#', 'home')} 
               className="font-display font-bold text-2xl tracking-tighter group"
             >
               JAYGOOD<span className="text-brand-lime transition-opacity duration-300 group-hover:opacity-50">.</span>
@@ -123,7 +166,7 @@ const Navbar: React.FC = () => {
                     >
                         <a 
                             href={link.href}
-                            onClick={(e) => scrollToSection(e, link.href)}
+                            onClick={(e) => handleLinkClick(e, link.href, link.page)}
                             className={`
                                 block font-display font-bold text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tighter
                                 transition-all duration-500 ease-out flex items-center gap-4 md:gap-8 justify-center
