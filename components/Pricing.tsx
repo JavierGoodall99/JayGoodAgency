@@ -1,104 +1,86 @@
 import React from 'react';
-import { Sparkles, Zap, Smartphone, Globe, Shield, RefreshCw, PenTool, Layout } from 'lucide-react';
-
-const features = [
-  {
-    title: "Custom Website Design",
-    description: "We design and launch your custom website from scratch, with unlimited revisions.",
-    icon: Layout
-  },
-  {
-    title: "Domain & Hosting",
-    description: "We handle domain registration and fast, secure hosting all included.",
-    icon: Globe
-  },
-  {
-    title: "Unlimited Edits & Updates",
-    description: "Need to change text, photos, hours, or services? We make updates within 24 hours with no extra charges.",
-    icon: RefreshCw
-  },
-  {
-    title: "Mobile-Optimized Design",
-    description: "Your site will look great and work smoothly on all devices.",
-    icon: Smartphone
-  },
-  {
-    title: "SEO & Performance Optimization",
-    description: "We optimize your site for search engines and speed to maximize your online visibility.",
-    icon: Zap
-  },
-  {
-    title: "Ongoing Support & Maintenance",
-    description: "We handle the tech stuff like backups, security, and performance so you don't have to.",
-    icon: Shield
-  },
-  {
-    title: "Lightning Fast Turnaround",
-    description: "7-10 days guaranteed from concept to launch.",
-    icon: Sparkles
-  },
-  {
-    title: "Fully Done for You",
-    description: "You just tell us your vision and we handle everything else.",
-    icon: PenTool
-  }
-];
+import { Check } from 'lucide-react';
 
 const Pricing: React.FC = () => {
   return (
-    <section id="pricing" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
-      <div className="container mx-auto max-w-5xl">
-        <div className="mb-20 text-center">
-            <h2 className="font-display font-semibold text-4xl md:text-7xl mb-6">ONE SIMPLE PLAN</h2>
-            <div className="h-1 w-20 bg-brand-lime mx-auto mb-8"></div>
-            <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            Stop worrying about hourly rates, plugin updates, or server crashes. We become your dedicated digital partner for a flat, transparent rate.
+    <section id="pricing" className="py-20 md:py-32 px-6 bg-brand-dark border-t border-white/10">
+      <div className="container mx-auto">
+        
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-end">
+            <h2 className="font-display font-bold text-6xl md:text-8xl leading-none">
+                ENGAGEMENT <br/> 
+                <span className="text-brand-lime">MODELS</span>
+            </h2>
+            <p className="text-gray-400 max-w-sm text-right mt-8 md:mt-0">
+                We partner with ambitious brands. Choose the velocity that suits your growth trajectory.
             </p>
         </div>
 
-        <div className="relative border border-brand-lime bg-white/[0.02] p-6 md:p-16 overflow-hidden group">
-            {/* Background Glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-brand-lime/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-
-            <div className="flex flex-col md:flex-row justify-between items-center border-b border-white/10 pb-12 mb-12 gap-8">
-                <div className="text-center md:text-left">
-                    <h3 className="font-display font-bold text-2xl md:text-4xl text-white mb-2">THE PARTNERSHIP</h3>
-                    <p className="text-gray-400 text-sm md:text-base">Everything you need to dominate your market.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
+            
+            {/* Model 1: Project Based */}
+            <div className="bg-brand-dark p-8 md:p-16 hover:bg-white/[0.02] transition-colors duration-500 group relative">
+                <div className="absolute top-8 right-8 text-brand-lime font-mono text-xs uppercase tracking-widest border border-brand-lime px-3 py-1 rounded-full">
+                    Most Common
                 </div>
-                <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                    <div className="text-center">
-                         <span className="block text-xs md:text-sm text-gray-500 font-mono tracking-widest uppercase mb-1">Starting At</span>
-                         <span className="text-4xl md:text-6xl font-display font-bold text-white">$1,000</span>
-                    </div>
-                    <div className="hidden md:block text-2xl text-brand-lime font-light">+</div>
-                    <div className="text-center">
-                        <span className="block text-xs md:text-sm text-gray-500 font-mono tracking-widest uppercase mb-1">Then Just</span>
-                         <span className="text-4xl md:text-6xl font-display font-bold text-brand-lime">$100<span className="text-xl text-gray-400 ml-1">/mo</span></span>
-                    </div>
+                
+                <h3 className="font-display font-bold text-4xl text-white mb-2">SPRINT</h3>
+                <p className="text-gray-500 font-mono text-sm uppercase tracking-widest mb-12">One-Time Project</p>
+
+                <div className="text-5xl font-display font-bold text-white mb-12">
+                    <span className="text-2xl align-top text-gray-500 font-normal mr-2">from</span>
+                    $15k
                 </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
-                {features.map((feature, idx) => (
-                    <div key={idx} className="flex gap-5">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand-lime/10 flex items-center justify-center text-brand-lime border border-brand-lime/20">
-                            <feature.icon size={20} />
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-white text-lg mb-2">{feature.title}</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                <ul className="space-y-6 mb-16">
+                    {['Brand Identity System', 'Custom 3D/WebGL Website', 'CMS Integration', 'SEO Foundation', '4-6 Week Turnaround'].map(item => (
+                        <li key={item} className="flex items-center gap-4 text-gray-300">
+                            <div className="w-1 h-1 bg-brand-lime rounded-full"></div>
+                            {item}
+                        </li>
+                    ))}
+                </ul>
 
-            <div className="text-center">
-                <button className="w-full md:w-auto bg-brand-lime text-black font-display font-bold text-lg md:text-xl py-5 px-12 hover:scale-[1.02] transition-transform uppercase tracking-widest">
-                    Start Your Build
+                <button className="w-full py-6 border border-white/20 text-white font-mono text-sm uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300 cursor-interactive">
+                    Initiate Sprint
                 </button>
-                <p className="mt-6 text-xs text-gray-500 font-mono uppercase tracking-widest">No long-term contracts. Cancel anytime.</p>
             </div>
+
+            {/* Model 2: Retainer */}
+            <div className="bg-brand-dark p-8 md:p-16 hover:bg-white/[0.02] transition-colors duration-500 group relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-lime to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <h3 className="font-display font-bold text-4xl text-white mb-2">PARTNER</h3>
+                <p className="text-gray-500 font-mono text-sm uppercase tracking-widest mb-12">Ongoing Evolution</p>
+
+                <div className="text-5xl font-display font-bold text-white mb-12">
+                    <span className="text-2xl align-top text-gray-500 font-normal mr-2">from</span>
+                    $5k
+                    <span className="text-xl text-gray-500 font-normal ml-2">/mo</span>
+                </div>
+
+                <ul className="space-y-6 mb-16">
+                    {['Dedicated Design Team', 'Unlimited Request Queue', 'Priority Support', 'Quarterly Strategy Sessions', 'Cancel Anytime'].map(item => (
+                        <li key={item} className="flex items-center gap-4 text-gray-300">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+
+                <button className="w-full py-6 bg-brand-lime border border-brand-lime text-black font-mono text-sm uppercase tracking-widest hover:bg-transparent hover:text-white transition-all duration-300 cursor-interactive">
+                    Become a Partner
+                </button>
+            </div>
+
         </div>
+
+        <div className="mt-16 text-center">
+            <p className="text-gray-500 text-sm font-mono uppercase tracking-widest">
+                Need a custom enterprise solution? <a href="mailto:enterprise@jaygood.agency" className="text-white border-b border-white/20 hover:border-brand-lime transition-colors cursor-interactive">Contact Sales</a>
+            </p>
+        </div>
+
       </div>
     </section>
   );

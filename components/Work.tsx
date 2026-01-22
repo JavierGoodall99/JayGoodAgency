@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { ProjectItem } from '../types';
 
@@ -6,94 +6,205 @@ const projects: ProjectItem[] = [
   {
     id: '01',
     title: 'NEBULA FINANCE',
-    category: 'Web3 / Fintech Interface',
+    category: 'WEB3 / FINTECH',
     year: '2024',
     image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop'
   },
   {
     id: '02',
     title: 'AERO DYNAMICS',
-    category: 'Aerospace / 3D Configurator',
+    category: 'AUTOMOTIVE / 3D',
     year: '2023',
     image: 'https://images.unsplash.com/photo-1559080463-5c745741211e?q=80&w=2565&auto=format&fit=crop'
   },
   {
     id: '03',
     title: 'SILK & STONE',
-    category: 'Fashion / Headless Commerce',
+    category: 'FASHION / ECOMMERCE',
     year: '2023',
     image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'
   },
   {
     id: '04',
-    title: 'ORBITAL',
-    category: 'SaaS / AI Dashboard',
+    title: 'ORBITAL AI',
+    category: 'SAAS / PLATFORM',
     year: '2024',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop'
+  },
+  {
+    id: '05',
+    title: 'VANTAGE',
+    category: 'REAL ESTATE',
+    year: '2024',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop'
   }
 ];
 
 const Work: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      // Skip logic on mobile to avoid calculations for hidden elements
+      if (window.innerWidth < 768) return;
+
+      const element = sectionRef.current;
+      const { top, height } = element.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate scroll distance
+      const scrollDist = height - viewportHeight;
+      const scrollTop = -top;
+      
+      let progress = scrollTop / scrollDist;
+      progress = Math.max(0, Math.min(1, progress));
+      
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section id="work" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
-      <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
-            <div>
-                 <h2 className="font-display font-semibold text-5xl md:text-9xl leading-[0.8] tracking-tighter text-white mb-6">
-                    SELECTED <br />
-                    <span className="text-white/20">BUILDS</span>
-                </h2>
-            </div>
-            <div className="flex flex-col items-start md:items-end w-full md:w-auto mt-8 md:mt-0">
-                <p className="text-gray-400 max-w-sm md:text-right font-light text-lg mb-8 leading-relaxed">
-                    Digital products defined by bold aesthetics and engineering precision. We push the browser to its absolute limit.
-                </p>
-                 <a href="#" className="text-sm font-bold uppercase tracking-widest border-b border-white/20 pb-1 hover:text-brand-lime hover:border-brand-lime transition-all">
-                    View Full Archive
-                </a>
-            </div>
+    <div id="work" className="bg-brand-dark">
+      
+      {/* --- MOBILE LAYOUT (Vertical Stack) --- */}
+      <div className="block md:hidden py-20 px-6">
+        <div className="mb-12">
+            <h2 className="font-display font-bold text-5xl text-white leading-none mb-4">
+                SELECTED <span className="text-brand-lime">WORKS</span>
+            </h2>
+             <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
+                Case Studies
+            </p>
         </div>
 
-        <div className="space-y-24 md:space-y-32">
-          {projects.map((project, idx) => (
-            <div 
-              key={project.id} 
-              className={`group flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 md:gap-20 items-center`}
-            >
-              {/* Image Side */}
-              <div className="w-full md:w-3/5 relative">
-                <div className="relative overflow-hidden aspect-[4/3] md:aspect-[16/9] border border-white/10 group-hover:border-brand-lime/50 transition-colors duration-500">
-                    <div className="absolute inset-0 bg-brand-lime/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
-                    <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-all duration-700 ease-in-out"
-                    />
-                    
-                    {/* Tech Corners */}
-                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-brand-lime opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0"></div>
-                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-brand-lime opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0"></div>
+        <div className="flex flex-col gap-16">
+            {projects.map((project) => (
+                <div key={project.id} className="group">
+                    <div className="relative aspect-[4/3] overflow-hidden mb-6 border border-white/10">
+                         <img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                        />
+                         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full">
+                            <span className="font-mono text-[10px] text-white uppercase tracking-widest">{project.category}</span>
+                        </div>
+                    </div>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <span className="text-brand-lime font-mono text-xs mb-1 block">/{project.id}</span>
+                            <h3 className="font-display font-bold text-3xl text-white mb-2">{project.title}</h3>
+                        </div>
+                        <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+                             <ArrowUpRight size={18} className="text-white" />
+                        </a>
+                    </div>
                 </div>
-              </div>
-
-              {/* Text Side - Always left align on mobile, alternate on desktop */}
-              <div className={`w-full md:w-2/5 flex flex-col items-start text-left ${idx % 2 === 0 ? '' : 'md:items-end md:text-right'}`}>
-                <span className="text-brand-lime font-mono text-xs tracking-widest mb-4">0{idx + 1} / {project.year}</span>
-                <h3 className="text-3xl md:text-6xl font-display font-bold mb-4 leading-none group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">
-                    {project.title}
-                </h3>
-                <p className={`text-gray-400 text-lg mb-8 border-white/20 pl-4 border-l ${idx % 2 === 0 ? '' : 'md:border-l-0 md:border-r md:pr-4 md:pl-0'}`}>
-                    {project.category}
-                </p>
-                <button className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white group-hover:text-brand-lime transition-colors">
-                    View Live <ArrowUpRight size={16} />
-                </button>
-              </div>
+            ))}
+             <div className="pt-8 flex justify-center">
+                 <a href="#contact" className="inline-flex items-center gap-2 font-mono text-sm text-brand-lime uppercase tracking-widest border-b border-brand-lime/30 pb-1">
+                    View Archive <ArrowUpRight size={14} />
+                 </a>
             </div>
-          ))}
         </div>
       </div>
-    </section>
+
+      {/* --- DESKTOP LAYOUT (Horizontal Scroll) --- */}
+      <section ref={sectionRef} className="hidden md:block relative h-[400vh]">
+        <div className="sticky top-0 h-screen overflow-hidden flex flex-col">
+          
+          {/* Static Header */}
+          <div className="container mx-auto px-6 pt-24 md:pt-32 flex justify-between items-end shrink-0 relative z-20">
+              <div>
+                  <h2 className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-none">
+                      SELECTED <span className="text-brand-lime">WORKS</span>
+                  </h2>
+              </div>
+              <div className="hidden md:block text-right">
+                  <p className="font-mono text-sm uppercase tracking-widest text-gray-500 mb-2">
+                      Case Studies
+                  </p>
+                  <div className="text-brand-lime font-mono text-xs">
+                      ( Drag / Scroll )
+                  </div>
+              </div>
+          </div>
+
+          {/* Horizontal Track */}
+          <div className="flex-grow flex items-center relative z-10 w-full">
+              <div 
+                  ref={trackRef}
+                  className="flex gap-12 md:gap-24 pl-6 md:pl-32 items-center w-max will-change-transform"
+                  style={{ 
+                      transform: `translate3d(-${scrollProgress * 75}%, 0, 0)`,
+                  }}
+              >
+                  {projects.map((project, index) => (
+                      <div 
+                          key={project.id}
+                          className="relative group w-[85vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0"
+                      >
+                          {/* Image Container */}
+                          <div className="relative aspect-[4/3] overflow-hidden mb-8 border border-white/10 bg-brand-dark">
+                              <div className="absolute inset-0 bg-brand-lime/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+                              <img 
+                                  src={project.image} 
+                                  alt={project.title}
+                                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-110 group-hover:scale-100 transition-all duration-700 ease-out"
+                              />
+                              
+                              {/* Floating Badge */}
+                              <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full z-20">
+                                  <span className="font-mono text-xs text-white uppercase tracking-widest">{project.category}</span>
+                              </div>
+                          </div>
+
+                          {/* Info */}
+                          <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-interactive">
+                              <div>
+                                  <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
+                                  <h3 className="font-display font-bold text-4xl md:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
+                                      {project.title}
+                                  </h3>
+                              </div>
+                              <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
+                                  <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                              </div>
+                          </div>
+                      </div>
+                  ))}
+                  
+                  {/* View All / End Card */}
+                  <div className="flex-shrink-0 w-[40vw] md:w-[30vw] flex items-center justify-center pr-24">
+                      <a href="#contact" className="group flex flex-col items-center gap-6 cursor-interactive">
+                          <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-white group-hover:border-white transition-all duration-500">
+                              <ArrowUpRight size={40} className="text-white group-hover:text-black" />
+                          </div>
+                          <span className="font-display font-bold text-2xl md:text-4xl text-white">VIEW ARCHIVE</span>
+                      </a>
+                  </div>
+              </div>
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="w-full h-[1px] bg-white/10 relative z-20 mt-auto">
+              <div 
+                  className="h-full bg-brand-lime"
+                  style={{ width: `${scrollProgress * 100}%` }}
+              ></div>
+          </div>
+
+        </div>
+      </section>
+    </div>
   );
 };
 

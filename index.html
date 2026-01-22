@@ -20,14 +20,15 @@
               brand: {
                 lime: '#ccff00',
                 dark: '#050505',
-                gray: '#1a1a1a'
+                gray: '#111111',
+                silver: '#cfcfcf'
               }
             },
             animation: {
-              'marquee': 'marquee 60s linear infinite',
-              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-              'blob': 'blob 7s infinite',
-              'spin-slow': 'spin 12s linear infinite',
+              'marquee': 'marquee 40s linear infinite',
+              'fade-in-up': 'fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'glitch': 'glitch 1s linear infinite',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               marquee: {
@@ -35,14 +36,13 @@
                 '100%': { transform: 'translateX(-100%)' },
               },
               fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '0%': { opacity: '0', transform: 'translateY(40px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
               }
             }
           },
@@ -50,9 +50,18 @@
       }
     </script>
     <style>
+      :root {
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+      }
       body {
         background-color: #050505;
         color: #ffffff;
+        cursor: none; /* Hide default cursor */
+        overflow-x: hidden;
+      }
+      a, button, input, textarea, select, .cursor-pointer {
+        cursor: none;
       }
       .scrollbar-hide::-webkit-scrollbar {
           display: none;
@@ -70,7 +79,14 @@
         color: transparent;
       }
       .bg-noise {
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+      }
+      ::selection {
+        background: #ccff00;
+        color: #000;
+      }
+      .blend-difference {
+        mix-blend-mode: difference;
       }
     </style>
   <script type="importmap">

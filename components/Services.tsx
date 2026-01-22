@@ -1,60 +1,87 @@
 import React from 'react';
+import { ArrowUpRight, Plus } from 'lucide-react';
 import { ServiceItem } from '../types';
 
 const services: ServiceItem[] = [
   {
     id: '01',
-    title: 'Creative Development',
-    description: 'We turn designs into functional reality. Award-winning animations, WebGL interactions, and immersive front-end experiences.',
-    tags: ['WebGL', 'Three.js', 'GSAP']
+    title: 'Digital Direction',
+    description: 'Brand Strategy, Art Direction, Visual Identity, Motion Systems',
+    tags: ['Strategy', 'Identity']
   },
   {
     id: '02',
-    title: 'Modern Architecture',
-    description: 'Scalable, secure, and lightning-fast. We build using the latest frameworks to ensure your site performs under pressure.',
-    tags: ['Next.js', 'React', 'Headless CMS']
+    title: 'Interface Design',
+    description: 'UI/UX Design, Design Systems, Prototyping, 3D Assets',
+    tags: ['Figma', 'Blender']
   },
   {
     id: '03',
-    title: 'E-Commerce Engineering',
-    description: 'Custom storefronts that convert. From high-performance headless implementations to bespoke cart solutions, we handle the complex logic.',
-    tags: ['Headless', 'Stripe', 'Custom Checkout']
+    title: 'Creative Dev',
+    description: 'WebGL, Three.js, React, GSAP, Shader Programming',
+    tags: ['Frontend', 'WebGL']
   },
   {
     id: '04',
-    title: 'Performance & SEO',
-    description: 'Code optimized for search engines and speed. We target 100/100 Core Web Vitals for maximum visibility.',
-    tags: ['Technical SEO', 'Optimization', 'Accessibility']
+    title: 'Architecture',
+    description: 'Headless CMS, E-commerce, Backend Development, API Integration',
+    tags: ['Full Stack', 'Cloud']
   }
 ];
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative">
-      <div className="container mx-auto">
-        <div className="mb-12 md:mb-20">
-          <h2 className="font-display font-semibold text-4xl md:text-7xl mb-6">DEV EXPERTISE</h2>
-          <div className="h-1 w-20 bg-brand-lime"></div>
+    <section id="services" className="bg-brand-dark text-white py-20 md:py-32 border-t border-white/10">
+      <div className="container mx-auto px-6">
+        
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-24">
+            <h2 className="font-display font-bold text-5xl md:text-7xl">
+                CAPABILITIES
+            </h2>
+            <p className="font-mono text-gray-500 text-sm uppercase tracking-widest mt-4 md:mt-0">
+                Full Cycle Production
+            </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 md:gap-y-16">
-          {services.map((service) => (
-            <div key={service.id} className="group border-t border-white/10 pt-8 hover:border-brand-lime/50 transition-colors duration-500">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-brand-lime font-mono text-sm tracking-widest">/{service.id}</span>
-                <div className="flex flex-wrap gap-2 justify-end">
-                    {service.tags.map(tag => (
-                        <span key={tag} className="text-[10px] md:text-xs border border-white/10 px-2 py-1 rounded text-gray-400 group-hover:text-white transition-colors">{tag}</span>
-                    ))}
+        <div className="flex flex-col border-t border-white/10">
+            {services.map((service) => (
+                <div 
+                    key={service.id} 
+                    className="group relative border-b border-white/10 py-12 md:py-20 transition-all duration-500 hover:bg-white/[0.02] overflow-hidden cursor-interactive"
+                >
+                    {/* Hover Scanline Effect */}
+                    <div className="absolute inset-0 bg-brand-lime/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+                    
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8 md:gap-0 px-2 md:px-8">
+                        
+                        <div className="md:w-1/4">
+                            <span className="font-mono text-brand-lime/50 group-hover:text-brand-lime transition-colors">
+                                ( {service.id} )
+                            </span>
+                        </div>
+
+                        <div className="md:w-1/2">
+                            <h3 className="font-display font-bold text-4xl md:text-6xl mb-4 group-hover:translate-x-4 transition-transform duration-500">
+                                {service.title}
+                            </h3>
+                            <div className="h-0 overflow-hidden group-hover:h-auto group-hover:overflow-visible transition-all duration-500">
+                                <p className="text-gray-400 font-mono text-sm md:text-base pt-2">
+                                    {service.description}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="md:w-1/4 flex justify-end">
+                            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime group-hover:rotate-45 transition-all duration-500">
+                                <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-display font-medium mb-4 group-hover:text-brand-lime transition-colors">{service.title}</h3>
-              <p className="text-gray-400 leading-relaxed max-w-md group-hover:text-gray-200 transition-colors text-sm md:text-base">
-                {service.description}
-              </p>
-            </div>
-          ))}
+            ))}
         </div>
+
       </div>
     </section>
   );

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowDown, MoveRight } from 'lucide-react';
-import Marquee from './Marquee';
+import { MoveRight } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -9,12 +8,11 @@ const Hero: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!heroRef.current) return;
       const { clientX, clientY } = e;
-      const moveX = clientX - window.innerWidth / 2;
-      const moveY = clientY - window.innerHeight / 2;
+      const moveX = (clientX - window.innerWidth / 2) * 0.01;
+      const moveY = (clientY - window.innerHeight / 2) * 0.01;
       
-      const offset = 0.02;
-      heroRef.current.style.setProperty('--mouse-x', `${moveX * offset}px`);
-      heroRef.current.style.setProperty('--mouse-y', `${moveY * offset}px`);
+      heroRef.current.style.setProperty('--move-x', `${moveX}deg`);
+      heroRef.current.style.setProperty('--move-y', `${moveY}deg`);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -24,84 +22,60 @@ const Hero: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex flex-col pt-20 overflow-hidden bg-brand-dark"
-      style={{
-        '--mouse-x': '0px',
-        '--mouse-y': '0px'
-      } as React.CSSProperties}
+      className="relative min-h-screen flex flex-col pt-32 pb-12 px-6 bg-brand-dark overflow-hidden perspective-1000"
     >
-      {/* Dynamic Background Elements */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
-         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-lime/20 rounded-full blur-[120px] mix-blend-screen animate-blob"
-              style={{ transform: 'translate(var(--mouse-x), var(--mouse-y))' }}></div>
-         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-900/30 rounded-full blur-[120px] mix-blend-screen animate-blob animation-delay-2000"
-              style={{ transform: 'translate(calc(var(--mouse-x) * -1), calc(var(--mouse-y) * -1))' }}></div>
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[120px] animate-pulse"></div>
+      {/* Background Ambience */}
+      <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-brand-lime/5 rounded-full blur-[120px] animate-pulse-slow"></div>
+          <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-blue-900/10 rounded-full blur-[150px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute inset-0 bg-noise z-10 opacity-30"></div>
+          
+          {/* Grid */}
+          <div 
+            className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:6rem_6rem] z-0 transform transition-transform duration-100"
+            style={{ transform: 'rotateX(var(--move-y)) rotateY(var(--move-x)) scale(1.1)' }}
+          ></div>
       </div>
 
-      {/* Noise Overlay */}
-      <div className="absolute inset-0 bg-noise opacity-40 pointer-events-none z-10"></div>
-      
-      {/* Grid Lines */}
-      <div className="absolute inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:6rem_6rem]"></div>
-
-      {/* Main Content Wrapper */}
-      <div className="flex-grow flex flex-col justify-center container mx-auto z-20 relative px-4 md:px-6">
-        <div className="flex flex-col items-center md:items-start">
-            
-            {/* Massive Typography */}
-            <div className="relative group mt-8 md:mt-0">
-                <h1 className="font-display font-bold leading-[0.85] tracking-tighter text-center md:text-left select-none">
-                    <div className="text-[13vw] md:text-[11rem] text-outline text-outline-hover transition-all duration-500 transform translate-x-0 group-hover:translate-x-2">
-                        WE BUILD
-                    </div>
-                    <div className="text-[13vw] md:text-[11rem] text-white mix-blend-normal relative z-10">
-                        THE MODERN
-                    </div>
-                    <div className="text-[13vw] md:text-[11rem] text-brand-lime flex flex-col md:flex-row items-center md:gap-8 transform translate-x-0 group-hover:-translate-x-2 transition-transform duration-500">
-                        WEB
-                        <div className="hidden md:flex h-[120px] w-[120px] rounded-full border border-brand-lime/30 items-center justify-center animate-spin-slow">
-                            <ArrowDown size={40} className="text-brand-lime" />
-                        </div>
-                    </div>
-                </h1>
-            </div>
-
-            {/* Content & CTA */}
-            <div className="mt-12 md:mt-16 w-full flex flex-col md:flex-row justify-between items-end gap-8">
-                <p className="text-gray-400 max-w-md text-lg md:text-xl leading-relaxed font-light backdrop-blur-sm text-center md:text-left">
-                    We are JayGood. Digital architects crafting <span className="text-white font-medium">award-winning experiences</span> where engineering meets emotion.
-                </p>
-                
-                <div className="flex flex-col gap-4 w-full md:w-auto">
-                    <a href="#pricing" className="relative px-8 py-4 bg-white text-black font-display font-bold text-lg uppercase tracking-widest hover:bg-brand-lime transition-colors flex items-center justify-between gap-8 group overflow-hidden">
-                        <span className="relative z-10">Start Your Project</span>
-                        <MoveRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        <div className="absolute inset-0 bg-brand-lime transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
-                    </a>
-                    <div className="flex justify-between items-center px-1">
-                        <span className="text-[10px] font-mono text-gray-500 uppercase">Scroll to explore</span>
-                        <span className="text-[10px] font-mono text-gray-500 uppercase">v2.0.4</span>
-                    </div>
+      <div className="container mx-auto relative z-20 flex-grow flex flex-col justify-center">
+        
+        {/* Main Title */}
+        <div className="relative z-10 mix-blend-color-dodge">
+            <h1 className="font-display font-bold text-[16vw] md:text-[13vw] leading-[0.85] md:leading-[0.8] tracking-tighter text-white">
+                <div className="overflow-hidden flex flex-col md:flex-row md:items-center gap-2 md:gap-12">
+                    <span className="block animate-fade-in-up text-brand-lime" style={{ animationDelay: '0.2s' }}>ALCHEMY</span>
+                    <div className="h-[1px] md:h-[2vw] w-full md:w-auto md:flex-grow bg-white/10 animate-fade-in-up hidden md:block" style={{ animationDelay: '0.4s' }}></div>
                 </div>
+                <div className="overflow-hidden">
+                    <span className="block animate-fade-in-up hover:text-outline transition-all duration-500 cursor-interactive" style={{ animationDelay: '0.3s' }}>STUDIO</span>
+                </div>
+            </h1>
+        </div>
+
+        {/* Bottom Lockup */}
+        <div className="mt-16 md:mt-24 flex flex-col md:flex-row justify-between items-start md:items-end gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+            <div className="max-w-xl">
+                <p className="text-lg md:text-2xl text-gray-400 font-light leading-relaxed">
+                    We don't just build websites. We engineer <span className="text-white font-medium">digital dominance</span>. 
+                    Merging brutalist aesthetics with silky performance.
+                </p>
             </div>
 
+            <a href="#work" className="group flex items-center gap-6 cursor-interactive">
+                <span className="font-mono text-sm uppercase tracking-widest text-brand-lime group-hover:text-white transition-colors">
+                    Explore The Work
+                </span>
+                <div className="w-16 h-16 rounded-full border border-brand-lime/30 group-hover:border-brand-lime group-hover:bg-brand-lime flex items-center justify-center transition-all duration-500">
+                    <MoveRight className="text-brand-lime group-hover:text-black transition-colors" />
+                </div>
+            </a>
         </div>
-      </div>
-      
-      {/* Marquee Banner pinned to bottom */}
-      <div className="w-full z-20 relative">
-        <Marquee />
+
       </div>
 
-      {/* Decorative Side Elements */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-4 z-20">
-          <div className="w-1 h-20 bg-white/10 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1/2 bg-brand-lime animate-pulse"></div>
-          </div>
-          <div className="font-mono text-[10px] text-brand-lime rotate-90 origin-center translate-y-8 w-4">
-              SCROLL
-          </div>
+      {/* Decorative Floating Elements */}
+      <div className="absolute right-6 bottom-6 md:right-12 md:bottom-32 hidden lg:block font-mono text-[10px] text-gray-600 writing-vertical-rl animate-pulse">
+          SCROLL_TO_INITIALIZE_SEQUENCE
       </div>
     </section>
   );

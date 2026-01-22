@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Manifesto from './components/Manifesto';
 import Services from './components/Services';
 import Work from './components/Work';
-import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 import TiredOf from './components/TiredOf';
 import Loader from './components/Loader';
-import BrandAlchemist from './components/BrandAlchemist';
+import Cursor from './components/Cursor';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -22,17 +22,17 @@ const App: React.FC = () => {
   }, [loading]);
 
   return (
-    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black">
+    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none">
+      <Cursor />
       {loading && <Loader onComplete={() => setLoading(false)} />}
       
       <Navbar />
       <main>
         <Hero />
-        <Services />
         <Work />
-        <BrandAlchemist />
+        <Services />
         <TiredOf />
-        <Pricing />
+        <Manifesto />
       </main>
       <Footer />
     </div>
