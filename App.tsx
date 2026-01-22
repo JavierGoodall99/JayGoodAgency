@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Marquee from './components/Marquee';
 import Services from './components/Services';
 import Work from './components/Work';
 import Pricing from './components/Pricing';
@@ -28,7 +27,6 @@ const App: React.FC = () => {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
         <Services />
         <Work />
         <TiredOf />

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowDown, MoveRight } from 'lucide-react';
+import Marquee from './Marquee';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -23,7 +24,7 @@ const Hero: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex flex-col justify-center px-4 md:px-6 pt-20 overflow-hidden bg-brand-dark"
+      className="relative min-h-screen flex flex-col pt-20 overflow-hidden bg-brand-dark"
       style={{
         '--mouse-x': '0px',
         '--mouse-y': '0px'
@@ -44,7 +45,8 @@ const Hero: React.FC = () => {
       {/* Grid Lines */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:6rem_6rem]"></div>
 
-      <div className="container mx-auto z-20 relative">
+      {/* Main Content Wrapper */}
+      <div className="flex-grow flex flex-col justify-center container mx-auto z-20 relative px-4 md:px-6">
         <div className="flex flex-col items-center md:items-start">
             
             {/* Massive Typography */}
@@ -87,6 +89,11 @@ const Hero: React.FC = () => {
         </div>
       </div>
       
+      {/* Marquee Banner pinned to bottom */}
+      <div className="w-full z-20 relative">
+        <Marquee />
+      </div>
+
       {/* Decorative Side Elements */}
       <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-4 z-20">
           <div className="w-1 h-20 bg-white/10 relative overflow-hidden">
