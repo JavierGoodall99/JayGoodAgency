@@ -1,82 +1,236 @@
 import React, { useEffect, useRef } from 'react';
-import { MoveRight } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current) return;
-      const { clientX, clientY } = e;
-      const moveX = (clientX - window.innerWidth / 2) * 0.01;
-      const moveY = (clientY - window.innerHeight / 2) * 0.01;
-      
-      heroRef.current.style.setProperty('--move-x', `${moveX}deg`);
-      heroRef.current.style.setProperty('--move-y', `${moveY}deg`);
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationId: number;
+    let width = container.clientWidth;
+    let height = container.clientHeight;
+
+    // Configuration
+    const STRING_COUNT = 15; // Number of strings
+    const SPACING = width / (STRING_COUNT + 1);
+    const TENSION = 0.05;    // Snap back speed
+    const DAMPING = 0.90;    // Decay speed (lower = faster stop)
+    const MOUSE_INFLUENCE = 100; // Radius of mouse influence
+
+    // State
+    const mouse = { x: -1000, y: -1000, vx: 0, vy: 0, prevX: 0, prevY: 0 };
+    
+    class HarmonicString {
+        x: number;
+        points: { x: number; y: number; vx: number; vy: number; baseX: number }[];
+        color: string;
+        active: number; // 0 to 1, for color interpolation
+
+        constructor(x: number) {
+            this.x = x;
+            this.color = '#333333';
+            this.active = 0;
+            // Create control points along the string for smoother bending
+            const segments = 10;
+            this.points = [];
+            for(let i=0; i <= segments; i++) {
+                this.points.push({
+                    x: x,
+                    y: (height / segments) * i,
+                    vx: 0,
+                    vy: 0,
+                    baseX: x
+                });
+            }
+        }
+
+        update() {
+            let stringMoved = false;
+
+            this.points.forEach((p, i) => {
+                // skip top and bottom points (anchors)
+                if (i === 0 || i === this.points.length - 1) return;
+
+                // Physics: Hooke's Law + Damping
+                const dx = p.x - p.baseX;
+                const ax = -TENSION * dx;
+                p.vx += ax;
+                p.vx *= DAMPING;
+                p.x += p.vx;
+
+                // Mouse Interaction
+                // Calculate distance from mouse to this point line segment
+                const dy = Math.abs(mouse.y - p.y);
+                
+                if (dy < MOUSE_INFLUENCE && Math.abs(mouse.x - p.x) < MOUSE_INFLUENCE) {
+                    // Check if mouse crossed the string
+                    // Simple distance based push for now
+                    const dist = mouse.x - p.x;
+                    const force = Math.max(0, (MOUSE_INFLUENCE - Math.abs(dist)) / MOUSE_INFLUENCE);
+                    
+                    // Add mouse velocity influence for "strum" effect
+                    if (Math.abs(mouse.vx) > 5) {
+                         p.vx += mouse.vx * force * 0.1;
+                         this.active = 1.0;
+                    }
+                }
+
+                if (Math.abs(p.vx) > 0.01 || Math.abs(dx) > 0.1) {
+                    stringMoved = true;
+                }
+            });
+
+            // Decay active color
+            this.active *= 0.95;
+            
+            return stringMoved || this.active > 0.01;
+        }
+
+        draw(ctx: CanvasRenderingContext2D) {
+            ctx.beginPath();
+            
+            // Draw smooth curve through points
+            ctx.moveTo(this.points[0].x, this.points[0].y);
+            
+            for (let i = 0; i < this.points.length - 1; i++) {
+                const p0 = this.points[i];
+                const p1 = this.points[i + 1];
+                const midX = (p0.x + p1.x) / 2;
+                const midY = (p0.y + p1.y) / 2;
+                
+                // Use quadratic curves for smooth string look
+                if (i === 0) {
+                     ctx.lineTo(midX, midY);
+                } else {
+                     ctx.quadraticCurveTo(p0.x, p0.y, midX, midY);
+                }
+            }
+            
+            // Connect to last point
+            const last = this.points[this.points.length - 1];
+            ctx.lineTo(last.x, last.y);
+
+            // Interpolate color: Grey to Lime
+            // Simple approach: set strokeStyle based on active
+            const r = Math.floor(20 + (204 - 20) * this.active);
+            const g = Math.floor(20 + (255 - 20) * this.active);
+            const b = Math.floor(20 + (0 - 20) * this.active);
+            
+            ctx.strokeStyle = `rgb(${r},${g},${b})`;
+            ctx.lineWidth = 1 + (this.active * 1.5);
+            ctx.stroke();
+        }
+    }
+
+    let strings: HarmonicString[] = [];
+
+    const init = () => {
+        width = container.clientWidth;
+        height = container.clientHeight;
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        
+        strings = [];
+        const actualSpacing = width / (STRING_COUNT + 1);
+        for(let i=1; i <= STRING_COUNT; i++) {
+            strings.push(new HarmonicString(i * actualSpacing));
+        }
     };
 
+    const animate = () => {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Update mouse velocity
+        mouse.vx = mouse.x - mouse.prevX;
+        mouse.vy = mouse.y - mouse.prevY;
+        mouse.prevX = mouse.x;
+        mouse.prevY = mouse.y;
+
+        strings.forEach(s => {
+            s.update();
+            s.draw(ctx);
+        });
+
+        animationId = requestAnimationFrame(animate);
+    };
+
+    const handleResize = () => {
+        init();
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    };
+
+    window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+    init();
+    animate();
+
+    return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('mousemove', handleMouseMove);
+        cancelAnimationFrame(animationId);
+    };
   }, []);
 
   return (
-    <section 
-      ref={heroRef}
-      className="relative min-h-screen flex flex-col pt-32 pb-12 px-6 bg-brand-dark overflow-hidden perspective-1000"
-    >
-      {/* Background Ambience */}
-      <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-brand-lime/5 rounded-full blur-[120px] animate-pulse-slow"></div>
-          <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-blue-900/10 rounded-full blur-[150px] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute inset-0 bg-noise z-10 opacity-30"></div>
+    <section ref={containerRef} className="relative h-screen w-full bg-[#030303] overflow-hidden flex flex-col items-center justify-center">
+      
+      {/* Background Typography (Behind Strings) */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none pointer-events-none">
           
-          {/* Grid */}
-          <div 
-            className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:6rem_6rem] z-0 transform transition-transform duration-100"
-            style={{ transform: 'rotateX(var(--move-y)) rotateY(var(--move-x)) scale(1.1)' }}
-          ></div>
-      </div>
+          <div className="flex flex-col items-center justify-center mix-blend-screen opacity-100">
+             <div className="overflow-hidden">
+                <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] animate-fade-in-up whitespace-nowrap">
+                    WE BUILD THE
+                </h1>
+             </div>
+             
+             <div className="flex items-center gap-8 overflow-hidden">
+                 <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-white animate-fade-in-up delay-100 blur-[0.5px] whitespace-nowrap">
+                    MODERN WEB
+                 </h1>
+             </div>
+          </div>
 
-      <div className="container mx-auto relative z-20 flex-grow flex flex-col justify-center">
-        
-        {/* Main Title */}
-        <div className="relative z-10 mix-blend-color-dodge">
-            <h1 className="font-display font-bold text-[16vw] md:text-[13vw] leading-[0.85] md:leading-[0.8] tracking-tighter text-white">
-                <div className="overflow-hidden flex flex-col md:flex-row md:items-center gap-2 md:gap-12">
-                    <span className="block animate-fade-in-up text-brand-lime" style={{ animationDelay: '0.2s' }}>ALCHEMY</span>
-                    <div className="h-[1px] md:h-[2vw] w-full md:w-auto md:flex-grow bg-white/10 animate-fade-in-up hidden md:block" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-                <div className="overflow-hidden">
-                    <span className="block animate-fade-in-up hover:text-outline transition-all duration-500 cursor-interactive" style={{ animationDelay: '0.3s' }}>STUDIO</span>
-                </div>
-            </h1>
-        </div>
-
-        {/* Bottom Lockup */}
-        <div className="mt-16 md:mt-24 flex flex-col md:flex-row justify-between items-start md:items-end gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            <div className="max-w-xl">
-                <p className="text-lg md:text-2xl text-gray-400 font-light leading-relaxed">
-                    We don't just build websites. We engineer <span className="text-white font-medium">digital dominance</span>. 
-                    Merging brutalist aesthetics with silky performance.
-                </p>
-            </div>
-
-            <a href="#work" className="group flex items-center gap-6 cursor-interactive">
-                <span className="font-mono text-sm uppercase tracking-widest text-brand-lime group-hover:text-white transition-colors">
-                    Explore The Work
-                </span>
-                <div className="w-16 h-16 rounded-full border border-brand-lime/30 group-hover:border-brand-lime group-hover:bg-brand-lime flex items-center justify-center transition-all duration-500">
-                    <MoveRight className="text-brand-lime group-hover:text-black transition-colors" />
-                </div>
-            </a>
-        </div>
+          <div className="mt-12 max-w-xl text-center px-6 animate-fade-in-up delay-300">
+             <p className="font-mono text-gray-500 text-sm uppercase tracking-widest leading-loose">
+                We engineer digital gravity.<br/>
+                <span className="text-brand-lime">Strum the chords of the web.</span>
+             </p>
+          </div>
 
       </div>
 
-      {/* Decorative Floating Elements */}
-      <div className="absolute right-6 bottom-6 md:right-12 md:bottom-32 hidden lg:block font-mono text-[10px] text-gray-600 writing-vertical-rl animate-pulse">
-          SCROLL_TO_INITIALIZE_SEQUENCE
+      {/* Interactive Canvas Layer (The Strings) */}
+      <canvas 
+        ref={canvasRef} 
+        className="absolute inset-0 z-10 w-full h-full cursor-none"
+      />
+
+      {/* Bottom CTA */}
+      <div className="absolute bottom-12 z-20 animate-fade-in-up delay-700 pointer-events-none">
+         <a href="#work" className="pointer-events-auto group flex flex-col items-center gap-4 cursor-interactive">
+             <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-brand-lime group-hover:h-24 transition-all duration-500"></div>
+             <div className="flex items-center gap-3">
+                 <span className="font-mono text-[10px] text-white uppercase tracking-widest group-hover:text-brand-lime transition-colors">Enter System</span>
+                 <ArrowDown size={14} className="text-brand-lime animate-bounce" />
+             </div>
+         </a>
       </div>
+
     </section>
   );
 };

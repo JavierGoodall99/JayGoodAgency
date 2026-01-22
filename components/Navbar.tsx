@@ -43,12 +43,6 @@ const Navbar: React.FC = () => {
       id: '01',
       image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop'
     },
-    { 
-      name: 'Services', 
-      href: '#services', 
-      id: '02',
-      image: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2700&auto=format&fit=crop'
-    },
   ];
 
   return (

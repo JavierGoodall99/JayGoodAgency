@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
-import Services from './components/Services';
 import Work from './components/Work';
 import Footer from './components/Footer';
 import TiredOf from './components/TiredOf';
@@ -30,7 +29,6 @@ const App: React.FC = () => {
       <main>
         <Hero />
         <Work />
-        <Services />
         <TiredOf />
         <Manifesto />
       </main>

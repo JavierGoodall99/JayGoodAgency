@@ -119,7 +119,7 @@ const Work: React.FC = () => {
 
       {/* --- DESKTOP LAYOUT (Horizontal Scroll) --- */}
       <section ref={sectionRef} className="hidden md:block relative h-[400vh]">
-        <div className="sticky top-0 h-screen overflow-hidden flex flex-col">
+        <div className="sticky top-0 h-screen overflow-hidden flex flex-col z-30 bg-brand-dark">
           
           {/* Static Header */}
           <div className="container mx-auto px-6 pt-24 md:pt-32 flex justify-between items-end shrink-0 relative z-20">
@@ -150,7 +150,7 @@ const Work: React.FC = () => {
                   {projects.map((project, index) => (
                       <div 
                           key={project.id}
-                          className="relative group w-[85vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0"
+                          className="relative group w-[85vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0"
                       >
                           {/* Image Container */}
                           <div className="relative aspect-[4/3] overflow-hidden mb-8 border border-white/10 bg-brand-dark">
@@ -171,7 +171,7 @@ const Work: React.FC = () => {
                           <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-interactive">
                               <div>
                                   <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
-                                  <h3 className="font-display font-bold text-4xl md:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
+                                  <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
                                       {project.title}
                                   </h3>
                               </div>
