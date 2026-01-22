@@ -46,7 +46,7 @@ const features = [
 
 const Pricing: React.FC = () => {
   return (
-    <section id="pricing" className="py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
+    <section id="pricing" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
       <div className="container mx-auto max-w-5xl">
         <div className="mb-20 text-center">
             <h2 className="font-display font-semibold text-4xl md:text-7xl mb-6">ONE SIMPLE PLAN</h2>

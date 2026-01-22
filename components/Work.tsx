@@ -35,7 +35,7 @@ const projects: ProjectItem[] = [
 
 const Work: React.FC = () => {
   return (
-    <section id="work" className="py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
+    <section id="work" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative border-t border-white/5">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32">
             <div>

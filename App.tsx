@@ -7,6 +7,7 @@ import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 import TiredOf from './components/TiredOf';
 import Loader from './components/Loader';
+import BrandAlchemist from './components/BrandAlchemist';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         <Hero />
         <Services />
         <Work />
+        <BrandAlchemist />
         <TiredOf />
         <Pricing />
       </main>

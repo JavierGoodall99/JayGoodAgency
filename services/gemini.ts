@@ -1,7 +1,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { BrandConcept } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Safe initialization for browser environments where process might be undefined
+const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+const ai = new GoogleGenAI({ apiKey });
 
 export const generateBrandConcept = async (
   industry: string,

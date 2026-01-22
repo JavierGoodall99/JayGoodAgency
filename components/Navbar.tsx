@@ -22,9 +22,36 @@ const Navbar: React.FC = () => {
     }
   }, [isOpen]);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      const offset = 80; // Approximate height of the fixed navbar
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      // Update URL hash without jumping
+      window.history.pushState(null, '', href);
+    } else if (href === '#') {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+    
+    if (isOpen) setIsOpen(false);
+  };
+
   const navLinks = [
-    { name: 'Work', href: '#work' },
     { name: 'Services', href: '#services' },
+    { name: 'Work', href: '#work' },
     { name: 'Pricing', href: '#pricing' },
     { name: 'Contact', href: '#contact' },
   ];
@@ -33,7 +60,11 @@ const Navbar: React.FC = () => {
     <>
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-brand-dark/90 backdrop-blur-md border-b border-white/5' : 'bg-transparent'}`}>
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <a href="#" className="font-display font-bold text-2xl tracking-tighter hover:text-brand-lime transition-colors relative z-50">
+          <a 
+            href="#" 
+            onClick={(e) => scrollToSection(e, '#')} 
+            className="font-display font-bold text-2xl tracking-tighter hover:text-brand-lime transition-colors relative z-50"
+          >
             JAYGOOD<span className="text-brand-lime">.</span>
           </a>
 
@@ -43,13 +74,18 @@ const Navbar: React.FC = () => {
               <a 
                 key={link.name} 
                 href={link.href} 
+                onClick={(e) => scrollToSection(e, link.href)}
                 className="text-sm font-medium tracking-wide text-gray-300 hover:text-white relative group"
               >
                 {link.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-brand-lime transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
-            <a href="#contact" className="px-5 py-2 border border-white/20 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+            <a 
+              href="#contact" 
+              onClick={(e) => scrollToSection(e, '#contact')}
+              className="px-5 py-2 border border-white/20 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+            >
               Let's Talk
             </a>
           </div>
@@ -76,9 +112,9 @@ const Navbar: React.FC = () => {
             <a 
               key={link.name} 
               href={link.href} 
+              onClick={(e) => scrollToSection(e, link.href)}
               className="text-5xl font-display font-bold text-transparent text-outline hover:text-brand-lime hover:text-outline-none transition-all"
               style={{ WebkitTextStroke: '1px rgba(255,255,255,0.5)' }}
-              onClick={() => setIsOpen(false)}
             >
               {link.name}
             </a>
@@ -87,7 +123,7 @@ const Navbar: React.FC = () => {
              <a 
                 href="#contact" 
                 className="inline-block text-xl text-brand-lime font-mono uppercase tracking-widest mb-4"
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => scrollToSection(e, '#contact')}
              >
                 Start a Project ->
              </a>

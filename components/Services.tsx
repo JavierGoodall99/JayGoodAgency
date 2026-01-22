@@ -30,7 +30,7 @@ const services: ServiceItem[] = [
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-20 md:py-32 px-6 bg-brand-dark relative">
+    <section id="services" className="scroll-mt-20 py-20 md:py-32 px-6 bg-brand-dark relative">
       <div className="container mx-auto">
         <div className="mb-12 md:mb-20">
           <h2 className="font-display font-semibold text-4xl md:text-7xl mb-6">DEV EXPERTISE</h2>
