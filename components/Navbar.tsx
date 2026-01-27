@@ -85,30 +85,23 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
 
   const navLinks = [
     {
-      name: 'Work',
-      href: '#work',
-      id: '01',
-      page: 'home', // Navigate to home then scroll
-      image: '/menu/work.png'
-    },
-    {
       name: 'About',
       href: '/about',
-      id: '02',
+      id: '01',
       page: 'about',
       image: '/menu/about.png'
     },
     {
       name: 'Services',
       href: '/services',
-      id: '03',
+      id: '02',
       page: 'services',
       image: '/menu/services.png'
     },
     {
       name: 'Contact',
       href: '/contact',
-      id: '04',
+      id: '03',
       page: 'contact',
       image: '/menu/contact.png'
     },
