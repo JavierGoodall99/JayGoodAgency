@@ -102,7 +102,7 @@ const ContactPage: React.FC = () => {
                         <div className="text-center md:text-left">
                             <h3 className="font-mono text-xs uppercase tracking-widest text-brand-lime mb-2">Physical Coordinates</h3>
                             <p className="font-display text-2xl md:text-3xl text-white mb-2">
-                                1200 Digital Blvd, Suite 404 <span className="text-gray-500 mx-2">//</span> Los Angeles, CA
+                                1200 Digital Blvd, Suite 404 <span className="text-gray-500 mx-2">//</span> Cape Town, South Africa
                             </p>
                             <p className="text-gray-500 font-mono text-sm">
                                 34.0522° N, 118.2437° W

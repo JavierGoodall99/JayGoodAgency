@@ -7,7 +7,6 @@ const projects: ProjectItem[] = [
         id: '01',
         title: 'ZENITH',
         category: 'WEB3 / SAAS',
-        year: '2024',
         image: '/projects/zenith.png',
         link: 'https://zenithboutique.vercel.app/'
     },
@@ -15,7 +14,6 @@ const projects: ProjectItem[] = [
         id: '02',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
-        year: '2024',
         image: '/projects/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
@@ -23,7 +21,6 @@ const projects: ProjectItem[] = [
         id: '03',
         title: 'STUDIOS ELEVEN',
         category: 'AGENCY / CREATIVE',
-        year: '2024',
         image: '/projects/studioseleven.png',
         link: 'https://studioeleven.vercel.app/'
     },
@@ -31,7 +28,6 @@ const projects: ProjectItem[] = [
         id: '04',
         title: 'RETRO RISE',
         category: 'ECOMMERCE / FASHION',
-        year: '2023',
         image: '/projects/retrorise.png',
         link: 'https://fliply-dba75.web.app/'
     },
@@ -39,7 +35,6 @@ const projects: ProjectItem[] = [
         id: '05',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
-        year: '2023',
         image: '/projects/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
     },
@@ -47,7 +42,6 @@ const projects: ProjectItem[] = [
         id: '06',
         title: 'RUIL MIJN WONING',
         category: 'REAL ESTATE / PLATFORM',
-        year: '2023',
         image: '/projects/ruilmijnwoning.png',
         link: 'https://www.ruilmijnwoning.nl/'
     },
@@ -55,7 +49,6 @@ const projects: ProjectItem[] = [
         id: '07',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
-        year: '2025',
         image: '/projects/javiergoodallportfolio.png',
         link: 'https://javiergoodall.vercel.app/'
     }

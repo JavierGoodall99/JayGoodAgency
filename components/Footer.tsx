@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             <div>
                 <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Location</h4>
                 <p className="text-xl text-white">
-                    Los Angeles, CA<br/>
+                    Cape Town, South Africa<br/>
                     Digital Everywhere
                 </p>
             </div>
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
             JAYGOOD
          </div>
          <div className="text-gray-600 font-mono text-xs uppercase tracking-widest mb-4">
-            &copy; 2024
+            &copy; {new Date().getFullYear()}
          </div>
       </div>
     </footer>

@@ -10,7 +10,6 @@ export interface ProjectItem {
   title: string;
   category: string;
   image: string;
-  year: string;
   link: string;
 }
 

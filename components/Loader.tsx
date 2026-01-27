@@ -94,7 +94,7 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
         </div>
 
         <div className="font-mono text-xs text-gray-500 uppercase tracking-widest hidden md:block">
-           v2.0.4 // Build 2024
+           v2.0.4 // Build {new Date().getFullYear()}
         </div>
       </div>
     </div>
