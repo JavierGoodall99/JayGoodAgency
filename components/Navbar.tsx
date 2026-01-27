@@ -89,21 +89,18 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       href: '/about',
       id: '01',
       page: 'about',
-      image: '/menu/about.png'
     },
     {
       name: 'Services',
       href: '/services',
       id: '02',
       page: 'services',
-      image: '/menu/services.png'
     },
     {
       name: 'Contact',
       href: '/contact',
       id: '03',
       page: 'contact',
-      image: '/menu/contact.png'
     },
   ];
 
@@ -156,16 +153,9 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
           .clip-path-closed { clip-path: inset(0% 0% 100% 0%); }
         `}</style>
 
-        {/* Dynamic Background Image Reveal */}
+        {/* Background - Minimal Dark */}
         <div className="absolute inset-0 z-0">
-          {navLinks.map((link, idx) => (
-            <div
-              key={`bg-${link.id}`}
-              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out ${hoveredLinkIndex === idx ? 'opacity-40 scale-105' : 'opacity-0 scale-100'}`}
-              style={{ backgroundImage: `url(${link.image})` }}
-            />
-          ))}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+          <div className="absolute inset-0 bg-[#050505]"></div>
           {/* Grid overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20"></div>
         </div>

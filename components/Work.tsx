@@ -129,11 +129,7 @@ const Work: React.FC = () => {
                             </div>
                         </a>
                     ))}
-                    <div className="pt-8 flex justify-center">
-                        <a href="#contact" className="inline-flex items-center gap-2 font-mono text-sm text-brand-lime uppercase tracking-widest border-b border-brand-lime/30 pb-1">
-                            View Archive <ArrowUpRight size={14} />
-                        </a>
-                    </div>
+
                 </div>
             </div>
 
@@ -205,15 +201,7 @@ const Work: React.FC = () => {
                                 </a>
                             ))}
 
-                            {/* View All / End Card */}
-                            <div className="flex-shrink-0 w-[40vw] md:w-[30vw] flex items-center justify-center pr-24">
-                                <a href="#contact" className="group flex flex-col items-center gap-6 cursor-interactive">
-                                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-white group-hover:border-white transition-all duration-500">
-                                        <ArrowUpRight size={40} className="text-white group-hover:text-black" />
-                                    </div>
-                                    <span className="font-display font-bold text-2xl md:text-4xl text-white">VIEW ARCHIVE</span>
-                                </a>
-                            </div>
+
                         </div>
                     </div>
 
