@@ -11,6 +11,7 @@ export interface ProjectItem {
   category: string;
   image: string;
   year: string;
+  link: string;
 }
 
 
