@@ -89,7 +89,7 @@ const Work: React.FC = () => {
         <div id="work" className="bg-brand-dark">
 
             {/* --- MOBILE LAYOUT (Vertical Stack) --- */}
-            <div className="block md:hidden py-20 px-6">
+            <div className="block md:hidden py-10 px-6">
                 <div className="mb-12">
                     <h2 className="font-display font-bold text-5xl text-white leading-none mb-4">
                         LATEST <span className="text-brand-lime">WORK</span>
@@ -138,7 +138,7 @@ const Work: React.FC = () => {
                 <div className="sticky top-0 h-screen overflow-hidden flex flex-col z-30 bg-brand-dark">
 
                     {/* Static Header */}
-                    <div className="container mx-auto px-6 pt-24 md:pt-32 flex justify-between items-end shrink-0 relative z-20">
+                    <div className="container mx-auto px-6 pt-10 md:pt-20 flex justify-between items-end shrink-0 relative z-20">
                         <div>
                             <h2 className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-none">
                                 LATEST <span className="text-brand-lime">WORK</span>
