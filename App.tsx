@@ -10,6 +10,7 @@ import Cursor from './components/Cursor';
 import About from './components/About';
 import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
+import ScrollManager from './components/ScrollManager';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ const App: React.FC = () => {
   return (
     <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none min-h-screen flex flex-col">
       <Cursor />
+      {!loading && <ScrollManager />}
       {loading && <Loader onComplete={() => setLoading(false)} />}
 
       <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
