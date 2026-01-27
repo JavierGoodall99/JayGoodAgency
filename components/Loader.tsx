@@ -45,27 +45,26 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
       const timeout = setTimeout(() => {
         setIsExiting(true);
         // Wait for animation to finish before unmounting in parent
-        setTimeout(onComplete, 1000); 
+        setTimeout(onComplete, 1000);
       }, 500);
       return () => clearTimeout(timeout);
     }
   }, [progress, onComplete]);
 
   return (
-    <div 
-      className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col justify-between px-6 py-8 md:p-12 transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
-        isExiting ? '-translate-y-full' : 'translate-y-0'
-      }`}
+    <div
+      className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col justify-between px-6 py-8 md:p-12 transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isExiting ? '-translate-y-full' : 'translate-y-0'
+        }`}
     >
       {/* Top Bar */}
       <div className="flex justify-between items-start opacity-50">
         <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse"></div>
-            <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">JayGood.agency</span>
+          <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse"></div>
+          <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">JayGood.agency</span>
         </div>
         <div className="hidden md:block font-mono text-xs text-white uppercase tracking-widest text-right">
-            <div>Mem: 64GB OK</div>
-            <div>Gpu: DETECTED</div>
+          <div>Mem: 64GB OK</div>
+          <div>Gpu: DETECTED</div>
         </div>
       </div>
 
@@ -81,20 +80,20 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
       {/* Bottom Info */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-4">
         <div className="w-full md:w-64">
-           <div className="font-mono text-xs text-brand-lime mb-2 tracking-widest uppercase animate-pulse">
-             {">"} {bootText[textIndex]}
-           </div>
-           {/* Progress Bar */}
-           <div className="w-full h-1 bg-white/10 overflow-hidden">
-             <div 
-                className="h-full bg-brand-lime transition-all duration-200 ease-out"
-                style={{ width: `${progress}%` }}
-             ></div>
-           </div>
+          <div className="font-mono text-xs text-brand-lime mb-2 tracking-widest uppercase animate-pulse">
+            {">"} {bootText[textIndex]}
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full h-1 bg-white/10 overflow-hidden">
+            <div
+              className="h-full bg-brand-lime transition-all duration-200 ease-out"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
         </div>
 
         <div className="font-mono text-xs text-gray-500 uppercase tracking-widest hidden md:block">
-           v2.0.4 // Build {new Date().getFullYear()}
+          v3.0.0 // AWWWARDS EDITION {new Date().getFullYear()}
         </div>
       </div>
     </div>

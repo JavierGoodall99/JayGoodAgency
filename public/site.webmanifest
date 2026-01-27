@@ -1,0 +1,16 @@
+{
+    "name": "JayGood Agency",
+    "short_name": "JayGood",
+    "description": "Boutique digital agency crafting award-worthy websites and immersive web experiences.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#030303",
+    "theme_color": "#ccff00",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

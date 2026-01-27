@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
@@ -15,53 +15,97 @@ import ScrollManager from './components/ScrollManager';
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayPage, setDisplayPage] = useState('home');
 
   // Prevent scrolling while loading
   useEffect(() => {
-    if (loading) {
+    if (loading || isTransitioning) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [loading]);
+  }, [loading, isTransitioning]);
 
-  const handleNavigation = (page: string) => {
-    if (page === currentPage) return;
+  const handleNavigation = useCallback((page: string) => {
+    if (page === currentPage || isTransitioning) return;
 
-    // Scroll to top
-    window.scrollTo(0, 0);
+    // Start transition
+    setIsTransitioning(true);
     setCurrentPage(page);
-  };
 
-  return (
-    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none min-h-screen flex flex-col">
-      <Cursor />
-      {!loading && <ScrollManager />}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+    // After transition in, update content
+    setTimeout(() => {
+      setDisplayPage(page);
+      window.scrollTo(0, 0);
 
-      <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
+      // After content swap, transition out
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 100);
+    }, 600);
+  }, [currentPage, isTransitioning]);
 
-      <main className="flex-grow">
-        {currentPage === 'home' && (
-          <>
+  // Render page content based on displayPage (not currentPage) for smooth transitions
+  const renderPageContent = () => {
+    const pageClasses = `animate-fade-in-up`;
+
+    switch (displayPage) {
+      case 'home':
+        return (
+          <div className={pageClasses}>
             <Hero />
             <Work />
             <TiredOf />
             <Manifesto />
-          </>
-        )}
+          </div>
+        );
+      case 'about':
+        return (
+          <div className={pageClasses}>
+            <About />
+          </div>
+        );
+      case 'services':
+        return (
+          <div className={pageClasses}>
+            <ServicesPage />
+          </div>
+        );
+      case 'contact':
+        return (
+          <div className={pageClasses}>
+            <ContactPage />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
-        {currentPage === 'about' && (
-          <About />
-        )}
+  return (
+    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none md:cursor-none min-h-screen flex flex-col">
+      <Cursor />
+      {!loading && <ScrollManager />}
+      {loading && <Loader onComplete={() => setLoading(false)} />}
 
-        {currentPage === 'services' && (
-          <ServicesPage />
-        )}
+      {/* Page Transition Overlay */}
+      <div
+        className={`fixed inset-0 bg-brand-lime z-[90] pointer-events-none transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isTransitioning ? 'translate-y-0' : '-translate-y-full'
+          }`}
+        aria-hidden="true"
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="font-display font-bold text-black text-4xl md:text-6xl tracking-tighter opacity-20">
+            JAYGOOD
+          </span>
+        </div>
+      </div>
 
-        {currentPage === 'contact' && (
-          <ContactPage />
-        )}
+      <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
+
+      <main id="main-content" className="flex-grow" role="main" tabIndex={-1}>
+        {renderPageContent()}
       </main>
 
       <Footer />

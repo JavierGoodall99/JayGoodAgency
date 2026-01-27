@@ -107,6 +107,7 @@ const Work: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group block"
+                            data-cursor="project"
                         >
                             <div className="relative aspect-[4/3] overflow-hidden mb-6 border border-white/10">
                                 <img
@@ -170,6 +171,7 @@ const Work: React.FC = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="relative group w-[85vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0 block"
+                                    data-cursor="project"
                                 >
                                     {/* Image Container */}
                                     <div className="relative aspect-[4/3] overflow-hidden mb-8 border border-white/10 bg-brand-dark">

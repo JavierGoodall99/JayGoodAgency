@@ -1,0 +1,13 @@
+# JayGood Agency - Robots.txt
+# https://jaygood.agency
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://jaygood.agency/sitemap.xml
+
+# Disallow admin/private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
