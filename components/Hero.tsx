@@ -198,7 +198,7 @@ const Hero: React.FC = () => {
                 <div className="flex flex-col items-center justify-center mix-blend-screen opacity-100">
                     <div className="overflow-hidden">
                         <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] animate-fade-in-up whitespace-nowrap">
-                            WE BUILD THE
+                            BUILDING THE
                         </h1>
                     </div>
 
@@ -211,7 +211,7 @@ const Hero: React.FC = () => {
 
                 <div className="mt-12 max-w-xl text-center px-6 animate-fade-in-up stagger-3">
                     <p className="font-mono text-gray-500 text-sm uppercase tracking-widest leading-loose">
-                        We engineer digital gravity.<br />
+                        Engineering digital gravity.<br />
                         <span className="text-brand-lime">Strum the chords of the web.</span>
                     </p>
                 </div>
@@ -232,7 +232,7 @@ const Hero: React.FC = () => {
                 <a
                     href="#work"
                     className="pointer-events-auto group flex flex-col items-center gap-4 cursor-interactive magnetic-hover"
-                    aria-label="Scroll down to see our work"
+                    aria-label="Scroll down to see my work"
                 >
                     <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-brand-lime group-hover:h-24 transition-all duration-500"></div>
                     <div className="flex items-center gap-3">
