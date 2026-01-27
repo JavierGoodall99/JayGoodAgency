@@ -1,11 +1,11 @@
 import React from 'react';
-import { Twitter, Linkedin, Github, Dribbble, ArrowUpRight } from 'lucide-react';
+import { Instagram, Linkedin, Github, Facebook, ArrowUpRight } from 'lucide-react';
 
 const socialLinks = [
-    { name: 'Twitter / X', icon: <Twitter size={20} />, href: 'https://twitter.com/javiergoodall' },
+    { name: 'Instagram', icon: <Instagram size={20} />, href: 'https://www.instagram.com/javiergoodall/' },
     { name: 'LinkedIn', icon: <Linkedin size={20} />, href: 'https://linkedin.com/in/javiergoodall' },
     { name: 'GitHub', icon: <Github size={20} />, href: 'https://github.com/JavierGoodall99' },
-    { name: 'Dribbble', icon: <Dribbble size={20} />, href: 'https://dribbble.com/javiergoodall' },
+    { name: 'Facebook', icon: <Facebook size={20} />, href: 'https://www.facebook.com/javier.goodall/' },
 ];
 
 const Footer: React.FC = () => {
