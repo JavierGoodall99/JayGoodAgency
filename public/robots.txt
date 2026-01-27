@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://jaygood.agency/sitemap.xml
+Sitemap: https://jaygood-agency.vercel.app/sitemap.xml
 
 # Disallow admin/private areas
 Disallow: /admin/

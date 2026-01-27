@@ -8,17 +8,20 @@ const Cursor: React.FC = () => {
   const [cursorText, setCursorText] = useState('VIEW');
   const [isPressed, setIsPressed] = useState(false);
 
-  useEffect(() => {
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    let trailX = 0;
-    let trailY = 0;
+  // Use refs for mutable values to persist across re-renders
+  const pos = useRef({
+    mouseX: 0,
+    mouseY: 0,
+    cursorX: 0,
+    cursorY: 0,
+    trailX: 0,
+    trailY: 0
+  });
 
+  useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      pos.current.mouseX = e.clientX;
+      pos.current.mouseY = e.clientY;
       if (!isVisible) setIsVisible(true);
     };
 
@@ -47,35 +50,12 @@ const Cursor: React.FC = () => {
     const onMouseLeave = () => setIsVisible(false);
     const onMouseEnter = () => setIsVisible(true);
 
-    const animate = () => {
-      // Main cursor - faster response
-      const easeMain = 0.25;
-      cursorX += (mouseX - cursorX) * easeMain;
-      cursorY += (mouseY - cursorY) * easeMain;
-
-      // Trail cursor - slower/smoother follow
-      const easeTrail = 0.12;
-      trailX += (mouseX - trailX) * easeTrail;
-      trailY += (mouseY - trailY) * easeTrail;
-
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(${isPressed ? 0.85 : 1})`;
-      }
-
-      if (trailRef.current) {
-        trailRef.current.style.transform = `translate3d(${trailX}px, ${trailY}px, 0)`;
-      }
-
-      requestAnimationFrame(animate);
-    };
-
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseover', onMouseOver);
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mouseup', onMouseUp);
     document.documentElement.addEventListener('mouseleave', onMouseLeave);
     document.documentElement.addEventListener('mouseenter', onMouseEnter);
-    const animFrame = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
@@ -84,9 +64,41 @@ const Cursor: React.FC = () => {
       window.removeEventListener('mouseup', onMouseUp);
       document.documentElement.removeEventListener('mouseleave', onMouseLeave);
       document.documentElement.removeEventListener('mouseenter', onMouseEnter);
+    };
+  }, []); // Run events setup once
+
+  // Separate animation loop
+  useEffect(() => {
+    let animFrame: number;
+
+    const animate = () => {
+      // Main cursor - faster response
+      const easeMain = 0.25;
+      pos.current.cursorX += (pos.current.mouseX - pos.current.cursorX) * easeMain;
+      pos.current.cursorY += (pos.current.mouseY - pos.current.cursorY) * easeMain;
+
+      // Trail cursor - slower/smoother follow
+      const easeTrail = 0.12;
+      pos.current.trailX += (pos.current.mouseX - pos.current.trailX) * easeTrail;
+      pos.current.trailY += (pos.current.mouseY - pos.current.trailY) * easeTrail;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${pos.current.cursorX}px, ${pos.current.cursorY}px, 0) scale(${isPressed ? 0.85 : 1})`;
+      }
+
+      if (trailRef.current) {
+        trailRef.current.style.transform = `translate3d(${pos.current.trailX}px, ${pos.current.trailY}px, 0)`;
+      }
+
+      animFrame = requestAnimationFrame(animate);
+    };
+
+    animFrame = requestAnimationFrame(animate);
+
+    return () => {
       cancelAnimationFrame(animFrame);
     };
-  }, [isVisible, isPressed]);
+  }, [isPressed]); // Re-run animation loop if pressed state changes (to update scale)
 
   if (!isVisible) return null;
 
