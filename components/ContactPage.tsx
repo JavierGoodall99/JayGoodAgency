@@ -14,7 +14,7 @@ const ContactPage: React.FC = () => {
         {
             id: '02',
             label: 'WHATSAPP',
-            value: '067 143 5160',
+            value: '+27 67 143 5160',
             href: 'https://wa.me/27671435160',
             icon: <MessageCircle className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Quick comms. Encrypted end-to-end.'
@@ -22,8 +22,8 @@ const ContactPage: React.FC = () => {
         {
             id: '03',
             label: 'PHONE',
-            value: '067 143 5160',
-            href: 'tel:0671435160',
+            value: '+27 67 143 5160',
+            href: 'tel:+27671435160',
             icon: <Phone className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Emergency / Direct Line.'
         }

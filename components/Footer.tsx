@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
                     <div>
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Contact</h4>
                         <a href="mailto:javiergoodall@outlook.com" className="block text-xl text-white hover:text-brand-lime transition-colors">javiergoodall@outlook.com</a>
-                        <p className="text-xl text-white mt-2">067 143 5160</p>
+                        <p className="text-xl text-white mt-2">+27 67 143 5160</p>
                     </div>
                     <div>
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Socials</h4>
