@@ -6,24 +6,24 @@ const ContactPage: React.FC = () => {
         {
             id: '01',
             label: 'EMAIL',
-            value: 'hello@jaygood.agency',
-            href: 'mailto:hello@jaygood.agency',
+            value: 'javiergoodall@outlook.com',
+            href: 'mailto:javiergoodall@outlook.com',
             icon: <Mail className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'For inquiries, pitches, and love letters.'
         },
         {
             id: '02',
             label: 'WHATSAPP',
-            value: '+1 (555) 019-2834',
-            href: 'https://wa.me/15550192834',
+            value: '067 143 5160',
+            href: 'https://wa.me/27671435160',
             icon: <MessageCircle className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Quick comms. Encrypted end-to-end.'
         },
         {
             id: '03',
             label: 'PHONE',
-            value: '+1 (555) 019-2834',
-            href: 'tel:+15550192834',
+            value: '067 143 5160',
+            href: 'tel:0671435160',
             icon: <Phone className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Emergency / Direct Line.'
         }
@@ -31,15 +31,15 @@ const ContactPage: React.FC = () => {
 
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20 flex flex-col">
-            
+
             <section className="px-6 mb-16 md:mb-24">
                 <div className="container mx-auto">
                     <h1 className="font-display font-bold text-[12vw] leading-[0.8] tracking-tighter mix-blend-difference mb-8">
-                        CONTACT <br/>
+                        CONTACT <br />
                         <span className="text-brand-lime ml-[10vw]">UPLINK</span>
                     </h1>
                     <p className="font-mono text-gray-500 text-sm md:text-base uppercase tracking-widest max-w-xl">
-                        We don't do forms. We do direct connections. <br/>
+                        We don't do forms. We do direct connections. <br />
                         Choose your frequency.
                     </p>
                 </div>
@@ -49,7 +49,7 @@ const ContactPage: React.FC = () => {
                 <div className="container mx-auto">
                     <div className="grid grid-cols-1 gap-px bg-white/10 border-t border-white/10">
                         {contactMethods.map((method) => (
-                            <a 
+                            <a
                                 key={method.id}
                                 href={method.href}
                                 target={method.label === 'WHATSAPP' ? '_blank' : undefined}
@@ -98,22 +98,22 @@ const ContactPage: React.FC = () => {
                             <div className="absolute inset-0 bg-brand-lime/20 rounded-full blur-xl animate-pulse"></div>
                             <Globe className="text-white relative z-10 animate-spin-slow" size={48} strokeWidth={1} />
                         </div>
-                        
+
                         <div className="text-center md:text-left">
                             <h3 className="font-mono text-xs uppercase tracking-widest text-brand-lime mb-2">Physical Coordinates</h3>
                             <p className="font-display text-2xl md:text-3xl text-white mb-2">
                                 1200 Digital Blvd, Suite 404 <span className="text-gray-500 mx-2">//</span> Cape Town, South Africa
                             </p>
                             <p className="text-gray-500 font-mono text-sm">
-                                34.0522° N, 118.2437° W
+                                33.9249° S, 18.4241° E
                             </p>
                         </div>
 
                         <div className="md:ml-auto">
-                             <div className="px-4 py-2 border border-brand-lime/30 bg-brand-lime/10 rounded-full flex items-center gap-3">
-                                 <div className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></div>
-                                 <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">Open Now</span>
-                             </div>
+                            <div className="px-4 py-2 border border-brand-lime/30 bg-brand-lime/10 rounded-full flex items-center gap-3">
+                                <div className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></div>
+                                <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">Open Now</span>
+                            </div>
                         </div>
                     </div>
                 </div>
