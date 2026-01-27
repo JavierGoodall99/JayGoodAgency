@@ -26,26 +26,19 @@ const App: React.FC = () => {
 
   const handleNavigation = (page: string) => {
     if (page === currentPage) return;
-    
-    // Trigger loader for page transition effect
-    setLoading(true);
-    
+
     // Scroll to top
     window.scrollTo(0, 0);
-
-    // Change content after a brief delay to allow loader to appear
-    setTimeout(() => {
-        setCurrentPage(page);
-    }, 100);
+    setCurrentPage(page);
   };
 
   return (
     <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none min-h-screen flex flex-col">
       <Cursor />
       {loading && <Loader onComplete={() => setLoading(false)} />}
-      
+
       <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
-      
+
       <main className="flex-grow">
         {currentPage === 'home' && (
           <>
@@ -68,7 +61,7 @@ const App: React.FC = () => {
           <ContactPage />
         )}
       </main>
-      
+
       <Footer />
     </div>
   );

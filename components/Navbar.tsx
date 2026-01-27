@@ -15,6 +15,32 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
 
+  // Weather state
+  const [temperature, setTemperature] = useState<number | null>(null);
+
+  // Fetch Weather
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        // Coordinates for Cape Town
+        const response = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=-33.9249&longitude=18.4241&current_weather=true'
+        );
+        const data = await response.json();
+        if (data.current_weather) {
+          setTemperature(Math.round(data.current_weather.temperature));
+        }
+      } catch (error) {
+        console.error('Failed to fetch weather:', error);
+      }
+    };
+
+    fetchWeather();
+    // Update every 30 mins
+    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Live Time Clock
   useEffect(() => {
     const updateTime = () => {
@@ -122,7 +148,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         <div className="flex items-center gap-3 pointer-events-auto font-mono text-xs md:text-sm tracking-widest text-gray-200">
           {/* Status Dot */}
           <div className="w-2 h-2 rounded-full bg-brand-lime animate-pulse shadow-[0_0_8px_rgba(204,255,0,0.6)]"></div>
-          <span>CPT 22° / {time}</span>
+          <span>CPT {temperature !== null ? `${temperature}°` : '...'} / {time}</span>
         </div>
 
       </header>
