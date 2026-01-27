@@ -27,12 +27,41 @@ const App: React.FC = () => {
     }
   }, [loading, isTransitioning]);
 
+  // Handle URL synchronization
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.substring(1) || 'home';
+      if (['home', 'about', 'services', 'contact'].includes(path)) {
+        setDisplayPage(path);
+        setCurrentPage(path);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    // Initial check
+    const initialPath = window.location.pathname.substring(1) || 'home';
+    if (['home', 'about', 'services', 'contact'].includes(initialPath)) {
+      // Only set if not already default, though initial state is 'home'
+      if (initialPath !== 'home') {
+        setDisplayPage(initialPath);
+        setCurrentPage(initialPath);
+      }
+    }
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleNavigation = useCallback((page: string) => {
     if (page === currentPage || isTransitioning) return;
 
     // Start transition
     setIsTransitioning(true);
     setCurrentPage(page);
+
+    // Update URL
+    const url = page === 'home' ? '/' : `/${page}`;
+    window.history.pushState({}, '', url);
 
     // After transition in, update content
     setTimeout(() => {
