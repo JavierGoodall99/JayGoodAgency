@@ -23,19 +23,11 @@ const Footer: React.FC = () => {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/10 pt-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/10 pt-12">
                     <div>
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Contact</h4>
                         <a href="mailto:javiergoodall@outlook.com" className="block text-xl text-white hover:text-brand-lime transition-colors">javiergoodall@outlook.com</a>
                         <p className="text-xl text-white mt-2">+27 67 143 5160</p>
-                    </div>
-                    <div>
-                        <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Socials</h4>
-                        <div className="flex flex-col gap-2">
-                            <a href="#" className="text-xl text-white hover:text-brand-lime transition-colors cursor-interactive w-max">Instagram</a>
-                            <a href="#" className="text-xl text-white hover:text-brand-lime transition-colors cursor-interactive w-max">Twitter / X</a>
-                            <a href="#" className="text-xl text-white hover:text-brand-lime transition-colors cursor-interactive w-max">LinkedIn</a>
-                        </div>
                     </div>
                     <div>
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Location</h4>
