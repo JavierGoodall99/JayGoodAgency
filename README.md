@@ -1,20 +1,55 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# JayGood Digital Agency
 
-# Run and deploy your AI Studio app
+Modern, animated digital agency site built with Vite, React, and TypeScript. Includes a brand concept generator powered by Gemini with graceful fallbacks when an API key is not provided.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1ktRdkRo79N7BOGy4MIj0HSPnEpyM_hNK
+- Responsive, component-driven layout for a full agency site
+- Animated hero and interactive sections
+- Brand concept generator with structured JSON output
+- Clean, minimal UI using Tailwind CSS utilities
 
-## Run Locally
+## Tech stack
 
-**Prerequisites:**  Node.js
+- Vite + React + TypeScript
+- Tailwind CSS + PostCSS
+- Three.js
+
+## Getting started
+
+Install dependencies:
+
+```
+npm install
+```
+
+Start the dev server:
+
+```
+npm run dev
+```
+
+Build for production:
+
+```
+npm run build
+```
+
+Preview the production build:
+
+```
+npm run preview
+```
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Project structure
+
+- [App.tsx](App.tsx)
+- [index.tsx](index.tsx)
+- [components/](components/)
+	- [components/Hero.tsx](components/Hero.tsx)
+	- [components/Services.tsx](components/Services.tsx)
+	- [components/Work.tsx](components/Work.tsx)
+	- [components/Pricing.tsx](components/Pricing.tsx)
+	- [components/ContactPage.tsx](components/ContactPage.tsx)
+	- [components/Footer.tsx](components/Footer.tsx)
