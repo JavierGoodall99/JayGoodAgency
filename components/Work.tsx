@@ -67,6 +67,31 @@ const Work: React.FC = () => {
     const sectionRef = useRef<HTMLElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [maxTranslate, setMaxTranslate] = useState(0);
+
+    useEffect(() => {
+        const calculateTranslate = () => {
+            if (trackRef.current) {
+                const trackWidth = trackRef.current.scrollWidth;
+                const viewWidth = window.innerWidth;
+                // Calculate how much of the track is "hidden" and needs to be translated
+                if (trackWidth > viewWidth) {
+                    const percentage = ((trackWidth - viewWidth) / trackWidth) * 100;
+                    setMaxTranslate(percentage);
+                }
+            }
+        };
+
+        calculateTranslate();
+        window.addEventListener('resize', calculateTranslate);
+        // Also recalculate after a short delay to ensure layout is settled
+        const timeout = setTimeout(calculateTranslate, 100);
+
+        return () => {
+            window.removeEventListener('resize', calculateTranslate);
+            clearTimeout(timeout);
+        };
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -131,7 +156,7 @@ const Work: React.FC = () => {
                             <div className="flex justify-between items-start">
                                 <div>
                                     <span className="text-brand-lime font-mono text-xs mb-1 block">/{project.id}</span>
-                                    <h3 className="font-display font-bold text-3xl text-white mb-2 min-h-[4rem] flex items-center">{project.title}</h3>
+                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{project.title}</h3>
                                 </div>
                                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                                     <ArrowUpRight size={18} className="text-white" />
@@ -144,7 +169,7 @@ const Work: React.FC = () => {
             </div>
 
             {/* --- DESKTOP LAYOUT (Horizontal Scroll) --- */}
-            <section ref={sectionRef} className="hidden md:block relative h-[400vh]">
+            <section ref={sectionRef} className="hidden md:block relative h-[600vh]">
                 <div className="sticky top-0 h-screen overflow-hidden flex flex-col z-30 bg-brand-dark">
 
                     {/* Static Header */}
@@ -170,7 +195,7 @@ const Work: React.FC = () => {
                             ref={trackRef}
                             className="flex gap-12 md:gap-24 pl-6 md:pl-32 items-center w-max will-change-transform"
                             style={{
-                                transform: `translate3d(-${scrollProgress * 75}%, 0, 0)`,
+                                transform: `translate3d(-${scrollProgress * maxTranslate}%, 0, 0)`,
                             }}
                         >
                             {projects.map((project, index) => (
@@ -201,7 +226,7 @@ const Work: React.FC = () => {
                                     <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-pointer">
                                         <div>
                                             <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
-                                            <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300 min-h-[2.5em] md:min-h-[2em] flex items-end">
+                                            <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
                                                 {project.title}
                                             </h3>
                                         </div>
