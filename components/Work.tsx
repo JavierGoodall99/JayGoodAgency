@@ -5,38 +5,40 @@ import { ProjectItem } from '../types';
 const projects: ProjectItem[] = [
     {
         id: '01',
-        title: 'ZENITH',
-        category: 'WEB3 / SAAS',
-        image: '/projects/zenith.png',
-        link: 'https://zenithboutique.vercel.app/'
-    },
-    {
-        id: '02',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
         image: '/projects/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
     {
-        id: '03',
-        title: 'STUDIOS ELEVEN',
-        category: 'AGENCY / CREATIVE',
-        image: '/projects/studioseleven.png',
-        link: 'https://studioeleven.vercel.app/'
-    },
-    {
-        id: '04',
-        title: 'RETRO RISE',
-        category: 'ECOMMERCE / FASHION',
-        image: '/projects/retrorise.png',
-        link: 'https://fliply-dba75.web.app/'
-    },
-    {
-        id: '05',
+        id: '02',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
         image: '/projects/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
+    },
+    {
+        id: '03',
+        title: 'RETRO RISE',
+        category: 'RETRO GAME / ARCADE',
+        image: '/projects/retrorise.png',
+        link: 'https://fliply-dba75.web.app/'
+
+    },
+    {
+        id: '04',
+        title: 'STUDIOS ELEVEN',
+        category: 'AGENCY / CREATIVE',
+        image: '/projects/studioseleven.png',
+        link: 'https://studioeleven.vercel.app/'
+
+    },
+    {
+        id: '05',
+        title: 'ZENITH',
+        category: 'ECOMMERCE / FASHION',
+        image: '/projects/zenith.png',
+        link: 'https://zenithboutique.vercel.app/'
     },
     {
         id: '06',
@@ -47,6 +49,13 @@ const projects: ProjectItem[] = [
     },
     {
         id: '07',
+        title: 'VELORA',
+        category: 'AI MARKETING / SAAS',
+        image: '/projects/velora.png',
+        link: 'https://messagemarketingai.vercel.app/'
+    },
+    {
+        id: '08',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
         image: '/projects/javiergoodallportfolio.png',
@@ -109,7 +118,7 @@ const Work: React.FC = () => {
                             className="group block"
                             data-cursor="project"
                         >
-                            <div className="relative aspect-[4/3] overflow-hidden mb-6 border border-white/10">
+                            <div className="relative aspect-video overflow-hidden mb-6 border border-white/10">
                                 <img
                                     src={project.image}
                                     alt={project.title}
@@ -122,7 +131,7 @@ const Work: React.FC = () => {
                             <div className="flex justify-between items-start">
                                 <div>
                                     <span className="text-brand-lime font-mono text-xs mb-1 block">/{project.id}</span>
-                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{project.title}</h3>
+                                    <h3 className="font-display font-bold text-3xl text-white mb-2 min-h-[4rem] flex items-center">{project.title}</h3>
                                 </div>
                                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                                     <ArrowUpRight size={18} className="text-white" />
@@ -170,11 +179,11 @@ const Work: React.FC = () => {
                                     href={project.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="relative group w-[85vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0 block"
+                                    className="relative group w-[85vw] md:w-[60vw] lg:w-[50vw] flex-shrink-0 block"
                                     data-cursor="project"
                                 >
                                     {/* Image Container */}
-                                    <div className="relative aspect-[4/3] overflow-hidden mb-8 border border-white/10 bg-brand-dark">
+                                    <div className="relative aspect-video overflow-hidden mb-8 border border-white/10 bg-brand-dark">
                                         <div className="absolute inset-0 bg-brand-lime/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
                                         <img
                                             src={project.image}
@@ -192,7 +201,7 @@ const Work: React.FC = () => {
                                     <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-pointer">
                                         <div>
                                             <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
-                                            <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
+                                            <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300 min-h-[2.5em] md:min-h-[2em] flex items-end">
                                                 {project.title}
                                             </h3>
                                         </div>
