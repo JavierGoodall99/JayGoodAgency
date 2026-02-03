@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 
 interface Award {
     id: string;
     title: string;
     category: string;
-    year: string;
-    color: string;
+    project: string;
     image: string;
 }
 
@@ -13,114 +13,94 @@ const awards: Award[] = [
     {
         id: '01',
         title: 'BEST UI DESIGN',
-        category: 'CSSDA Public Vote',
-        year: '2025',
-        color: '#ccff00',
+        category: 'CSS Design Awards',
+        project: 'JayGood Agency',
         image: '/awards/cssda-best-ui-white.png'
     },
     {
         id: '02',
         title: 'BEST UX DESIGN',
-        category: 'CSSDA Public Vote',
-        year: '2025',
-        color: '#ccff00',
+        category: 'CSS Design Awards',
+        project: 'JayGood Agency',
         image: '/awards/cssda-best-ux-white.png'
     },
     {
         id: '03',
         title: 'BEST INNOVATION',
-        category: 'CSSDA Public Vote',
-        year: '2025',
-        color: '#ccff00',
+        category: 'CSS Design Awards',
+        project: 'JayGood Agency',
         image: '/awards/cssda-best-inn-white.png'
     },
     {
         id: '04',
         title: 'SPECIAL KUDOS',
-        category: 'CSSDA Judges Award',
-        year: '2025',
-        color: '#ffffff',
+        category: 'CSS Design Awards',
+        project: 'JayGood Agency',
         image: '/awards/cssda-special-kudos-white.png'
     }
 ];
 
 const Awards: React.FC = () => {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const cursorRef = useRef<HTMLDivElement>(null);
-    const sectionRef = useRef<HTMLElement>(null);
+    const [hoveredAward, setHoveredAward] = useState<Award | null>(null);
+    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Smooth cursor follow effect
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (sectionRef.current) {
-                const rect = sectionRef.current.getBoundingClientRect();
-                // Calculate relative position within the section
-                setMousePos({
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top
-                });
-            }
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    const handleMouseMove = (e: React.MouseEvent) => {
+        setCursorPosition({
+            x: e.clientX,
+            y: e.clientY
+        });
+    };
 
     return (
         <section
-            ref={sectionRef}
-            className="relative bg-brand-dark py-32 overflow-hidden cursor-none"
+            className="relative bg-brand-dark text-white py-32 md:py-48 overflow-hidden cursor-none"
+            ref={containerRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setHoveredAward(null)}
         >
-            <div className="container mx-auto px-6 relative z-10">
+            {/* Background Marquee */}
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full opacity-[0.03] pointer-events-none select-none overflow-hidden">
+                <div className="whitespace-nowrap animate-marquee-slow font-display font-black text-[15vw] leading-none">
+                    HALL OF FAME — RECOGNITION — EXCELLENCE — HALL OF FAME — RECOGNITION — EXCELLENCE —
+                </div>
+            </div>
 
-                {/* Header - Massive & Brutalist */}
-                <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="container mx-auto px-6 relative z-10">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row items-end justify-between mb-24 pb-8 border-b border-white/10">
                     <div>
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-3 h-3 bg-brand-lime rounded-full animate-pulse" />
-                            <span className="font-mono text-xs uppercase tracking-[0.2em] text-gray-400">Hall of Fame</span>
-                        </div>
-                        <h2 className="font-display font-bold text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter">
-                            AWARDS
-                            <span className="block text-brand-lime opacity-50 text-4xl md:text-6xl lg:text-7xl mt-2 ml-2">
-                                & RECOGNITION
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse" />
+                            <span className="font-mono text-xs uppercase tracking-[0.2em] text-gray-500">
+                                Curated Recognition
                             </span>
+                        </div>
+                        <h2 className="font-display font-bold text-6xl md:text-8xl tracking-tighter leading-none">
+                            AWARDS
+                            <span className="text-brand-lime">.</span>
                         </h2>
                     </div>
-
-                    <a
-                        href="https://www.cssdesignawards.com/sites/jaygood-agency/48808"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center gap-4 border border-white/20 px-8 py-4 rounded-full hover:bg-white/5 transition-all duration-500"
-                    >
-                        <div className="flex flex-col items-end">
-                            <span className="font-display font-bold text-white text-xl group-hover:text-brand-lime transition-colors">CSSDA</span>
-                            <span className="font-mono text-xs text-gray-500 uppercase tracking-wider">View Profile</span>
-                        </div>
-                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center group-hover:scale-110 group-hover:rotate-45 transition-all duration-500">
-                            <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </div>
-                    </a>
+                    <div className="mt-8 md:mt-0 text-right">
+                        <p className="font-mono text-xs md:text-sm text-gray-400 max-w-xs uppercase tracking-wider leading-relaxed">
+                            International recognition for design excellence and engineering precision.
+                        </p>
+                    </div>
                 </div>
 
-                {/* Interactive List */}
+                {/* Awards List */}
                 <div className="flex flex-col">
                     {awards.map((award, index) => (
                         <div
                             key={award.id}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                            className="group relative border-t border-white/10 hover:border-brand-lime/50 transition-colors duration-500"
+                            onMouseEnter={() => setHoveredAward(award)}
+                            className="group relative border-b border-white/10 py-12 transition-all duration-300 hover:border-brand-lime/50"
                         >
-                            <div className="flex flex-col md:flex-row items-baseline md:items-center justify-between py-12 md:py-16 px-4 md:px-8 transition-all duration-500 group-hover:bg-white/[0.02]">
+                            <div className="flex flex-col md:flex-row items-baseline md:items-center justify-between gap-6 md:gap-0 relative z-20">
 
-                                {/* ID & Category */}
-                                <div className="flex items-center gap-8 md:w-1/4 mb-4 md:mb-0">
-                                    <span className="font-mono text-sm text-gray-600 group-hover:text-brand-lime transition-colors duration-300">
+                                {/* Left: Year & Category */}
+                                <div className="md:w-1/4 flex gap-4 md:gap-8 items-center">
+                                    <span className="font-mono text-sm text-brand-lime">
                                         /{award.id}
                                     </span>
                                     <span className="font-mono text-xs text-gray-500 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
@@ -128,31 +108,64 @@ const Awards: React.FC = () => {
                                     </span>
                                 </div>
 
-                                {/* Title with Text Stroke Effect */}
-                                <div className="md:w-1/2 relative">
-                                    <h3 className="font-display font-black text-4xl md:text-6xl lg:text-7xl uppercase tracking-tighter transition-all duration-500 bg-clip-text text-transparent bg-white group-hover:text-brand-lime group-hover:pl-4">
+                                {/* Center: Title */}
+                                <div className="md:w-2/4">
+                                    <h3 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl uppercase tracking-tight transition-all duration-300 group-hover:text-brand-lime group-hover:translate-x-4">
                                         {award.title}
                                     </h3>
-                                    {/* Pseudo-element for stroke effect backup if needed, but standard text transition is cleaner here for legibility */}
                                 </div>
 
-                                {/* Award Stamp (Replaces Year) */}
+                                {/* Right: Award Badge */}
                                 <div className="md:w-1/4 flex justify-end">
-                                    <div className="relative w-16 h-16 md:w-20 md:h-20 group-hover:scale-110 transition-transform duration-500 ease-out">
-                                        <div className="absolute inset-0 bg-brand-lime/20 rounded-full blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
-                                        <img
-                                            src={award.image}
-                                            alt={award.title}
-                                            className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]"
-                                        />
-                                    </div>
+                                    <img
+                                        src={award.image}
+                                        alt={award.title}
+                                        className="w-20 h-20 md:w-28 md:h-28 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                                    />
                                 </div>
                             </div>
                         </div>
                     ))}
-                    <div className="border-t border-white/10" />
                 </div>
 
+                {/* Floating Preview Image */}
+                <div
+                    className="pointer-events-none fixed top-0 left-0 z-50 w-[300px] h-[300px] hidden md:block mix-blend-exclusion transition-opacity duration-300"
+                    style={{
+                        transform: `translate(${cursorPosition.x}px, ${cursorPosition.y}px) translate(-50%, -50%)`,
+                        opacity: hoveredAward ? 1 : 0
+                    }}
+                >
+                    {hoveredAward && (
+                        <div className="relative w-full h-full p-4 border border-brand-lime/30 bg-black/80 backdrop-blur-sm rounded-lg overflow-hidden">
+                            <img
+                                src={hoveredAward.image}
+                                alt={hoveredAward.title}
+                                className="w-full h-full object-contain filter grayscale contrast-125"
+                            />
+                            {/* Scanlines Effect */}
+                            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 background-size-[100%_2px,3px_100%] pointer-events-none" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Link to all awards */}
+                <div className="mt-24 flex justify-center">
+                    <a
+                        href="https://www.cssdesignawards.com/sites/jaygood-agency/48808"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative px-8 py-4 overflow-hidden border border-white/20 rounded-full hover:border-brand-lime transition-colors duration-300"
+                    >
+                        <div className="absolute inset-0 bg-brand-lime translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <div className="relative z-10 flex items-center gap-2">
+                            <span className="font-mono text-xs uppercase tracking-widest group-hover:text-black transition-colors duration-300">
+                                View All Recognition
+                            </span>
+                            <ArrowUpRight className="w-4 h-4 group-hover:text-black transition-colors duration-300" />
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
     );
