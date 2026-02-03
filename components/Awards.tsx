@@ -41,23 +41,9 @@ const awards: Award[] = [
 ];
 
 const Awards: React.FC = () => {
-    const [hoveredAward, setHoveredAward] = useState<Award | null>(null);
-    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        setCursorPosition({
-            x: e.clientX,
-            y: e.clientY
-        });
-    };
-
     return (
         <section
             className="relative bg-brand-dark text-white py-32 md:py-48 overflow-hidden cursor-none"
-            ref={containerRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={() => setHoveredAward(null)}
         >
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full opacity-[0.03] pointer-events-none select-none overflow-hidden">
@@ -93,7 +79,6 @@ const Awards: React.FC = () => {
                     {awards.map((award, index) => (
                         <div
                             key={award.id}
-                            onMouseEnter={() => setHoveredAward(award)}
                             className="group relative border-b border-white/10 py-12 transition-all duration-300 hover:border-brand-lime/50"
                         >
                             <div className="flex flex-col md:flex-row items-baseline md:items-center justify-between gap-6 md:gap-0 relative z-20">
@@ -128,26 +113,7 @@ const Awards: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Floating Preview Image */}
-                <div
-                    className="pointer-events-none fixed top-0 left-0 z-50 w-[300px] h-[300px] hidden md:block mix-blend-exclusion transition-opacity duration-300"
-                    style={{
-                        transform: `translate(${cursorPosition.x}px, ${cursorPosition.y}px) translate(-50%, -50%)`,
-                        opacity: hoveredAward ? 1 : 0
-                    }}
-                >
-                    {hoveredAward && (
-                        <div className="relative w-full h-full p-4 border border-brand-lime/30 bg-black/80 backdrop-blur-sm rounded-lg overflow-hidden">
-                            <img
-                                src={hoveredAward.image}
-                                alt={hoveredAward.title}
-                                className="w-full h-full object-contain filter grayscale contrast-125"
-                            />
-                            {/* Scanlines Effect */}
-                            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 background-size-[100%_2px,3px_100%] pointer-events-none" />
-                        </div>
-                    )}
-                </div>
+
 
                 {/* Link to all awards */}
                 <div className="mt-24 flex justify-center">
