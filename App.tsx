@@ -11,6 +11,7 @@ import About from './components/About';
 import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
 import ScrollManager from './components/ScrollManager';
+import Awards from './components/Awards';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -84,6 +85,7 @@ const App: React.FC = () => {
         return (
           <div className={pageClasses}>
             <Hero />
+            <Awards />
             <Work />
             <TiredOf />
             <Manifesto />
