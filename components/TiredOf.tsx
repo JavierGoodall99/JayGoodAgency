@@ -39,8 +39,8 @@ const TiredOf: React.FC = () => {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row gap-16 md:gap-32">
 
-                    <div className="md:w-1/3" ref={introRef}>
-                        <div className="scroll-reveal-left">
+                    <div className="md:w-1/3">
+                        <div ref={introRef} className="scroll-reveal-left">
                             <span className="block font-mono text-sm uppercase tracking-widest mb-4 border-b border-black/20 pb-4">
                                 // The Standard
                             </span>
