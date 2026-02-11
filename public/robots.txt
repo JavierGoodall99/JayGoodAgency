@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jaygood-agency.vercel.app/sitemap.xml
+Sitemap: https://jaygood.com/sitemap.xml

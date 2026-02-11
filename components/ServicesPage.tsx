@@ -45,7 +45,7 @@ const ServicesPage: React.FC = () => {
             <SEO
                 title="Services"
                 description="Our services include high-end web design, full-stack development, e-commerce solutions, and digital strategy. We build digital products that dominate."
-                canonical="https://jaygood-agency.vercel.app/services"
+                canonical="https://jaygood.com/services"
             />
 
             {/* HERO */}

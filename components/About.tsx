@@ -14,7 +14,7 @@ const About: React.FC = () => {
       <SEO
         title="About"
         description="JayGood is a digital agency built on the belief that the web should be an experience, not just a utility. We combine brutalist aesthetics with hyper-performance engineering."
-        canonical="https://jaygood-agency.vercel.app/about"
+        canonical="https://jaygood.com/about"
       />
 
       {/* HERO */}

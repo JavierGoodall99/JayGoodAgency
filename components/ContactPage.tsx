@@ -35,7 +35,7 @@ const ContactPage: React.FC = () => {
             <SEO
                 title="Contact"
                 description="Ready to disrupt? Contact JayGood Agency for your next web project. Direct lines only, no forms."
-                canonical="https://jaygood-agency.vercel.app/contact"
+                canonical="https://jaygood.com/contact"
             />
 
             <section className="px-6 mb-16 md:mb-24">

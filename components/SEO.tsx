@@ -12,9 +12,9 @@ interface SEOProps {
 const SEO: React.FC<SEOProps> = ({
     title = 'JayGood | Digital Experience Agency — Cape Town',
     description = 'JayGood is a boutique digital agency crafting award-worthy websites, immersive web experiences, and high-performance applications. We fuse brutalist aesthetics with hyper-performance engineering.',
-    canonical = 'https://jaygood-agency.vercel.app/',
+    canonical = 'https://jaygood.com/',
     type = 'website',
-    image = 'https://jaygood-agency.vercel.app/og-image.png'
+    image = 'https://jaygood.com/og-image.png'
 }) => {
     const siteTitle = title === 'JayGood | Digital Experience Agency — Cape Town' ? title : `${title} | JayGood Agency`;
 
