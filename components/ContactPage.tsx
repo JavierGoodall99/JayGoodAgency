@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight, Mail, Phone, Globe, MessageCircle } from 'lucide-react';
+import SEO from './SEO';
 
 const ContactPage: React.FC = () => {
     const contactMethods = [
@@ -31,6 +32,11 @@ const ContactPage: React.FC = () => {
 
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20 flex flex-col">
+            <SEO
+                title="Contact"
+                description="Ready to disrupt? Contact JayGood Agency for your next web project. Direct lines only, no forms."
+                canonical="https://jaygood-agency.vercel.app/contact"
+            />
 
             <section className="px-6 mb-16 md:mb-24">
                 <div className="container mx-auto">

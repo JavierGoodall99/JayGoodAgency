@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowDownRight, Award, Zap, Globe } from 'lucide-react';
+import SEO from './SEO';
 
 const team = [
   { name: 'JAVIER GOODALL', role: 'FOUNDER / DEVELOPER', image: '/me.png' }
@@ -10,6 +11,11 @@ const team = [
 const About: React.FC = () => {
   return (
     <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20">
+      <SEO
+        title="About"
+        description="JayGood is a digital agency built on the belief that the web should be an experience, not just a utility. We combine brutalist aesthetics with hyper-performance engineering."
+        canonical="https://jaygood-agency.vercel.app/about"
+      />
 
       {/* HERO */}
       <section className="px-6 mb-32">

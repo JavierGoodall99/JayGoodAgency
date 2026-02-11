@@ -12,6 +12,10 @@ import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
 import ScrollManager from './components/ScrollManager';
 import Awards from './components/Awards';
+import { HelmetProvider } from 'react-helmet-async';
+import SEO from './components/SEO';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import Terms from './components/Terms';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -32,7 +36,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.substring(1) || 'home';
-      if (['home', 'about', 'services', 'contact'].includes(path)) {
+      if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
         setDisplayPage(path);
         setCurrentPage(path);
       }
@@ -42,7 +46,7 @@ const App: React.FC = () => {
 
     // Initial check
     const initialPath = window.location.pathname.substring(1) || 'home';
-    if (['home', 'about', 'services', 'contact'].includes(initialPath)) {
+    if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
       // Only set if not already default, though initial state is 'home'
       if (initialPath !== 'home') {
         setDisplayPage(initialPath);
@@ -109,38 +113,55 @@ const App: React.FC = () => {
             <ContactPage />
           </div>
         );
+      case 'privacy':
+        return (
+          <div className={pageClasses}>
+            <PrivacyPolicy />
+          </div>
+        );
+      case 'terms':
+        return (
+          <div className={pageClasses}>
+            <Terms />
+          </div>
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none md:cursor-none min-h-screen flex flex-col">
-      <Cursor />
-      {!loading && <ScrollManager />}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+    <HelmetProvider>
+      <>
+        <SEO />
+        <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none md:cursor-none min-h-screen flex flex-col">
+          <Cursor />
+          {!loading && <ScrollManager />}
+          {loading && <Loader onComplete={() => setLoading(false)} />}
 
-      {/* Page Transition Overlay */}
-      <div
-        className={`fixed inset-0 bg-brand-lime z-[90] pointer-events-none transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isTransitioning ? 'translate-y-0' : '-translate-y-full'
-          }`}
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-display font-bold text-black text-4xl md:text-6xl tracking-tighter opacity-20">
-            JAYGOOD
-          </span>
+          {/* Page Transition Overlay */}
+          <div
+            className={`fixed inset-0 bg-brand-lime z-[90] pointer-events-none transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isTransitioning ? 'translate-y-0' : '-translate-y-full'
+              }`}
+            aria-hidden="true"
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display font-bold text-black text-4xl md:text-6xl tracking-tighter opacity-20">
+                JAYGOOD
+              </span>
+            </div>
+          </div>
+
+          <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
+
+          <main id="main-content" className="flex-grow" role="main" tabIndex={-1}>
+            {renderPageContent()}
+          </main>
+
+          <Footer onNavigate={handleNavigation} />
         </div>
-      </div>
-
-      <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
-
-      <main id="main-content" className="flex-grow" role="main" tabIndex={-1}>
-        {renderPageContent()}
-      </main>
-
-      <Footer />
-    </div>
+      </>
+    </HelmetProvider>
   );
 };
 

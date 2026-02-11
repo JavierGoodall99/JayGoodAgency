@@ -19,7 +19,11 @@ const RevealWord: React.FC<{ children: string; delay: number }> = ({ children, d
     </span>
 );
 
-const Footer: React.FC = () => {
+interface FooterProps {
+    onNavigate: (page: string) => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     const { ref: ctaRef } = useScrollReveal({ threshold: 0.15 });
     const { ref: col1Ref } = useScrollReveal({ threshold: 0.2 });
     const { ref: col2Ref } = useScrollReveal({ threshold: 0.2 });
@@ -101,6 +105,10 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="text-gray-600 font-mono text-xs uppercase tracking-widest mb-4 flex flex-col md:flex-row items-end gap-4">
                     <span>&copy; {new Date().getFullYear()} JayGood Agency</span>
+                    <span className="hidden md:inline text-white/10">|</span>
+                    <button onClick={() => onNavigate('privacy')} className="hover:text-brand-lime transition-colors">Privacy Policy</button>
+                    <span className="hidden md:inline text-white/10">|</span>
+                    <button onClick={() => onNavigate('terms')} className="hover:text-brand-lime transition-colors">Terms of Service</button>
                     <span className="hidden md:inline text-white/10">|</span>
                     <span className="text-gray-500">Crafted with obsession</span>
                 </div>
