@@ -1,9 +1,41 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [scrollFade, setScrollFade] = useState({ opacity: 1, translateY: 0 });
+
+    // Scroll-driven parallax fade-out
+    useEffect(() => {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) return;
+
+        const handleScroll = () => {
+            const container = containerRef.current;
+            if (!container) return;
+
+            const rect = container.getBoundingClientRect();
+            const sectionHeight = container.offsetHeight;
+
+            // Only animate when scrolling past the hero
+            if (rect.top >= 0) {
+                setScrollFade({ opacity: 1, translateY: 0 });
+                return;
+            }
+
+            const scrolled = Math.abs(rect.top);
+            const progress = Math.min(scrolled / (sectionHeight * 0.6), 1);
+
+            setScrollFade({
+                opacity: 1 - progress * 0.8,
+                translateY: -progress * 60,
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -192,8 +224,15 @@ const Hero: React.FC = () => {
             aria-label="Hero section - Interactive guitar strings visualization"
         >
 
-            {/* Background Typography (Behind Strings) */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none pointer-events-none" aria-hidden="true">
+            {/* Background Typography (Behind Strings) — Parallax Fade-Out */}
+            <div
+                className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none pointer-events-none hero-parallax-content"
+                aria-hidden="true"
+                style={{
+                    opacity: scrollFade.opacity,
+                    transform: `translateY(${scrollFade.translateY}px)`,
+                }}
+            >
 
                 <div className="flex flex-col items-center justify-center mix-blend-screen opacity-100">
                     <div className="overflow-hidden">
@@ -225,10 +264,19 @@ const Hero: React.FC = () => {
                 data-cursor="drag"
                 aria-label="Interactive guitar strings - move your mouse to play"
                 role="img"
+                style={{
+                    opacity: scrollFade.opacity,
+                }}
             />
 
             {/* Bottom CTA */}
-            <div className="absolute bottom-12 z-20 animate-fade-in-up stagger-6 pointer-events-none">
+            <div
+                className="absolute bottom-12 z-20 animate-fade-in-up stagger-6 pointer-events-none"
+                style={{
+                    opacity: scrollFade.opacity,
+                    transform: `translateY(${scrollFade.translateY * 0.5}px)`,
+                }}
+            >
                 <a
                     href="#work"
                     className="pointer-events-auto group flex flex-col items-center gap-4 cursor-interactive magnetic-hover"

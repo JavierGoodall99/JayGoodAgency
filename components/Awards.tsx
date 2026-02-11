@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 interface Award {
     id: string;
@@ -40,7 +41,57 @@ const awards: Award[] = [
     }
 ];
 
+const AwardRow: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
+    const { ref, isVisible } = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    return (
+        <div
+            ref={ref}
+            className={`scroll-reveal scroll-stagger-${Math.min(index + 1, 6)}`}
+        >
+            <div
+                className="group relative border-b border-white/10 py-12 transition-all duration-300 hover:border-brand-lime/50"
+            >
+                <div className="flex flex-col md:flex-row items-baseline md:items-center justify-between gap-6 md:gap-0 relative z-20">
+
+                    {/* Left: Year & Category */}
+                    <div className="md:w-1/4 flex gap-4 md:gap-8 items-center">
+                        <span className="font-mono text-sm text-brand-lime">
+                            /{award.id}
+                        </span>
+                        <span className="font-mono text-xs text-gray-500 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
+                            {award.category}
+                        </span>
+                    </div>
+
+                    {/* Center: Title */}
+                    <div className="md:w-2/4">
+                        <h3 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl uppercase tracking-tight transition-all duration-300 group-hover:text-brand-lime group-hover:translate-x-4">
+                            {award.title}
+                        </h3>
+                    </div>
+
+                    {/* Right: Award Badge */}
+                    <div className="md:w-1/4 flex justify-end">
+                        <img
+                            src={award.image}
+                            alt={award.title}
+                            className={`w-20 h-20 md:w-28 md:h-28 object-contain transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] ${isVisible ? 'opacity-100 blur-0 scale-100' : 'opacity-0 blur-[4px] scale-90'}`}
+                            style={{ transitionDelay: `${(index + 1) * 0.1 + 0.2}s` }}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Awards: React.FC = () => {
+    const { ref: headerRef } = useScrollReveal({ threshold: 0.2 });
+    const { ref: subtitleRef } = useScrollReveal({ threshold: 0.2 });
+    const { ref: dividerRef } = useScrollReveal({ threshold: 0.3 });
+    const { ref: linkRef } = useScrollReveal({ threshold: 0.3 });
+
     return (
         <section
             className="relative bg-brand-dark text-white py-32 md:py-48 overflow-hidden cursor-none"
@@ -56,67 +107,38 @@ const Awards: React.FC = () => {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row items-end justify-between mb-24 pb-8 border-b border-white/10">
                     <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse" />
-                            <span className="font-mono text-xs uppercase tracking-[0.2em] text-gray-500">
-                                Curated Recognition
-                            </span>
+                        <div ref={headerRef} className="scroll-reveal">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse" />
+                                <span className="font-mono text-xs uppercase tracking-[0.2em] text-gray-500">
+                                    Curated Recognition
+                                </span>
+                            </div>
+                            <h2 className="font-display font-bold text-6xl md:text-8xl tracking-tighter leading-none">
+                                AWARDS
+                                <span className="text-brand-lime">.</span>
+                            </h2>
                         </div>
-                        <h2 className="font-display font-bold text-6xl md:text-8xl tracking-tighter leading-none">
-                            AWARDS
-                            <span className="text-brand-lime">.</span>
-                        </h2>
                     </div>
-                    <div className="mt-8 md:mt-0 text-right">
+                    <div ref={subtitleRef} className="mt-8 md:mt-0 text-right scroll-reveal scroll-stagger-2">
                         <p className="font-mono text-xs md:text-sm text-gray-400 max-w-xs uppercase tracking-wider leading-relaxed">
                             International recognition for design excellence and engineering precision.
                         </p>
                     </div>
                 </div>
 
+                {/* Divider line draw */}
+                <div ref={dividerRef} className="scroll-line-draw w-full h-px bg-white/10 -mt-24 mb-24"></div>
+
                 {/* Awards List */}
                 <div className="flex flex-col">
                     {awards.map((award, index) => (
-                        <div
-                            key={award.id}
-                            className="group relative border-b border-white/10 py-12 transition-all duration-300 hover:border-brand-lime/50"
-                        >
-                            <div className="flex flex-col md:flex-row items-baseline md:items-center justify-between gap-6 md:gap-0 relative z-20">
-
-                                {/* Left: Year & Category */}
-                                <div className="md:w-1/4 flex gap-4 md:gap-8 items-center">
-                                    <span className="font-mono text-sm text-brand-lime">
-                                        /{award.id}
-                                    </span>
-                                    <span className="font-mono text-xs text-gray-500 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
-                                        {award.category}
-                                    </span>
-                                </div>
-
-                                {/* Center: Title */}
-                                <div className="md:w-2/4">
-                                    <h3 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl uppercase tracking-tight transition-all duration-300 group-hover:text-brand-lime group-hover:translate-x-4">
-                                        {award.title}
-                                    </h3>
-                                </div>
-
-                                {/* Right: Award Badge */}
-                                <div className="md:w-1/4 flex justify-end">
-                                    <img
-                                        src={award.image}
-                                        alt={award.title}
-                                        className="w-20 h-20 md:w-28 md:h-28 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                        <AwardRow key={award.id} award={award} index={index} />
                     ))}
                 </div>
 
-
-
                 {/* Link to all awards */}
-                <div className="mt-24 flex justify-center">
+                <div ref={linkRef} className="mt-24 flex justify-center scroll-reveal-scale">
                     <a
                         href="https://www.cssdesignawards.com/sites/jaygood-agency/48808"
                         target="_blank"
