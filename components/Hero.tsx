@@ -332,7 +332,7 @@ const Hero: React.FC = () => {
 
             {/* Floating Status Badges — glassmorphism */}
             <motion.div
-                className="absolute top-8 right-8 md:top-12 md:right-16 z-20 hidden md:flex flex-col gap-3"
+                className="absolute top-24 right-8 md:top-32 md:right-16 z-20 flex flex-col gap-3 items-end"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.8, duration: 0.8 }}
@@ -343,10 +343,10 @@ const Hero: React.FC = () => {
                     animate={{ y: [0, -6, 0] }}
                     transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
                 >
-                    <span className="font-mono text-[10px] text-brand-lime uppercase tracking-widest">● Available Q1 2026</span>
+                    <span className="font-mono text-[10px] text-brand-lime uppercase tracking-widest">● WEB DESIGN AGENCY</span>
                 </motion.div>
                 <motion.div
-                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md self-end"
+                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
                     animate={{ y: [0, -4, 0] }}
                     transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 1 }}
                 >
