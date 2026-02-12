@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TextScramble from './TextScramble';
 
 interface NavbarProps {
   onNavigate: (page: string) => void;
@@ -225,7 +226,11 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
 
                       {/* Text */}
                       <span className={`relative z-10 ${hoveredLinkIndex === idx ? 'text-white scale-105' : 'text-transparent text-outline'} transition-transform duration-500`}>
-                        {link.name}
+                        {hoveredLinkIndex === idx ? (
+                          <TextScramble text={link.name} trigger="hover" speed={25} />
+                        ) : (
+                          link.name
+                        )}
                       </span>
                     </a>
                   </motion.div>

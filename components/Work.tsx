@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { ProjectItem } from '../types';
+import { motion } from 'framer-motion';
 
 const projects: ProjectItem[] = [
     {
@@ -68,6 +69,9 @@ const Work: React.FC = () => {
     const trackRef = useRef<HTMLDivElement>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [maxTranslate, setMaxTranslate] = useState(0);
+    const [scrollVelocity, setScrollVelocity] = useState(0);
+    const lastScrollY = useRef(0);
+    const velocityDecay = useRef<number>(0);
 
     useEffect(() => {
         const calculateTranslate = () => {
@@ -116,7 +120,26 @@ const Work: React.FC = () => {
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Initial check
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        // Velocity tracking with decay
+        const velocityFrame = () => {
+            const currentScroll = window.scrollY;
+            const velocity = currentScroll - lastScrollY.current;
+            lastScrollY.current = currentScroll;
+
+            // Smooth velocity with decay
+            setScrollVelocity(prev => {
+                const blended = prev * 0.85 + velocity * 0.15;
+                return Math.abs(blended) < 0.1 ? 0 : blended;
+            });
+
+            velocityDecay.current = requestAnimationFrame(velocityFrame);
+        };
+        velocityDecay.current = requestAnimationFrame(velocityFrame);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            cancelAnimationFrame(velocityDecay.current);
+        };
     }, []);
 
     return (
@@ -195,7 +218,8 @@ const Work: React.FC = () => {
                             ref={trackRef}
                             className="flex gap-12 md:gap-24 pl-6 md:pl-32 items-center w-max will-change-transform"
                             style={{
-                                transform: `translate3d(-${scrollProgress * maxTranslate}%, 0, 0)`,
+                                transform: `translate3d(-${scrollProgress * maxTranslate}%, 0, 0) skewX(${Math.max(-5, Math.min(5, scrollVelocity * -0.08))}deg)`,
+                                transition: 'transform 0.05s linear',
                             }}
                         >
                             {projects.map((project, index) => (
@@ -210,10 +234,12 @@ const Work: React.FC = () => {
                                     {/* Image Container */}
                                     <div className="relative aspect-video overflow-hidden mb-8 border border-white/10 bg-brand-dark">
                                         <div className="absolute inset-0 bg-brand-lime/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
-                                        <img
+                                        <motion.img
                                             src={project.image}
                                             alt={project.title}
-                                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-110 group-hover:scale-100 transition-all duration-700 ease-out"
+                                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                         />
 
                                         {/* Floating Badge */}

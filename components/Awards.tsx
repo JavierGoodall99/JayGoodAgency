@@ -1,6 +1,8 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import MagneticButton from './MagneticButton';
+import TextScramble from './TextScramble';
 
 interface Award {
     id: string;
@@ -67,7 +69,7 @@ const AwardRow: React.FC<{ award: Award; index: number }> = ({ award, index }) =
                     {/* Center: Title */}
                     <div className="md:w-2/4">
                         <h3 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl uppercase tracking-tight transition-all duration-300 group-hover:text-brand-lime group-hover:translate-x-4">
-                            {award.title}
+                            <TextScramble text={award.title} trigger="visible" speed={20} />
                         </h3>
                     </div>
 
@@ -139,11 +141,13 @@ const Awards: React.FC = () => {
 
                 {/* Link to all awards */}
                 <div ref={linkRef} className="mt-24 flex justify-center scroll-reveal-scale">
-                    <a
+                    <MagneticButton
+                        as="a"
                         href="https://www.cssdesignawards.com/sites/jaygood-agency/48808"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative px-8 py-4 overflow-hidden border border-white/20 rounded-full hover:border-brand-lime transition-colors duration-300"
+                        className="group relative px-8 py-4 overflow-hidden border border-white/20 rounded-full hover:border-brand-lime transition-colors duration-300 block"
+                        strength={0.4}
                     >
                         <div className="absolute inset-0 bg-brand-lime translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                         <div className="relative z-10 flex items-center gap-2">
@@ -152,7 +156,7 @@ const Awards: React.FC = () => {
                             </span>
                             <ArrowUpRight className="w-4 h-4 group-hover:text-black transition-colors duration-300" />
                         </div>
-                    </a>
+                    </MagneticButton>
                 </div>
             </div>
         </section>

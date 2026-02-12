@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
@@ -18,9 +18,45 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Cinematic page transition curtain variants
+const curtainVariants = {
+  initial: { scaleY: 0 },
+  enter: {
+    scaleY: [0, 1, 1, 0],
+    transition: {
+      duration: 1.2,
+      ease: [0.76, 0, 0.24, 1],
+      times: [0, 0.4, 0.6, 1],
+    },
+  },
+};
+
+const contentVariants = {
+  initial: { opacity: 0, y: 80 },
+  enter: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      delay: 0.6,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -30,
+    transition: {
+      duration: 0.3,
+      ease: [0.76, 0, 0.24, 1],
+    },
+  },
+};
+
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const pendingPageRef = useRef<string | null>(null);
 
   // Handle URL synchronization
   useEffect(() => {
@@ -45,39 +81,28 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigation = useCallback((page: string) => {
-    if (page === currentPage) return;
-    setCurrentPage(page);
-    window.scrollTo(0, 0);
+    if (page === currentPage || isTransitioning) return;
 
-    // Update URL
+    // Start the curtain transition
+    setIsTransitioning(true);
+    pendingPageRef.current = page;
+
+    // Update URL immediately
     const url = page === 'home' ? '/' : `/${page}`;
     window.history.pushState({}, '', url);
-  }, [currentPage]);
 
-  // Page Variants for Entrance/Exit
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-    },
-    enter: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-        when: "beforeChildren",
-      },
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.4,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
+    // Swap content while curtain is covering the screen (at 40% of animation)
+    setTimeout(() => {
+      setCurrentPage(page);
+      window.scrollTo(0, 0);
+    }, 480); // 1200ms * 0.4 = 480ms
+
+    // End transition after full animation
+    setTimeout(() => {
+      setIsTransitioning(false);
+      pendingPageRef.current = null;
+    }, 1200);
+  }, [currentPage, isTransitioning]);
 
   const renderPageContent = () => {
     switch (currentPage) {
@@ -117,13 +142,39 @@ const App: React.FC = () => {
             {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
           </AnimatePresence>
 
+          {/* Cinematic Page Transition Curtain */}
+          <AnimatePresence>
+            {isTransitioning && (
+              <motion.div
+                key="curtain"
+                className="fixed inset-0 z-[90] bg-brand-lime origin-top pointer-events-none"
+                variants={curtainVariants}
+                initial="initial"
+                animate="enter"
+                exit="initial"
+              >
+                {/* Centered page name during transition */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.span
+                    className="font-display font-bold text-5xl md:text-8xl text-black uppercase tracking-tighter"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: 0.15, duration: 0.3 } }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current?.toUpperCase()}
+                  </motion.span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
 
           <main id="main-content" className="flex-grow relative" role="main" tabIndex={-1}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentPage}
-                variants={pageVariants}
+                variants={contentVariants}
                 initial="initial"
                 animate="enter"
                 exit="exit"

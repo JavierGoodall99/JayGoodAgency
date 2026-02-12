@@ -6,6 +6,12 @@ const Hero: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Mouse position for gradient orb (with parallax offset)
+    const mouseXOrb = useMotionValue(0.5);
+    const mouseYOrb = useMotionValue(0.5);
+    const orbX = useSpring(mouseXOrb, { damping: 30, stiffness: 80 });
+    const orbY = useSpring(mouseYOrb, { damping: 30, stiffness: 80 });
+
     // Scroll-driven parallax fade-out using Framer Motion
     const { scrollY } = useScroll();
     const opacity = useTransform(scrollY, [0, 800], [1, 0]);
@@ -205,6 +211,16 @@ const Hero: React.FC = () => {
         };
     }, []);
 
+    // Track mouse for gradient orb
+    useEffect(() => {
+        const handleOrbMove = (e: MouseEvent) => {
+            mouseXOrb.set(e.clientX / window.innerWidth);
+            mouseYOrb.set(e.clientY / window.innerHeight);
+        };
+        window.addEventListener('mousemove', handleOrbMove);
+        return () => window.removeEventListener('mousemove', handleOrbMove);
+    }, [mouseXOrb, mouseYOrb]);
+
     // Staggered Text Animation Variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -295,6 +311,49 @@ const Hero: React.FC = () => {
 
             </motion.div>
 
+            {/* Animated Gradient Orb — follows mouse with parallax offset */}
+            <motion.div
+                className="absolute z-[5] pointer-events-none"
+                style={{
+                    left: useTransform(orbX, [0, 1], ['-10%', '70%']),
+                    top: useTransform(orbY, [0, 1], ['0%', '60%']),
+                    width: '40vmax',
+                    height: '40vmax',
+                }}
+            >
+                <div
+                    className="w-full h-full rounded-full opacity-20"
+                    style={{
+                        background: 'radial-gradient(circle, rgba(204,255,0,0.4) 0%, rgba(204,255,0,0.1) 40%, transparent 70%)',
+                        filter: 'blur(60px)',
+                    }}
+                />
+            </motion.div>
+
+            {/* Floating Status Badges — glassmorphism */}
+            <motion.div
+                className="absolute top-8 right-8 md:top-12 md:right-16 z-20 hidden md:flex flex-col gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.8, duration: 0.8 }}
+                style={{ opacity }}
+            >
+                <motion.div
+                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                >
+                    <span className="font-mono text-[10px] text-brand-lime uppercase tracking-widest">● Available Q1 2026</span>
+                </motion.div>
+                <motion.div
+                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md self-end"
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 1 }}
+                >
+                    <span className="font-mono text-[10px] text-gray-400 uppercase tracking-widest">Cape Town, ZA</span>
+                </motion.div>
+            </motion.div>
+
             {/* Interactive Canvas Layer (The Strings) */}
             <canvas
                 ref={canvasRef}
@@ -302,7 +361,7 @@ const Hero: React.FC = () => {
                 data-cursor="drag"
                 aria-label="Interactive guitar strings - move your mouse to play"
                 role="img"
-                style={{ opacity: 1 }} // Canvas stays visible slightly longer or fades with same opacity
+                style={{ opacity: 1 }}
             />
 
             {/* Bottom CTA */}
