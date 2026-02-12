@@ -1,41 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 
 const Hero: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [scrollFade, setScrollFade] = useState({ opacity: 1, translateY: 0 });
 
-    // Scroll-driven parallax fade-out
-    useEffect(() => {
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReducedMotion) return;
+    // Scroll-driven parallax fade-out using Framer Motion
+    const { scrollY } = useScroll();
+    const opacity = useTransform(scrollY, [0, 800], [1, 0]);
+    const y = useTransform(scrollY, [0, 800], [0, 300]);
+    const blur = useTransform(scrollY, [0, 800], [0, 10]);
 
-        const handleScroll = () => {
-            const container = containerRef.current;
-            if (!container) return;
-
-            const rect = container.getBoundingClientRect();
-            const sectionHeight = container.offsetHeight;
-
-            // Only animate when scrolling past the hero
-            if (rect.top >= 0) {
-                setScrollFade({ opacity: 1, translateY: 0 });
-                return;
-            }
-
-            const scrolled = Math.abs(rect.top);
-            const progress = Math.min(scrolled / (sectionHeight * 0.6), 1);
-
-            setScrollFade({
-                opacity: 1 - progress * 0.8,
-                translateY: -progress * 60,
-            });
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    // Spring physics for smooth parallax
+    const smoothY = useSpring(y, { damping: 15, stiffness: 100 });
+    const smoothBlur = useSpring(blur, { damping: 15, stiffness: 100 });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -50,11 +29,11 @@ const Hero: React.FC = () => {
         let height = container.clientHeight;
 
         // Configuration
-        const STRING_COUNT = 15; // Number of strings
+        const STRING_COUNT = 20; // Increased string count for denser visual
         const SPACING = width / (STRING_COUNT + 1);
-        const TENSION = 0.05;    // Snap back speed
-        const DAMPING = 0.90;    // Decay speed (lower = faster stop)
-        const MOUSE_INFLUENCE = 100; // Radius of mouse influence
+        const TENSION = 0.08;    // Slightly higher tension
+        const DAMPING = 0.92;    // Less damping for longer sustain
+        const MOUSE_INFLUENCE = 150; // Larger influence area
 
         // State
         const mouse = { x: -1000, y: -1000, vx: 0, vy: 0, prevX: 0, prevY: 0 };
@@ -70,7 +49,7 @@ const Hero: React.FC = () => {
                 this.color = '#333333';
                 this.active = 0;
                 // Create control points along the string for smoother bending
-                const segments = 10;
+                const segments = 12; // More segments for smoother curves
                 this.points = [];
                 for (let i = 0; i <= segments; i++) {
                     this.points.push({
@@ -98,19 +77,17 @@ const Hero: React.FC = () => {
                     p.x += p.vx;
 
                     // Mouse Interaction
-                    // Calculate distance from mouse to this point line segment
                     const dy = Math.abs(mouse.y - p.y);
 
                     if (dy < MOUSE_INFLUENCE && Math.abs(mouse.x - p.x) < MOUSE_INFLUENCE) {
-                        // Check if mouse crossed the string
-                        // Simple distance based push for now
                         const dist = mouse.x - p.x;
                         const force = Math.max(0, (MOUSE_INFLUENCE - Math.abs(dist)) / MOUSE_INFLUENCE);
 
                         // Add mouse velocity influence for "strum" effect
-                        if (Math.abs(mouse.vx) > 5) {
-                            p.vx += mouse.vx * force * 0.1;
-                            this.active = 1.0;
+                        if (Math.abs(mouse.vx) > 3) {
+                            p.vx += mouse.vx * force * 0.05;
+                            // Activate string based on impact
+                            this.active = Math.min(this.active + Math.abs(mouse.vx) * 0.01, 1.0);
                         }
                     }
 
@@ -120,7 +97,7 @@ const Hero: React.FC = () => {
                 });
 
                 // Decay active color
-                this.active *= 0.95;
+                this.active *= 0.94;
 
                 return stringMoved || this.active > 0.01;
             }
@@ -149,15 +126,26 @@ const Hero: React.FC = () => {
                 const last = this.points[this.points.length - 1];
                 ctx.lineTo(last.x, last.y);
 
-                // Interpolate color: Grey to Lime
-                // Simple approach: set strokeStyle based on active
-                const r = Math.floor(20 + (204 - 20) * this.active);
-                const g = Math.floor(20 + (255 - 20) * this.active);
-                const b = Math.floor(20 + (0 - 20) * this.active);
+                // Interpolate color: Grey to Brand Lime
+                // Base: #1a1a1a, Active: #ccff00
+                const r = Math.floor(26 + (204 - 26) * this.active);
+                const g = Math.floor(26 + (255 - 26) * this.active);
+                const b = Math.floor(26 + (0 - 26) * this.active);
 
                 ctx.strokeStyle = `rgb(${r},${g},${b})`;
-                ctx.lineWidth = 1 + (this.active * 1.5);
+                // Dynamic line width based on activity
+                ctx.lineWidth = 1 + (this.active * 3);
+
+                // Add glow if active
+                if (this.active > 0.1) {
+                    ctx.shadowBlur = this.active * 15;
+                    ctx.shadowColor = `rgba(204, 255, 0, ${this.active})`;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+
                 ctx.stroke();
+                ctx.shadowBlur = 0; // Reset
             }
         }
 
@@ -217,45 +205,95 @@ const Hero: React.FC = () => {
         };
     }, []);
 
+    // Staggered Text Animation Variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { y: 100, opacity: 0, rotateX: -40 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            transition: {
+                type: "spring",
+                damping: 20,
+                stiffness: 100,
+            },
+        },
+    };
+
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full bg-[#030303] overflow-hidden flex flex-col items-center justify-center"
+            className="relative h-screen w-full bg-[#030303] overflow-hidden flex flex-col items-center justify-center p-0"
             aria-label="Hero section - Interactive guitar strings visualization"
         >
 
             {/* Background Typography (Behind Strings) — Parallax Fade-Out */}
-            <div
-                className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none pointer-events-none hero-parallax-content"
+            <motion.div
+                className="absolute inset-0 flex flex-col items-center justify-center z-0 select-none pointer-events-none"
                 aria-hidden="true"
                 style={{
-                    opacity: scrollFade.opacity,
-                    transform: `translateY(${scrollFade.translateY}px)`,
+                    opacity,
+                    y: smoothY,
+                    filter: useMotionTemplate`blur(${smoothBlur}px)`,
                 }}
             >
 
-                <div className="flex flex-col items-center justify-center mix-blend-screen opacity-100">
-                    <div className="overflow-hidden">
-                        <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] animate-fade-in-up whitespace-nowrap">
-                            BUILDING THE
+                <div className="flex flex-col items-center justify-center mix-blend-screen opacity-100 z-0">
+                    <motion.div
+                        className="overflow-hidden perspective-text"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] whitespace-nowrap flex">
+                            {"BUILDING THE".split('').map((char, index) => (
+                                <motion.span key={index} variants={itemVariants} className="inline-block relative">
+                                    {char === ' ' ? '\u00A0' : char}
+                                </motion.span>
+                            ))}
                         </h1>
-                    </div>
+                    </motion.div>
 
-                    <div className="flex items-center gap-8 overflow-hidden">
-                        <span className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-white animate-fade-in-up stagger-1 blur-[0.5px] whitespace-nowrap">
-                            MODERN WEB
+                    <motion.div
+                        className="flex items-center gap-8 overflow-hidden perspective-text"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <span className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-white whitespace-nowrap flex">
+                            {"MODERN WEB".split('').map((char, index) => (
+                                <motion.span key={index} variants={itemVariants} className="inline-block relative">
+                                    {char === ' ' ? '\u00A0' : char}
+                                </motion.span>
+                            ))}
                         </span>
-                    </div>
+                    </motion.div>
                 </div>
 
-                <div className="mt-12 max-w-xl text-center px-6 animate-fade-in-up stagger-3">
+                <motion.div
+                    className="mt-12 max-w-xl text-center px-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2, duration: 0.8 }}
+                >
                     <p className="font-mono text-gray-500 text-sm uppercase tracking-widest leading-loose">
                         Engineering digital gravity.<br />
                         <span className="text-brand-lime">Strum the chords of the web.</span>
                     </p>
-                </div>
+                </motion.div>
 
-            </div>
+            </motion.div>
 
             {/* Interactive Canvas Layer (The Strings) */}
             <canvas
@@ -264,31 +302,39 @@ const Hero: React.FC = () => {
                 data-cursor="drag"
                 aria-label="Interactive guitar strings - move your mouse to play"
                 role="img"
-                style={{
-                    opacity: scrollFade.opacity,
-                }}
+                style={{ opacity: 1 }} // Canvas stays visible slightly longer or fades with same opacity
             />
 
             {/* Bottom CTA */}
-            <div
-                className="absolute bottom-12 z-20 animate-fade-in-up stagger-6 pointer-events-none"
+            <motion.div
+                className="absolute bottom-12 z-20"
                 style={{
-                    opacity: scrollFade.opacity,
-                    transform: `translateY(${scrollFade.translateY * 0.5}px)`,
+                    opacity,
+                    y: useTransform(scrollY, [0, 300], [0, 100])
                 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 1 }}
             >
                 <a
                     href="#work"
-                    className="pointer-events-auto group flex flex-col items-center gap-4 cursor-interactive magnetic-hover"
+                    className="pointer-events-auto group flex flex-col items-center gap-4 cursor-interactive"
                     aria-label="Scroll down to see my work"
                 >
-                    <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-brand-lime group-hover:h-24 transition-all duration-500"></div>
-                    <div className="flex items-center gap-3">
+                    <motion.div
+                        className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-brand-lime"
+                        whileHover={{ height: 100 }}
+                        transition={{ duration: 0.3 }}
+                    ></motion.div>
+                    <motion.div
+                        className="flex items-center gap-3"
+                        whileHover={{ y: 5 }}
+                    >
                         <span className="font-mono text-[10px] text-white uppercase tracking-widest group-hover:text-brand-lime transition-colors">Enter System</span>
                         <ArrowDown size={14} className="text-brand-lime animate-bounce" />
-                    </div>
+                    </motion.div>
                 </a>
-            </div>
+            </motion.div>
 
         </section>
     );

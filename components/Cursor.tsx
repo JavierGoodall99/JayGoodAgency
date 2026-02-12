@@ -1,27 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
 const Cursor: React.FC = () => {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [cursorText, setCursorText] = useState('VIEW');
   const [isPressed, setIsPressed] = useState(false);
 
-  // Use refs for mutable values to persist across re-renders
-  const pos = useRef({
-    mouseX: 0,
-    mouseY: 0,
-    cursorX: 0,
-    cursorY: 0,
-    trailX: 0,
-    trailY: 0
-  });
+  // Motion values for raw mouse position
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  // Smooth spring physics for main cursor (responsive)
+  const cursorX = useSpring(mouseX, { damping: 25, stiffness: 300, mass: 0.5 });
+  const cursorY = useSpring(mouseY, { damping: 25, stiffness: 300, mass: 0.5 });
+
+  // Lazy spring physics for trail (fluid)
+  const trailX = useSpring(mouseX, { damping: 40, stiffness: 200, mass: 1 });
+  const trailY = useSpring(mouseY, { damping: 40, stiffness: 200, mass: 1 });
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
-      pos.current.mouseX = e.clientX;
-      pos.current.mouseY = e.clientY;
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
       if (!isVisible) setIsVisible(true);
     };
 
@@ -65,79 +66,64 @@ const Cursor: React.FC = () => {
       document.documentElement.removeEventListener('mouseleave', onMouseLeave);
       document.documentElement.removeEventListener('mouseenter', onMouseEnter);
     };
-  }, []); // Run events setup once
-
-  // Separate animation loop
-  useEffect(() => {
-    let animFrame: number;
-
-    const animate = () => {
-      // Main cursor - faster response
-      const easeMain = 0.25;
-      pos.current.cursorX += (pos.current.mouseX - pos.current.cursorX) * easeMain;
-      pos.current.cursorY += (pos.current.mouseY - pos.current.cursorY) * easeMain;
-
-      // Trail cursor - slower/smoother follow
-      const easeTrail = 0.12;
-      pos.current.trailX += (pos.current.mouseX - pos.current.trailX) * easeTrail;
-      pos.current.trailY += (pos.current.mouseY - pos.current.trailY) * easeTrail;
-
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${pos.current.cursorX}px, ${pos.current.cursorY}px, 0) scale(${isPressed ? 0.85 : 1})`;
-      }
-
-      if (trailRef.current) {
-        trailRef.current.style.transform = `translate3d(${pos.current.trailX}px, ${pos.current.trailY}px, 0)`;
-      }
-
-      animFrame = requestAnimationFrame(animate);
-    };
-
-    animFrame = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animFrame);
-    };
-  }, [isPressed]); // Re-run animation loop if pressed state changes (to update scale)
+  }, [mouseX, mouseY, isVisible]);
 
   if (!isVisible) return null;
 
   return (
     <>
       {/* Trail cursor (behind) */}
-      <div
-        ref={trailRef}
+      <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9998] -ml-1 -mt-1 hidden md:block"
-        aria-hidden="true"
+        style={{
+          x: trailX,
+          y: trailY,
+          translateX: '-50%',
+          translateY: '-50%'
+        }}
       >
         <div className={`
               rounded-full transition-all duration-500 ease-out opacity-30
-              ${isHovering ? 'w-20 h-20 -ml-8 -mt-8 bg-brand-lime' : 'w-3 h-3 bg-white'}
+              ${isHovering ? 'w-20 h-20 bg-brand-lime' : 'w-3 h-3 bg-white'}
           `} />
-      </div>
+      </motion.div>
 
       {/* Main cursor */}
-      <div
-        ref={cursorRef}
+      <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999] -ml-2 -mt-2 mix-blend-exclusion hidden md:block"
-        aria-hidden="true"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%',
+          scale: isPressed ? 0.8 : 1
+        }}
       >
         {/* Dot */}
-        <div className={`
-              bg-white rounded-full transition-all duration-300 ease-out
-              ${isHovering ? 'w-16 h-16 -ml-6 -mt-6 opacity-100' : 'w-4 h-4 opacity-100'}
-          `} />
-
-        {/* Text inside cursor when hovering */}
-        <div className={`
-              absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-              text-black font-mono text-[10px] font-bold tracking-widest uppercase
-              transition-all duration-300
-              ${isHovering ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
-          `}>
-          {cursorText}
-        </div>
-      </div>
+        <motion.div
+          className="bg-white rounded-full flex items-center justify-center"
+          animate={{
+            width: isHovering ? 64 : 16,
+            height: isHovering ? 64 : 16,
+            opacity: 1
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {/* Text inside cursor when hovering */}
+          <AnimatePresence>
+            {isHovering && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="text-black font-mono text-[10px] font-bold tracking-widest uppercase"
+              >
+                {cursorText}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
     </>
   );
 };

@@ -16,28 +16,17 @@ import { HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayPage, setDisplayPage] = useState('home');
-
-  // Prevent scrolling while loading
-  useEffect(() => {
-    if (loading || isTransitioning) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [loading, isTransitioning]);
 
   // Handle URL synchronization
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.substring(1) || 'home';
       if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
-        setDisplayPage(path);
         setCurrentPage(path);
       }
     };
@@ -47,9 +36,7 @@ const App: React.FC = () => {
     // Initial check
     const initialPath = window.location.pathname.substring(1) || 'home';
     if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
-      // Only set if not already default, though initial state is 'home'
       if (initialPath !== 'home') {
-        setDisplayPage(initialPath);
         setCurrentPage(initialPath);
       }
     }
@@ -58,73 +45,62 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigation = useCallback((page: string) => {
-    if (page === currentPage || isTransitioning) return;
-
-    // Start transition
-    setIsTransitioning(true);
+    if (page === currentPage) return;
     setCurrentPage(page);
+    window.scrollTo(0, 0);
 
     // Update URL
     const url = page === 'home' ? '/' : `/${page}`;
     window.history.pushState({}, '', url);
+  }, [currentPage]);
 
-    // After transition in, update content
-    setTimeout(() => {
-      setDisplayPage(page);
-      window.scrollTo(0, 0);
+  // Page Variants for Entrance/Exit
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      y: 20,
+    },
+    enter: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+        when: "beforeChildren",
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.4,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
 
-      // After content swap, transition out
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 100);
-    }, 600);
-  }, [currentPage, isTransitioning]);
-
-  // Render page content based on displayPage (not currentPage) for smooth transitions
   const renderPageContent = () => {
-    const pageClasses = `animate-fade-in-up`;
-
-    switch (displayPage) {
+    switch (currentPage) {
       case 'home':
         return (
-          <div className={pageClasses}>
+          <>
             <Hero />
             <Awards />
             <Work />
             <TiredOf />
             <Manifesto />
-          </div>
+          </>
         );
       case 'about':
-        return (
-          <div className={pageClasses}>
-            <About />
-          </div>
-        );
+        return <About />;
       case 'services':
-        return (
-          <div className={pageClasses}>
-            <ServicesPage />
-          </div>
-        );
+        return <ServicesPage />;
       case 'contact':
-        return (
-          <div className={pageClasses}>
-            <ContactPage />
-          </div>
-        );
+        return <ContactPage />;
       case 'privacy':
-        return (
-          <div className={pageClasses}>
-            <PrivacyPolicy />
-          </div>
-        );
+        return <PrivacyPolicy />;
       case 'terms':
-        return (
-          <div className={pageClasses}>
-            <Terms />
-          </div>
-        );
+        return <Terms />;
       default:
         return null;
     }
@@ -137,25 +113,25 @@ const App: React.FC = () => {
         <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none md:cursor-none min-h-screen flex flex-col">
           <Cursor />
           {!loading && <ScrollManager />}
-          {loading && <Loader onComplete={() => setLoading(false)} />}
-
-          {/* Page Transition Overlay */}
-          <div
-            className={`fixed inset-0 bg-brand-lime z-[90] pointer-events-none transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isTransitioning ? 'translate-y-0' : '-translate-y-full'
-              }`}
-            aria-hidden="true"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display font-bold text-black text-4xl md:text-6xl tracking-tighter opacity-20">
-                JAYGOOD
-              </span>
-            </div>
-          </div>
+          <AnimatePresence mode="wait">
+            {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
+          </AnimatePresence>
 
           <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
 
-          <main id="main-content" className="flex-grow" role="main" tabIndex={-1}>
-            {renderPageContent()}
+          <main id="main-content" className="flex-grow relative" role="main" tabIndex={-1}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentPage}
+                variants={pageVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                className="w-full"
+              >
+                {renderPageContent()}
+              </motion.div>
+            </AnimatePresence>
           </main>
 
           <Footer onNavigate={handleNavigation} />
