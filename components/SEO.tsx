@@ -11,7 +11,7 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
     title = 'JayGood | Web Design Agency — Cape Town',
-    description = 'JayGood is a boutique digital agency crafting award-worthy websites, immersive web experiences, and high-performance applications. We fuse brutalist aesthetics with hyper-performance engineering.',
+    description = 'JayGood is a web design agency crafting award-worthy websites, immersive web experiences, and high-performance applications. We fuse brutalist aesthetics with hyper-performance engineering.',
     canonical = 'https://jaygood.com/',
     type = 'website',
     image = 'https://jaygood.com/og-image.png'
