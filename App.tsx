@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
@@ -16,28 +16,53 @@ import { HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Cinematic page transition curtain variants
+const curtainVariants = {
+  initial: { scaleY: 0 },
+  enter: {
+    scaleY: [0, 1, 1, 0],
+    transition: {
+      duration: 1.2,
+      ease: [0.76, 0, 0.24, 1],
+      times: [0, 0.4, 0.6, 1],
+    },
+  },
+};
+
+const contentVariants = {
+  initial: { opacity: 0, y: 80 },
+  enter: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      delay: 0.6,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -30,
+    transition: {
+      duration: 0.3,
+      ease: [0.76, 0, 0.24, 1],
+    },
+  },
+};
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayPage, setDisplayPage] = useState('home');
-
-  // Prevent scrolling while loading
-  useEffect(() => {
-    if (loading || isTransitioning) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [loading, isTransitioning]);
+  const pendingPageRef = useRef<string | null>(null);
 
   // Handle URL synchronization
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.substring(1) || 'home';
       if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
-        setDisplayPage(path);
         setCurrentPage(path);
       }
     };
@@ -47,9 +72,7 @@ const App: React.FC = () => {
     // Initial check
     const initialPath = window.location.pathname.substring(1) || 'home';
     if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
-      // Only set if not already default, though initial state is 'home'
       if (initialPath !== 'home') {
-        setDisplayPage(initialPath);
         setCurrentPage(initialPath);
       }
     }
@@ -60,71 +83,49 @@ const App: React.FC = () => {
   const handleNavigation = useCallback((page: string) => {
     if (page === currentPage || isTransitioning) return;
 
-    // Start transition
+    // Start the curtain transition
     setIsTransitioning(true);
-    setCurrentPage(page);
+    pendingPageRef.current = page;
 
-    // Update URL
+    // Update URL immediately
     const url = page === 'home' ? '/' : `/${page}`;
     window.history.pushState({}, '', url);
 
-    // After transition in, update content
+    // Swap content while curtain is covering the screen (at 40% of animation)
     setTimeout(() => {
-      setDisplayPage(page);
+      setCurrentPage(page);
       window.scrollTo(0, 0);
+    }, 480); // 1200ms * 0.4 = 480ms
 
-      // After content swap, transition out
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 100);
-    }, 600);
+    // End transition after full animation
+    setTimeout(() => {
+      setIsTransitioning(false);
+      pendingPageRef.current = null;
+    }, 1200);
   }, [currentPage, isTransitioning]);
 
-  // Render page content based on displayPage (not currentPage) for smooth transitions
   const renderPageContent = () => {
-    const pageClasses = `animate-fade-in-up`;
-
-    switch (displayPage) {
+    switch (currentPage) {
       case 'home':
         return (
-          <div className={pageClasses}>
+          <>
             <Hero />
             <Awards />
             <Work />
             <TiredOf />
             <Manifesto />
-          </div>
+          </>
         );
       case 'about':
-        return (
-          <div className={pageClasses}>
-            <About />
-          </div>
-        );
+        return <About />;
       case 'services':
-        return (
-          <div className={pageClasses}>
-            <ServicesPage />
-          </div>
-        );
+        return <ServicesPage />;
       case 'contact':
-        return (
-          <div className={pageClasses}>
-            <ContactPage />
-          </div>
-        );
+        return <ContactPage />;
       case 'privacy':
-        return (
-          <div className={pageClasses}>
-            <PrivacyPolicy />
-          </div>
-        );
+        return <PrivacyPolicy />;
       case 'terms':
-        return (
-          <div className={pageClasses}>
-            <Terms />
-          </div>
-        );
+        return <Terms />;
       default:
         return null;
     }
@@ -137,25 +138,51 @@ const App: React.FC = () => {
         <div className="bg-brand-dark text-white font-sans selection:bg-brand-lime selection:text-black cursor-none md:cursor-none min-h-screen flex flex-col">
           <Cursor />
           {!loading && <ScrollManager />}
-          {loading && <Loader onComplete={() => setLoading(false)} />}
+          <AnimatePresence mode="wait">
+            {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
+          </AnimatePresence>
 
-          {/* Page Transition Overlay */}
-          <div
-            className={`fixed inset-0 bg-brand-lime z-[90] pointer-events-none transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isTransitioning ? 'translate-y-0' : '-translate-y-full'
-              }`}
-            aria-hidden="true"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display font-bold text-black text-4xl md:text-6xl tracking-tighter opacity-20">
-                JAYGOOD
-              </span>
-            </div>
-          </div>
+          {/* Cinematic Page Transition Curtain */}
+          <AnimatePresence>
+            {isTransitioning && (
+              <motion.div
+                key="curtain"
+                className="fixed inset-0 z-[90] bg-brand-lime origin-top pointer-events-none"
+                variants={curtainVariants}
+                initial="initial"
+                animate="enter"
+                exit="initial"
+              >
+                {/* Centered page name during transition */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.span
+                    className="font-display font-bold text-5xl md:text-8xl text-black uppercase tracking-tighter"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: 0.15, duration: 0.3 } }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current?.toUpperCase()}
+                  </motion.span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
 
-          <main id="main-content" className="flex-grow" role="main" tabIndex={-1}>
-            {renderPageContent()}
+          <main id="main-content" className="flex-grow relative" role="main" tabIndex={-1}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentPage}
+                variants={contentVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                className="w-full"
+              >
+                {renderPageContent()}
+              </motion.div>
+            </AnimatePresence>
           </main>
 
           <Footer onNavigate={handleNavigation} />

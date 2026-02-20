@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Instagram, Linkedin, Github, Facebook, ArrowUpRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import MagneticButton from './MagneticButton';
 
 const socialLinks = [
     { name: 'Instagram', icon: <Instagram size={20} />, href: 'https://www.instagram.com/javiergoodall/' },
@@ -9,15 +10,34 @@ const socialLinks = [
     { name: 'Facebook', icon: <Facebook size={20} />, href: 'https://www.facebook.com/javier.goodall/' },
 ];
 
-// Word-level stagger reveal for the big CTA headline
-const RevealWord: React.FC<{ children: string; delay: number }> = ({ children, delay }) => (
-    <span
-        className="word-reveal"
-        style={{ transitionDelay: `${delay}s` }}
-    >
-        {children}
-    </span>
-);
+// Character-level wave animation for the CTA headline
+const AnimatedWord: React.FC<{ word: string }> = ({ word }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <span
+            className="inline-block"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {word.split('').map((char, i) => (
+                <span
+                    key={i}
+                    className="inline-block transition-transform duration-500"
+                    style={{
+                        transform: isHovered
+                            ? `translateY(${Math.sin(i * 0.8) * -12}px)`
+                            : 'translateY(0)',
+                        transitionDelay: `${i * 30}ms`,
+                        transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                >
+                    {char === ' ' ? '\u00A0' : char}
+                </span>
+            ))}
+        </span>
+    );
+};
 
 interface FooterProps {
     onNavigate: (page: string) => void;
@@ -41,21 +61,21 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                         </p>
                     </div>
 
-                    <a href="mailto:javiergoodall@outlook.com" className="group block relative cursor-interactive magnetic-hover" aria-label="Send email to JayGood">
+                    <a href="mailto:javiergoodall@outlook.com" className="group block relative cursor-interactive" aria-label="Send email to JayGood">
                         <div ref={ctaRef}>
                             <div className="overflow-hidden">
                                 <h2 className="font-display font-bold text-[13vw] md:text-[12vw] leading-[0.85] md:leading-[0.8] text-white group-hover:text-transparent group-hover:text-outline transition-all duration-500">
-                                    <RevealWord delay={0.1}>LET'S</RevealWord>
+                                    <AnimatedWord word="LET'S" />
                                 </h2>
                             </div>
                             <div className="overflow-hidden">
                                 <h2 className="font-display font-bold text-[13vw] md:text-[12vw] leading-[0.85] md:leading-[0.8] text-white group-hover:text-brand-lime group-hover:italic transition-all duration-500 ml-[5vw] md:ml-[10vw]">
-                                    <RevealWord delay={0.2}>CREATE</RevealWord>
+                                    <AnimatedWord word="CREATE" />
                                 </h2>
                             </div>
                             <div className="overflow-hidden">
                                 <h2 className="font-display font-bold text-[13vw] md:text-[12vw] leading-[0.85] md:leading-[0.8] text-transparent text-outline group-hover:text-white transition-all duration-500 text-right">
-                                    <RevealWord delay={0.35}>HISTORY</RevealWord>
+                                    <AnimatedWord word="HISTORY" />
                                 </h2>
                             </div>
                         </div>
@@ -79,16 +99,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Follow</h4>
                         <div className="flex gap-4">
                             {socialLinks.map((social) => (
-                                <a
+                                <MagneticButton
                                     key={social.name}
+                                    as="a"
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label={`Follow on ${social.name}`}
                                     className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-brand-lime hover:border-brand-lime hover:text-black transition-all duration-300 hover:scale-110"
+                                    strength={0.5}
                                 >
                                     {social.icon}
-                                </a>
+                                </MagneticButton>
                             ))}
                         </div>
                     </div>

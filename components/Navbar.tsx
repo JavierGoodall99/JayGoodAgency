@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import TextScramble from './TextScramble';
 
 interface NavbarProps {
   onNavigate: (page: string) => void;
@@ -104,6 +106,40 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
     },
   ];
 
+  // Animation Variants
+  const menuVariants = {
+    closed: {
+      clipPath: "inset(0% 0% 100% 0%)",
+      transition: {
+        type: "spring",
+        bounce: 0,
+        duration: 0.7,
+        when: "afterChildren",
+        staggerChildren: 0.1,
+        staggerDirection: -1
+      }
+    },
+    open: {
+      clipPath: "inset(0% 0% 0% 0%)",
+      transition: {
+        type: "spring",
+        bounce: 0,
+        duration: 0.7,
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const linkVariants = {
+    closed: { y: 100, opacity: 0 },
+    open: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100, damping: 20 }
+    }
+  };
+
   return (
     <>
       {/* --- FLOATING HEADER (Mix Blend Difference) --- */}
@@ -144,63 +180,67 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       </header>
 
       {/* --- FULL SCREEN OVERLAY --- */}
-      <div
-        className={`fixed inset-0 z-50 bg-[#050505] transition-all duration-[1000ms] ease-[cubic-bezier(0.87,0,0.13,1)] ${isOpen ? 'clip-path-open pointer-events-auto' : 'clip-path-closed pointer-events-none'
-          }`}
-      >
-        <style>{`
-          .clip-path-open { clip-path: inset(0% 0% 0% 0%); }
-          .clip-path-closed { clip-path: inset(0% 0% 100% 0%); }
-        `}</style>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-[#050505]"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            style={{ pointerEvents: 'auto' }}
+          >
+            {/* Background - Minimal Dark */}
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-[#050505]"></div>
+              {/* Grid overlay */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20"></div>
+            </div>
 
-        {/* Background - Minimal Dark */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[#050505]"></div>
-          {/* Grid overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20"></div>
-        </div>
+            {/* Content Container - Centered Layout */}
+            <div className="container mx-auto h-full relative z-10 flex flex-col justify-center items-center">
 
-        {/* Content Container - Centered Layout */}
-        <div className="container mx-auto h-full relative z-10 flex flex-col justify-center items-center">
+              {/* Main Navigation Links */}
+              <nav className="flex flex-col items-center space-y-2">
+                {navLinks.map((link, idx) => (
+                  <motion.div
+                    key={link.name}
+                    className="relative group text-center"
+                    onMouseEnter={() => setHoveredLinkIndex(idx)}
+                    onMouseLeave={() => setHoveredLinkIndex(null)}
+                    variants={linkVariants}
+                  >
+                    <a
+                      href={link.href}
+                      onClick={(e) => handleLinkClick(e, link.href, link.page)}
+                      className={`
+                                        block font-display font-bold text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tighter
+                                        transition-all duration-500 ease-out flex items-center gap-4 md:gap-8 justify-center
+                                        ${hoveredLinkIndex !== null && hoveredLinkIndex !== idx ? 'opacity-20 blur-[2px]' : 'opacity-100'}
+                                    `}
+                    >
+                      {/* Animated Number */}
+                      <span className="hidden md:block text-2xl font-mono tracking-widest text-brand-lime opacity-0 -translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 absolute -left-16 top-1/2 -translate-y-1/2">
+                        /{link.id}
+                      </span>
 
-          {/* Main Navigation Links */}
-          <nav className="flex flex-col items-center space-y-2">
-            {navLinks.map((link, idx) => (
-              <div
-                key={link.name}
-                className="relative group text-center"
-                onMouseEnter={() => setHoveredLinkIndex(idx)}
-                onMouseLeave={() => setHoveredLinkIndex(null)}
-              >
-                <a
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href, link.page)}
-                  className={`
-                                block font-display font-bold text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tighter
-                                transition-all duration-500 ease-out flex items-center gap-4 md:gap-8 justify-center
-                                ${hoveredLinkIndex !== null && hoveredLinkIndex !== idx ? 'opacity-20 blur-[2px]' : 'opacity-100'}
-                                ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}
-                            `}
-                  style={{
-                    transitionDelay: `${100 + idx * 50}ms`
-                  }}
-                >
-                  {/* Animated Number */}
-                  <span className="hidden md:block text-2xl font-mono tracking-widest text-brand-lime opacity-0 -translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 absolute -left-16 top-1/2 -translate-y-1/2">
-                    /{link.id}
-                  </span>
+                      {/* Text */}
+                      <span className={`relative z-10 ${hoveredLinkIndex === idx ? 'text-white scale-105' : 'text-transparent text-outline'} transition-transform duration-500`}>
+                        {hoveredLinkIndex === idx ? (
+                          <TextScramble text={link.name} trigger="hover" speed={25} />
+                        ) : (
+                          link.name
+                        )}
+                      </span>
+                    </a>
+                  </motion.div>
+                ))}
+              </nav>
 
-                  {/* Text */}
-                  <span className={`relative z-10 ${hoveredLinkIndex === idx ? 'text-white scale-105' : 'text-transparent text-outline'} transition-transform duration-500`}>
-                    {link.name}
-                  </span>
-                </a>
-              </div>
-            ))}
-          </nav>
-
-        </div>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
