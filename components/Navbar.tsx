@@ -99,9 +99,15 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       page: 'services',
     },
     {
+      name: 'Projects',
+      href: '/projects',
+      id: '03',
+      page: 'projects',
+    },
+    {
       name: 'Contact',
       href: '/contact',
-      id: '03',
+      id: '04',
       page: 'contact',
     },
   ];

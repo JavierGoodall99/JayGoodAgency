@@ -72,7 +72,11 @@ const projects: ProjectItem[] = [
     }
 ];
 
-const Work: React.FC = () => {
+interface WorkProps {
+    onNavigate?: (page: string) => void;
+}
+
+const Work: React.FC<WorkProps> = ({ onNavigate }) => {
     const sectionRef = useRef<HTMLElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -157,7 +161,7 @@ const Work: React.FC = () => {
             <div className="block md:hidden py-10 px-6">
                 <div className="mb-12">
                     <h2 className="font-display font-bold text-5xl text-white leading-none mb-4">
-                        LATEST <span className="text-brand-lime">WORK</span>
+                        FEATURED <span className="text-brand-lime">WORK</span>
                     </h2>
                     <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
                         Case Studies
@@ -165,7 +169,7 @@ const Work: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-16">
-                    {projects.map((project) => (
+                    {projects.slice(0, 4).map((project) => (
                         <a
                             key={project.id}
                             href={project.link}
@@ -196,6 +200,23 @@ const Work: React.FC = () => {
                         </a>
                     ))}
 
+                    <a
+                        href="/projects"
+                        onClick={(e) => {
+                            if (onNavigate) {
+                                e.preventDefault();
+                                onNavigate('projects');
+                            }
+                        }}
+                        className="group flex flex-col items-center justify-center border border-white/10 hover:border-brand-lime py-16 transition-colors duration-500 bg-white/5 hover:bg-white/10"
+                    >
+                        <h3 className="font-display font-bold text-3xl text-white group-hover:text-brand-lime transition-colors duration-300 mb-6 uppercase">
+                            View All
+                        </h3>
+                        <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
+                            <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -207,7 +228,7 @@ const Work: React.FC = () => {
                     <div className="container mx-auto px-6 pt-10 md:pt-20 flex justify-between items-end shrink-0 relative z-20">
                         <div>
                             <h2 className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-none">
-                                LATEST <span className="text-brand-lime">WORK</span>
+                                FEATURED <span className="text-brand-lime">WORK</span>
                             </h2>
                         </div>
                         <div className="hidden md:block text-right">
@@ -224,13 +245,13 @@ const Work: React.FC = () => {
                     <div className="flex-grow flex items-center relative z-10 w-full">
                         <div
                             ref={trackRef}
-                            className="flex gap-12 md:gap-24 pl-6 md:pl-32 items-center w-max will-change-transform"
+                            className="flex gap-12 md:gap-24 px-6 md:px-32 items-center w-max will-change-transform"
                             style={{
                                 transform: `translate3d(-${scrollProgress * maxTranslate}%, 0, 0) skewX(${Math.max(-5, Math.min(5, scrollVelocity * -0.08))}deg)`,
                                 transition: 'transform 0.05s linear',
                             }}
                         >
-                            {projects.map((project, index) => (
+                            {projects.slice(0, 4).map((project, index) => (
                                 <a
                                     key={project.id}
                                     href={project.link}
@@ -271,7 +292,25 @@ const Work: React.FC = () => {
                                 </a>
                             ))}
 
-
+                            {/* View All Projects Block */}
+                            <a
+                                href="/projects"
+                                onClick={(e) => {
+                                    if (onNavigate) {
+                                        e.preventDefault();
+                                        onNavigate('projects');
+                                    }
+                                }}
+                                className="relative group w-[85vw] md:w-[60vw] lg:w-[40vw] flex-shrink-0 flex flex-col items-center justify-center aspect-[4/3] md:aspect-video border border-white/10 hover:border-brand-lime transition-colors duration-500 bg-white/5 hover:bg-white/10"
+                                data-cursor="project"
+                            >
+                                <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300 mb-6 text-center">
+                                    VIEW ALL
+                                </h3>
+                                <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
+                                    <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                                </div>
+                            </a>
                         </div>
                     </div>
 

@@ -12,6 +12,7 @@ import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
 import ScrollManager from './components/ScrollManager';
 import TrustBar from './components/TrustBar';
+import ProjectsPage from './components/ProjectsPage';
 import { HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -62,7 +63,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.substring(1) || 'home';
-      if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
+      if (['home', 'about', 'projects', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
         setCurrentPage(path);
       }
     };
@@ -71,7 +72,7 @@ const App: React.FC = () => {
 
     // Initial check
     const initialPath = window.location.pathname.substring(1) || 'home';
-    if (['home', 'about', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
+    if (['home', 'about', 'projects', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
       if (initialPath !== 'home') {
         setCurrentPage(initialPath);
       }
@@ -111,13 +112,15 @@ const App: React.FC = () => {
           <>
             <Hero />
             <TrustBar />
-            <Work />
+            <Work onNavigate={handleNavigation} />
             <TiredOf />
             <Manifesto />
           </>
         );
       case 'about':
         return <About />;
+      case 'projects':
+        return <ProjectsPage />;
       case 'services':
         return <ServicesPage />;
       case 'contact':
@@ -161,7 +164,7 @@ const App: React.FC = () => {
                     animate={{ opacity: 1, y: 0, transition: { delay: 0.15, duration: 0.3 } }}
                     exit={{ opacity: 0 }}
                   >
-                    {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current?.toUpperCase()}
+                    {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current === 'projects' ? 'WORK' : pendingPageRef.current?.toUpperCase()}
                   </motion.span>
                 </div>
               </motion.div>
