@@ -33,8 +33,8 @@ const ContactPage: React.FC = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20 flex flex-col">
             <SEO
-                title="Contact"
-                description="Ready to disrupt? Contact JayGood Agency for your next web work. Direct lines only, no forms."
+                title="Contact | Web Design Agency | JayGood"
+                description="Ready to disrupt? Contact JayGood, the premier Web Design Agency, for your next web work. Direct lines only, no forms."
                 canonical="https://jaygood.com/contact"
             />
 

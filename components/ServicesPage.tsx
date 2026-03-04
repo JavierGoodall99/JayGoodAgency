@@ -43,8 +43,8 @@ const ServicesPage: React.FC = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20">
             <SEO
-                title="Services"
-                description="Our services include high-end web design, full-stack development, e-commerce solutions, and digital strategy. We build digital products that dominate."
+                title="Services | Web Design Agency | JayGood"
+                description="Our services include high-end web design, full-stack development, e-commerce solutions, and digital strategy. We build digital products that dominate as a premier Web Design Agency."
                 canonical="https://jaygood.com/services"
             />
 

@@ -30,8 +30,8 @@ const About: React.FC = () => {
   return (
     <div className="bg-brand-dark min-h-screen text-white pt-40 pb-20 overflow-hidden" ref={containerRef}>
       <SEO
-        title="About Us | JayGood Agency"
-        description="JayGood is an independent digital agency focused on crafting premium, high-performance web experiences that elevate brands."
+        title="About Us | Web Design Agency | JayGood"
+        description="JayGood is an independent web design agency focused on crafting premium, high-performance web experiences that elevate brands."
         canonical="https://jaygood.com/about"
       />
 

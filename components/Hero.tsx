@@ -253,6 +253,7 @@ const Hero: React.FC = () => {
             className="relative h-screen w-full bg-[#030303] overflow-hidden flex flex-col items-center justify-center p-0"
             aria-label="Hero section - Interactive guitar strings visualization"
         >
+            <h1 className="sr-only">Web Design Agency | JayGood | Award-Winning Digital Interfaces</h1>
 
             {/* Background Typography (Behind Strings) — Parallax Fade-Out */}
             <motion.div
@@ -272,13 +273,13 @@ const Hero: React.FC = () => {
                         initial="hidden"
                         animate="visible"
                     >
-                        <h1 className="font-display font-bold text-[12vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] whitespace-nowrap flex">
+                        <h2 className="font-display font-bold text-[12vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] whitespace-nowrap flex">
                             {"BUILDING THE".split('').map((char, index) => (
                                 <motion.span key={index} variants={itemVariants} className="inline-block relative">
                                     {char === ' ' ? '\u00A0' : char}
                                 </motion.span>
                             ))}
-                        </h1>
+                        </h2>
                     </motion.div>
 
                     <motion.div

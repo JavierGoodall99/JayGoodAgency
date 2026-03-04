@@ -10,13 +10,13 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-    title = 'JayGood | Web Design Agency — Cape Town',
-    description = 'JayGood is a web design agency crafting award-worthy websites, immersive web experiences, and high-performance applications. We fuse brutalist aesthetics with hyper-performance engineering.',
+    title = 'Web Design Agency | JayGood',
+    description = 'Looking for a top-tier Web Design Agency? JayGood is a boutique digital agency crafting award-worthy websites, immersive web experiences, and high-performance applications.',
     canonical = 'https://jaygood.com/',
     type = 'website',
     image = 'https://jaygood.com/og-image.png'
 }) => {
-    const siteTitle = title === 'JayGood | Digital Experience Agency — Cape Town' ? title : `${title} | JayGood Agency`;
+    const siteTitle = title === 'Web Design Agency | JayGood' ? title : `${title} | Web Design Agency`;
 
     return (
         <Helmet>

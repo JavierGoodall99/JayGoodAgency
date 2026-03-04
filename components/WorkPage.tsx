@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WorkItem } from '../types';
+import SEO from './SEO';
 
 const work: WorkItem[] = [
     {
@@ -348,6 +349,11 @@ const WorkPage: React.FC = () => {
 
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 md:pt-48 pb-20 px-6">
+            <SEO
+                title="Work | Web Design Agency | JayGood"
+                description="View the portfolio of JayGood, a top Web Design Agency creating award-winning websites and web experiences."
+                canonical="https://jaygood.com/work"
+            />
             <div className="container mx-auto max-w-7xl">
 
                 {/* ── Header Row ── */}
