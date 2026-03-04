@@ -27,8 +27,8 @@ const cards = [
     id: '04',
     title: 'THE LAUNCH',
     description: 'Not just a deploy. A cultural moment. We orchestrate the reveal for maximum impact.',
-    bg: 'bg-brand-lime',
-    color: 'text-black'
+    bg: 'bg-[#050505]',
+    color: 'text-white'
   }
 ];
 

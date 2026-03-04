@@ -7,8 +7,8 @@ const ContactPage: React.FC = () => {
         {
             id: '01',
             label: 'EMAIL',
-            value: 'javiergoodall@outlook.com',
-            href: 'mailto:javiergoodall@outlook.com',
+            value: ' hello@jaygood.com',
+            href: 'mailto: hello@jaygood.com',
             icon: <Mail className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'For inquiries, pitches, and love letters.'
         },
