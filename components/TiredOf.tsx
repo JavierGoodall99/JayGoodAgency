@@ -3,8 +3,8 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const values = [
     { title: "RADICAL TRANSPARENCY", desc: "No hidden fees. No hourly billing. Just clear, flat pricing and direct access to your design team." },
-    { title: "OBSESSIVE QUALITY", desc: "We aim for 100/100 Lighthouse scores and 60fps animations on every single build." },
-    { title: "SPEED AS A FEATURE", desc: "We build on the edge. Your site loads instantly, anywhere in the world." }
+    { title: "OBSESSIVE QUALITY", desc: "We ensure your website looks stunning and performs perfectly smoothly on every device." },
+    { title: "SPEED AS A FEATURE", desc: "Fast websites keep visitors happy. We optimize everything so your site loads instantly, everywhere." }
 ];
 
 const ValueItem: React.FC<{ item: typeof values[0]; index: number }> = ({ item, index }) => {
