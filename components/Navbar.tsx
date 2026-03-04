@@ -110,7 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
       <header className={`fixed top-0 left-0 right-0 z-[100] px-6 py-5 md:px-12 md:py-7 flex justify-between items-center pointer-events-none transition-colors duration-500 ${isOpen ? 'text-white' : 'text-white mix-blend-difference'}`}>
 
         {/* Left: Logo */}
-        <div className="pointer-events-auto w-1/3">
+        <div className="pointer-events-auto w-1/2 md:w-1/3">
           <button
             onClick={() => handleNavigation('home')}
             className="font-display font-bold text-2xl tracking-tighter group hover:italic transition-all duration-300"
@@ -120,10 +120,10 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         </div>
 
         {/* Center: Menu Trigger */}
-        <div className="pointer-events-auto w-1/3 flex justify-center">
+        <div className="pointer-events-auto w-1/2 md:w-1/3 flex justify-end md:justify-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="group flex items-center gap-3 cursor-pointer py-2 px-4"
+            className="group flex items-center gap-3 cursor-pointer py-2 pr-0 pl-4 md:px-4"
             aria-label="Toggle Menu"
           >
             <span className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] opacity-80 group-hover:opacity-100 transition-opacity">
@@ -137,8 +137,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         </div>
 
         {/* Right: Time Widget */}
-        <div className="pointer-events-auto w-1/3 flex justify-end">
-          <div className="hidden md:flex items-center gap-3 font-mono text-xs tracking-widest opacity-70">
+        <div className="pointer-events-auto hidden md:flex w-1/3 justify-end">
+          <div className="flex items-center gap-3 font-mono text-xs tracking-widest opacity-70">
             <div className="w-1.5 h-1.5 rounded-full bg-brand-lime animate-pulse shadow-[0_0_8px_rgba(204,255,0,0.5)]" />
             <span>CPT {temperature !== null ? `${temperature}°` : '—'} / {time}</span>
           </div>
