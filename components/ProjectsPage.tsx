@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ProjectItem } from '../types';
 
 const projects: ProjectItem[] = [
@@ -69,143 +69,394 @@ const projects: ProjectItem[] = [
     }
 ];
 
-const ProjectCard: React.FC<{ project: ProjectItem; index: number }> = ({ project, index }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"]
-    });
+type ViewMode = 'carousel' | 'two-col' | 'three-col';
 
-    const yText = useTransform(scrollYProgress, [0, 1], ["15%", "-15%"]);
-    const yImage = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+/* ─── Layout Toggle Icons ─── */
+const CarouselIcon = () => (
+    <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="0" width="14" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="0" y="3" width="2" height="10" rx="0.5" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+        <rect x="18" y="3" width="2" height="10" rx="0.5" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+    </svg>
+);
 
-    const isEven = index % 2 === 0;
+const TwoColIcon = () => (
+    <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="9" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="11" y="0" width="9" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+);
 
+const ThreeColIcon = () => (
+    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="6" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="8" y="0" width="6" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="16" y="0" width="6" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+);
+
+/* ─── Project Card (Grid View) ─── */
+const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMode }> = ({ project, index, viewMode }) => {
     return (
-        <div ref={ref} className="relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-16 md:py-32 border-t border-white/10 group">
-            {/* Text Block */}
-            <motion.div
-                style={{ y: yText }}
-                className={`w-full md:w-5/12 flex flex-col ${isEven ? 'md:order-1 items-start' : 'md:order-2 md:items-start'} z-10 relative`}
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4, delay: index * 0.03, ease: [0.16, 1, 0.3, 1], layout: { type: 'spring', stiffness: 300, damping: 30 } }}
+            className="group relative"
+        >
+            <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="project"
+                className="block"
             >
-                <div className="overflow-hidden mb-4">
-                    <motion.span
-                        initial={{ y: "100%" }}
-                        whileInView={{ y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                        className="block text-brand-lime font-mono text-sm"
-                    >
-                        /{project.id}
-                    </motion.span>
-                </div>
+                {/* Image Container */}
+                <div className="relative overflow-hidden bg-[#111] border border-white/5 aspect-[3/2]">
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-brand-lime/0 group-hover:bg-brand-lime/10 transition-colors duration-700 z-10 pointer-events-none mix-blend-overlay" />
 
-                <h2 className="font-display font-bold text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white mb-6 uppercase leading-[0.9] tracking-tighter group-hover:text-brand-lime transition-colors duration-700">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" data-cursor="project">
-                        {project.title}
-                    </a>
-                </h2>
-
-                <div className="overflow-hidden mb-10 md:mb-12">
-                    <motion.p
-                        initial={{ y: "100%" }}
-                        whileInView={{ y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                        className="font-mono text-xs md:text-sm text-gray-400 tracking-widest uppercase"
-                    >
-                        {project.category}
-                    </motion.p>
-                </div>
-
-                <motion.a
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-4 group/btn w-fit"
-                    data-cursor="project"
-                >
-                    <span className="font-mono text-sm uppercase tracking-widest text-white group-hover/btn:text-brand-lime transition-colors duration-300">
-                        View Project
-                    </span>
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center group-hover/btn:bg-brand-lime group-hover/btn:border-brand-lime transition-all duration-500 hover:scale-110">
-                        <ArrowUpRight className="text-white group-hover/btn:text-black transition-colors w-5 h-5 md:w-6 md:h-6" />
-                    </div>
-                </motion.a>
-            </motion.div>
-
-            {/* Image Block */}
-            <motion.div
-                className={`w-full md:w-7/12 overflow-hidden bg-brand-dark border border-white/10 aspect-[4/3] md:aspect-[4/3] relative ${isEven ? 'md:order-2' : 'md:order-1'}`}
-            >
-                <div className="absolute inset-0 bg-brand-lime/0 group-hover:bg-brand-lime/10 transition-colors duration-700 z-10 pointer-events-none mix-blend-overlay" />
-                <a href={project.link} target="_blank" rel="noopener noreferrer" data-cursor="project" className="block w-full h-full relative overflow-hidden">
                     <motion.img
-                        style={{ y: yImage, scale: 1.15 }}
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover origin-center"
-                        whileHover={{ scale: 1.25, rotate: isEven ? 1 : -1 }}
-                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                     />
-                </a>
-            </motion.div>
+
+                    {/* Arrow reveal on hover */}
+                    <div className="absolute top-4 right-4 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-lime flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-500">
+                        <ArrowUpRight className="text-black w-5 h-5" />
+                    </div>
+
+                    {/* Category badge */}
+                    <div className="absolute bottom-4 left-4 z-20">
+                        <span className="font-mono text-[10px] md:text-xs text-white/60 uppercase tracking-widest bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/5">
+                            {project.category}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Info */}
+                <div className="pt-3 pb-2 flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                            <span className="font-mono text-[10px] text-brand-lime">/{project.id}</span>
+                        </div>
+                        <h3 className={`font-display font-bold text-white uppercase tracking-tight leading-tight group-hover:text-brand-lime transition-colors duration-500 ${viewMode === 'three-col' ? 'text-sm md:text-base' : 'text-base md:text-lg lg:text-xl'}`}>
+                            {project.title}
+                        </h3>
+                    </div>
+                </div>
+            </a>
+        </motion.div>
+    );
+};
+
+/* ─── Carousel View ─── */
+const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }) => {
+    const [current, setCurrent] = useState(0);
+    const [direction, setDirection] = useState(0);
+
+    const paginate = useCallback((newDirection: number) => {
+        setDirection(newDirection);
+        setCurrent((prev) => {
+            let next = prev + newDirection;
+            if (next < 0) next = items.length - 1;
+            if (next >= items.length) next = 0;
+            return next;
+        });
+    }, [items.length]);
+
+    // Keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') paginate(-1);
+            if (e.key === 'ArrowRight') paginate(1);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [paginate]);
+
+    const project = items[current];
+
+    const slideVariants = {
+        enter: (dir: number) => ({
+            x: dir > 0 ? '100%' : '-100%',
+            opacity: 0,
+            scale: 0.95,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+            scale: 1,
+            transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+        },
+        exit: (dir: number) => ({
+            x: dir > 0 ? '-50%' : '50%',
+            opacity: 0,
+            scale: 0.95,
+            transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
+        }),
+    };
+
+    return (
+        <div className="relative">
+            {/* Main Slide */}
+            <div className="relative overflow-hidden bg-[#0a0a0a] border border-white/5 h-[50vh] md:h-[60vh]">
+                <AnimatePresence initial={false} custom={direction} mode="wait">
+                    <motion.a
+                        key={current}
+                        custom={direction}
+                        variants={slideVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-cursor="project"
+                        className="absolute inset-0 block group"
+                    >
+                        {/* Image */}
+                        <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                        />
+
+                        {/* Gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+
+                        {/* Hover tint */}
+                        <div className="absolute inset-0 bg-brand-lime/0 group-hover:bg-brand-lime/5 transition-colors duration-700 z-10 pointer-events-none" />
+
+                        {/* Arrow */}
+                        <div className="absolute top-6 right-6 md:top-8 md:right-8 w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center z-20 group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-500">
+                            <ArrowUpRight className="text-white group-hover:text-black transition-colors w-6 h-6" />
+                        </div>
+
+                        {/* Bottom info */}
+                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
+                            <div className="flex items-end justify-between gap-8">
+                                <div>
+                                    <span className="font-mono text-xs text-brand-lime mb-3 block tracking-widest">/{project.id}</span>
+                                    <h2 className="font-display font-bold text-3xl md:text-5xl lg:text-7xl text-white uppercase tracking-tighter leading-[0.9] group-hover:text-brand-lime transition-colors duration-500">
+                                        {project.title}
+                                    </h2>
+                                    <p className="font-mono text-xs md:text-sm text-white/50 mt-3 uppercase tracking-widest">
+                                        {project.category}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.a>
+                </AnimatePresence>
+            </div>
+
+            {/* Controls Bar */}
+            <div className="flex items-center justify-between mt-6 md:mt-8">
+                {/* Counter */}
+                <div className="font-mono text-sm text-gray-400 tracking-widest">
+                    <span className="text-white text-lg font-display font-bold">{String(current + 1).padStart(2, '0')}</span>
+                    <span className="mx-2 text-white/20">/</span>
+                    <span>{String(items.length).padStart(2, '0')}</span>
+                </div>
+
+                {/* Progress dots */}
+                <div className="hidden md:flex items-center gap-2">
+                    {items.map((_, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => {
+                                setDirection(idx > current ? 1 : -1);
+                                setCurrent(idx);
+                            }}
+                            className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${idx === current ? 'w-8 bg-brand-lime' : 'w-3 bg-white/20 hover:bg-white/40'
+                                }`}
+                            aria-label={`Go to project ${idx + 1}`}
+                        />
+                    ))}
+                </div>
+
+                {/* Arrow nav */}
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => paginate(-1)}
+                        className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-lime hover:border-brand-lime hover:text-black transition-all duration-300 text-white cursor-pointer group"
+                        aria-label="Previous project"
+                    >
+                        <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button
+                        onClick={() => paginate(1)}
+                        className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-lime hover:border-brand-lime hover:text-black transition-all duration-300 text-white cursor-pointer group"
+                        aria-label="Next project"
+                    >
+                        <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Thumbnail strip */}
+            <div className="mt-6 md:mt-8 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
+                {items.map((item, idx) => (
+                    <button
+                        key={item.id}
+                        onClick={() => {
+                            setDirection(idx > current ? 1 : -1);
+                            setCurrent(idx);
+                        }}
+                        className={`relative aspect-[4/3] overflow-hidden border transition-all duration-500 cursor-pointer ${idx === current
+                            ? 'border-brand-lime ring-1 ring-brand-lime/30'
+                            : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/30'
+                            }`}
+                        aria-label={`View ${item.title}`}
+                    >
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                        />
+                        {idx === current && (
+                            <motion.div
+                                layoutId="thumb-indicator"
+                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-lime"
+                            />
+                        )}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
 
+
+/* ─── Main Page ─── */
 const ProjectsPage: React.FC = () => {
+    const [viewMode, setViewMode] = useState<ViewMode>('carousel');
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    const viewModes: { mode: ViewMode; icon: React.ReactNode; label: string }[] = [
+        { mode: 'carousel', icon: <CarouselIcon />, label: 'Carousel' },
+        { mode: 'two-col', icon: <TwoColIcon />, label: '2 Columns' },
+        { mode: 'three-col', icon: <ThreeColIcon />, label: '3 Columns' },
+    ];
+
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 md:pt-48 pb-20 px-6">
             <div className="container mx-auto max-w-7xl">
-                {/* Hero section */}
-                <div className="mb-24 md:mb-40">
-                    <div className="overflow-hidden mb-4">
-                        <motion.h1
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-display font-bold text-6xl md:text-8xl lg:text-[10rem] text-white uppercase leading-[0.85] tracking-tighter"
-                        >
-                            SELECTED
-                        </motion.h1>
+
+                {/* ── Header Row ── */}
+                <div className="mb-16 md:mb-24">
+                    {/* Title */}
+                    <div className="mb-10 md:mb-16">
+                        <div className="overflow-hidden mb-2">
+                            <motion.h1
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                                className="font-display font-bold text-5xl md:text-7xl lg:text-[8rem] text-white uppercase leading-[0.85] tracking-tighter"
+                            >
+                                OUR
+                            </motion.h1>
+                        </div>
+                        <div className="overflow-hidden">
+                            <motion.h1
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                                className="font-display font-bold text-5xl md:text-7xl lg:text-[8rem] text-brand-lime uppercase leading-[0.85] tracking-tighter"
+                            >
+                                CRAFT
+                            </motion.h1>
+                        </div>
                     </div>
-                    <div className="overflow-hidden mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-0">
-                        <motion.h1
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-display font-bold text-6xl md:text-8xl lg:text-[10rem] text-brand-lime uppercase leading-[0.85] tracking-tighter"
-                        >
-                            WORKS
-                        </motion.h1>
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                            className="md:pb-4 max-w-xs"
-                        >
-                            <p className="font-mono text-xs md:text-sm text-gray-400 uppercase tracking-widest leading-relaxed">
-                                A curated collection of digital experiences designed and developed to elevate brands to the next level.
+
+                    {/* Toolbar row */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex items-center justify-between border-t border-b border-white/10 py-4"
+                    >
+                        {/* Left: Project count */}
+                        <div className="flex items-center gap-6">
+                            <p className="font-mono text-xs md:text-sm text-gray-400 uppercase tracking-widest">
+                                {projects.length} Projects
                             </p>
-                        </motion.div>
-                    </div>
+                        </div>
+
+                        {/* Right: View toggles */}
+                        <div className="flex items-center gap-1">
+                            {viewModes.map(({ mode, icon, label }) => (
+                                <button
+                                    key={mode}
+                                    onClick={() => setViewMode(mode)}
+                                    className={`p-2.5 md:p-3 transition-all duration-300 cursor-pointer relative ${viewMode === mode
+                                        ? 'text-brand-lime'
+                                        : 'text-gray-500 hover:text-white'
+                                        }`}
+                                    aria-label={`Switch to ${label} view`}
+                                    title={label}
+                                >
+                                    {icon}
+                                    {viewMode === mode && (
+                                        <motion.div
+                                            layoutId="view-indicator"
+                                            className="absolute -bottom-1 inset-x-0 mx-auto w-5 h-0.5 bg-brand-lime rounded-full"
+                                            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                        />
+                                    )}
+                                </button>
+                            ))}
+
+                            {/* Divider */}
+                            <div className="w-px h-5 bg-white/10 mx-2" />
+
+                            {/* Carousel left/right arrows (visible only in non-carousel modes for aesthetic balance) */}
+                            <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest hidden md:block">
+                                {viewMode === 'carousel' ? 'Use ← → keys' : `${viewMode === 'two-col' ? '2' : '3'} per row`}
+                            </span>
+                        </div>
+                    </motion.div>
                 </div>
 
-                {/* Projects Grid */}
-                <div className="flex flex-col">
-                    {projects.map((project, index) => (
-                        <ProjectCard key={project.id} project={project} index={index} />
-                    ))}
-                </div>
+                {/* ── Content Area ── */}
+                <LayoutGroup>
+                    <AnimatePresence mode="wait">
+                        {viewMode === 'carousel' ? (
+                            <motion.div
+                                key="carousel"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CarouselView projects={projects} />
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="grid"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className={`grid gap-5 md:gap-6 transition-all duration-500 ${viewMode === 'two-col'
+                                    ? 'grid-cols-1 md:grid-cols-2'
+                                    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                                    }`}
+                            >
+                                {projects.map((project, index) => (
+                                    <GridCard key={project.id} project={project} index={index} viewMode={viewMode} />
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </LayoutGroup>
             </div>
         </div>
     );
