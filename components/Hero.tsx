@@ -338,20 +338,19 @@ const Hero: React.FC = () => {
                 transition={{ delay: 1.8, duration: 0.8 }}
                 style={{ opacity }}
             >
-                <motion.div
-                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+                <motion.a
+                    href="/contact"
+                    className="px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer hover:bg-brand-lime/10 transition-colors pointer-events-auto"
                     animate={{ y: [0, -6, 0] }}
                     transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.history.pushState({}, '', '/contact');
+                        window.dispatchEvent(new Event('popstate'));
+                    }}
                 >
-                    <span className="font-mono text-[10px] text-brand-lime uppercase tracking-widest">● WEB DESIGN AGENCY</span>
-                </motion.div>
-                <motion.div
-                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
-                    animate={{ y: [0, -4, 0] }}
-                    transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 1 }}
-                >
-                    <span className="font-mono text-[10px] text-gray-400 uppercase tracking-widest">Cape Town, ZA</span>
-                </motion.div>
+                    <span className="font-mono text-xs text-brand-lime uppercase tracking-widest">● Let's work together</span>
+                </motion.a>
             </motion.div>
 
             {/* Interactive Canvas Layer (The Strings) */}

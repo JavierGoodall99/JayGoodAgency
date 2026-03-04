@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowDownRight, Award, Zap, Globe } from 'lucide-react';
 import SEO from './SEO';
+import Awards from './Awards';
 
 const team = [
   { name: 'JAVIER GOODALL', role: 'FOUNDER / DEVELOPER', image: '/me.png' }
@@ -29,7 +30,7 @@ const About: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-start border-t border-white/20 pt-8">
             <div className="md:w-1/3 mb-8 md:mb-0">
               <span className="font-mono text-xs uppercase tracking-widest text-brand-lime">
-                 // EST. 2022
+                 // INDEPENDENT AGENCY
               </span>
             </div>
             <div className="md:w-1/2">
@@ -46,7 +47,7 @@ const About: React.FC = () => {
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
           {[
             { label: 'HOUR SPRINTS', val: '16+' },
-            { label: 'FOUNDER', val: '1' },
+            { label: 'PIXEL PERFECT', val: '100%' },
             { label: 'DEDICATION', val: '∞' }
           ].map((stat, i) => (
             <div key={i} className="p-8 md:p-16 flex flex-col items-center justify-center hover:bg-white/5 transition-colors duration-500">
@@ -85,32 +86,8 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* TEAM */}
-      <section className="py-32 px-6 bg-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-        <div className="container mx-auto relative z-10">
-          <div className="mb-20">
-            <h2 className="font-display font-bold text-6xl md:text-8xl">THE <span className="text-brand-lime">FOUNDER</span></h2>
-          </div>
-
-          <div className="flex justify-center">
-            {team.map((member, i) => (
-              <div key={i} className="w-full max-w-lg group relative aspect-[3/4] overflow-hidden bg-brand-gray border border-white/10 cursor-interactive">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60"></div>
-                <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="font-display font-bold text-2xl text-white mb-1">{member.name}</h3>
-                  <p className="font-mono text-xs text-brand-lime uppercase tracking-widest">{member.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* AWARDS */}
+      <Awards />
 
 
 

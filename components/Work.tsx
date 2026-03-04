@@ -8,26 +8,34 @@ const projects: ProjectItem[] = [
         id: '01',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
-        image: '/projects/cloakly.png',
+        image: '/projects/devices/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
     {
         id: '02',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
-        image: '/projects/newgenmarketing.png',
+        image: '/projects/devices/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
     },
     {
         id: '03',
         title: 'RETRO RISE',
         category: 'RETRO GAME / ARCADE',
-        image: '/projects/retrorise.png',
+        image: '/projects/devices/retrorise.png',
         link: 'https://fliply-dba75.web.app/'
 
     },
     {
         id: '04',
+        title: 'BEDDING & GOWNS',
+        category: 'ECOMMERCE / FASHION',
+        image: '/projects/devices/beddingandgowns.png',
+        link: 'https://bedding-and-gowns.vercel.app'
+
+    },
+    {
+        id: '05',
         title: 'STUDIOS ELEVEN',
         category: 'AGENCY / CREATIVE',
         image: '/projects/studioseleven.png',
@@ -35,28 +43,28 @@ const projects: ProjectItem[] = [
 
     },
     {
-        id: '05',
+        id: '06',
         title: 'ZENITH',
         category: 'ECOMMERCE / FASHION',
         image: '/projects/zenith.png',
         link: 'https://zenithboutique.vercel.app/'
     },
     {
-        id: '06',
+        id: '07',
         title: 'RUIL MIJN WONING',
         category: 'REAL ESTATE / PLATFORM',
         image: '/projects/ruilmijnwoning.png',
         link: 'https://www.ruilmijnwoning.nl/'
     },
     {
-        id: '07',
+        id: '08',
         title: 'VELORA',
         category: 'AI MARKETING / SAAS',
         image: '/projects/velora.png',
         link: 'https://messagemarketingai.vercel.app/'
     },
     {
-        id: '08',
+        id: '09',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
         image: '/projects/javiergoodallportfolio.png',
@@ -233,11 +241,11 @@ const Work: React.FC = () => {
                                 >
                                     {/* Image Container */}
                                     <div className="relative aspect-video overflow-hidden mb-8 border border-white/10 bg-brand-dark">
-                                        <div className="absolute inset-0 bg-brand-lime/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+
                                         <motion.img
                                             src={project.image}
                                             alt={project.title}
-                                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                                            className="w-full h-full object-cover transition-all duration-700 ease-out"
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                         />

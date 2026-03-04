@@ -11,7 +11,7 @@ import About from './components/About';
 import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
 import ScrollManager from './components/ScrollManager';
-import Awards from './components/Awards';
+import TrustBar from './components/TrustBar';
 import { HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -110,7 +110,7 @@ const App: React.FC = () => {
         return (
           <>
             <Hero />
-            <Awards />
+            <TrustBar />
             <Work />
             <TiredOf />
             <Manifesto />

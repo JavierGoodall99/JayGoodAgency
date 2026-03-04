@@ -86,7 +86,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <div ref={col1Ref} className="scroll-reveal scroll-stagger-1">
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Contact</h4>
                         <a href="mailto:javiergoodall@outlook.com" className="block text-xl text-white hover:text-brand-lime transition-colors line-reveal">javiergoodall@outlook.com</a>
-                        <a href="tel:+27671435160" className="block text-xl text-white hover:text-brand-lime transition-colors mt-2">+27 67 143 5160</a>
+                        <a href="tel:+27842909844" className="block text-xl text-white hover:text-brand-lime transition-colors mt-2">+27 84 2909 844</a>
                     </div>
                     <div ref={col2Ref} className="scroll-reveal scroll-stagger-3">
                         <h4 className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4">Location</h4>
