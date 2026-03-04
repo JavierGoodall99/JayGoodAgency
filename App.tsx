@@ -92,17 +92,17 @@ const App: React.FC = () => {
     const url = page === 'home' ? '/' : `/${page}`;
     window.history.pushState({}, '', url);
 
-    // Swap content while curtain is covering the screen (at 40% of animation)
+    // Swap content when columns fully cover the screen (at 680ms)
     setTimeout(() => {
       setCurrentPage(page);
       window.scrollTo(0, 0);
-    }, 480); // 1200ms * 0.4 = 480ms
+    }, 680);
 
     // End transition after full animation
     setTimeout(() => {
       setIsTransitioning(false);
       pendingPageRef.current = null;
-    }, 1200);
+    }, 1500);
   }, [currentPage, isTransitioning]);
 
   const renderPageContent = () => {
@@ -148,26 +148,87 @@ const App: React.FC = () => {
           {/* Cinematic Page Transition Curtain */}
           <AnimatePresence>
             {isTransitioning && (
-              <motion.div
-                key="curtain"
-                className="fixed inset-0 z-[90] bg-brand-lime origin-top pointer-events-none"
-                variants={curtainVariants}
-                initial="initial"
-                animate="enter"
-                exit="initial"
-              >
-                {/* Centered page name during transition */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.span
-                    className="font-display font-bold text-5xl md:text-8xl text-black uppercase tracking-tighter"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0, transition: { delay: 0.15, duration: 0.3 } }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current === 'projects' ? 'WORK' : pendingPageRef.current?.toUpperCase()}
-                  </motion.span>
+              <div className="fixed inset-0 z-[90] pointer-events-none overflow-hidden flex flex-col items-center justify-center">
+
+                {/* 5 Staggered Columns Background */}
+                <div className="absolute inset-0 flex">
+                  {[...Array(5)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="h-full bg-brand-lime flex-1"
+                      initial={{ y: "100%" }}
+                      animate={{ y: ["100%", "0%", "0%", "100%"] }}
+                      transition={{
+                        duration: 1.2,
+                        ease: [0.76, 0, 0.24, 1],
+                        times: [0, 0.4, 0.6, 1],
+                        delay: i * 0.05
+                      }}
+                    />
+                  ))}
                 </div>
-              </motion.div>
+
+                {/* Corner markers */}
+                <motion.div
+                  className="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-black/30"
+                  animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.2, times: [0, 0.4, 0.6, 1], delay: 0.1 }}
+                />
+                <motion.div
+                  className="absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-black/30"
+                  animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.2, times: [0, 0.4, 0.6, 1], delay: 0.15 }}
+                />
+                <motion.div
+                  className="absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-black/30"
+                  animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.2, times: [0, 0.4, 0.6, 1], delay: 0.15 }}
+                />
+                <motion.div
+                  className="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-black/30"
+                  animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.2, times: [0, 0.4, 0.6, 1], delay: 0.2 }}
+                />
+
+                {/* Centered content */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  {/* Page name */}
+                  <div className="overflow-hidden">
+                    <motion.div
+                      className="flex items-center justify-center"
+                      initial={{ y: '100%' }}
+                      animate={{ y: ['100%', '0%', '0%', '100%'] }}
+                      transition={{
+                        duration: 1.2,
+                        ease: [0.76, 0, 0.24, 1],
+                        times: [0, 0.35, 0.65, 1],
+                        delay: 0.1
+                      }}
+                    >
+                      <span className="font-display font-bold text-6xl md:text-9xl text-black uppercase tracking-tighter inline-block px-4">
+                        {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current === 'projects' ? 'WORK' : pendingPageRef.current?.toUpperCase()}
+                      </span>
+                    </motion.div>
+                  </div>
+
+                  {/* Decorative subtitle */}
+                  <div className="overflow-hidden mt-4">
+                    <motion.span
+                      className="block font-mono text-[10px] md:text-xs text-black/50 uppercase tracking-[0.3em]"
+                      initial={{ y: '100%' }}
+                      animate={{ y: ['100%', '0%', '0%', '100%'] }}
+                      transition={{
+                        duration: 1.2,
+                        ease: [0.76, 0, 0.24, 1],
+                        times: [0, 0.35, 0.65, 1],
+                        delay: 0.15
+                      }}
+                    >
+                      — {pendingPageRef.current === 'home' ? 'AGENCY' : 'LOADING'} —
+                    </motion.span>
+                  </div>
+                </div>
+              </div>
             )}
           </AnimatePresence>
 
