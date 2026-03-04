@@ -4,31 +4,31 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 const cards = [
   {
     id: '01',
-    title: 'THE DISCOVERY',
-    description: 'We dig deep. We unearth the raw DNA of your brand before we write a single line of code.',
+    title: 'Strategy & Planning',
+    description: 'We start by understanding your business goals and user needs before writing any code.',
     bg: 'bg-[#0a0a0a]',
     color: 'text-white'
   },
   {
     id: '02',
-    title: 'THE ARCHITECTURE',
-    description: 'We build headless. We build scalable. We build for a future that hasn\'t happened yet.',
+    title: 'Design & Architecture',
+    description: 'We create user-centric designs and plan a solid technical foundation for your application.',
     bg: 'bg-[#111111]',
     color: 'text-brand-lime'
   },
   {
     id: '03',
-    title: 'THE EXECUTION',
-    description: 'Pixel perfection is the baseline. We aim for emotional resonance. Motion that feels like magic.',
+    title: 'Development',
+    description: 'We build your product with clean code, rigorous testing, and high attention to detail.',
     bg: 'bg-white',
     color: 'text-black'
   },
   {
     id: '04',
-    title: 'THE LAUNCH',
-    description: 'Not just a deploy. A cultural moment. We orchestrate the reveal for maximum impact.',
-    bg: 'bg-brand-lime',
-    color: 'text-black'
+    title: 'Launch & Support',
+    description: 'We deploy your project smoothly and provide ongoing support to ensure its success.',
+    bg: 'bg-[#050505]',
+    color: 'text-white'
   }
 ];
 
@@ -79,7 +79,7 @@ const Manifesto: React.FC = () => {
     <section className="bg-brand-dark relative pt-20 md:pt-32 pb-32">
       <div className="container mx-auto px-6 mb-16 md:mb-24">
         <div ref={headerRef} className="scroll-reveal">
-          <h2 className="font-display font-bold text-5xl md:text-6xl lg:text-8xl text-white mb-6">THE PROTOCOL</h2>
+          <h2 className="font-display font-bold text-5xl md:text-6xl lg:text-8xl text-white mb-6">OUR PROCESS</h2>
         </div>
         <div ref={lineRef} className="scroll-line-draw w-full h-px bg-white/10"></div>
       </div>

@@ -17,7 +17,7 @@ const Terms: React.FC = () => {
                     <p>All content, design, and code on this website are the intellectual property of JayGood Agency unless otherwise stated.</p>
 
                     <h3>3. Services</h3>
-                    <p>Our services are provided on a contract basis. Specific terms regarding project scope, payments, and deliverables will be outlined in individual service agreements.</p>
+                    <p>Our services are provided on a contract basis. Specific terms regarding work scope, payments, and deliverables will be outlined in individual service agreements.</p>
 
                     <h3>4. Limitation of Liability</h3>
                     <p>JayGood Agency shall not be held liable for any indirect, incidental, or consequential damages arising from the use of our website or services.</p>

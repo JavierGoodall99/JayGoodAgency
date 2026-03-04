@@ -41,15 +41,14 @@ Preview the production build:
 npm run preview
 ```
 
-
-## Project structure
+## Work structure
 
 - [App.tsx](App.tsx)
 - [index.tsx](index.tsx)
 - [components/](components/)
-	- [components/Hero.tsx](components/Hero.tsx)
-	- [components/Services.tsx](components/Services.tsx)
-	- [components/Work.tsx](components/Work.tsx)
-	- [components/Pricing.tsx](components/Pricing.tsx)
-	- [components/ContactPage.tsx](components/ContactPage.tsx)
-	- [components/Footer.tsx](components/Footer.tsx)
+  - [components/Hero.tsx](components/Hero.tsx)
+  - [components/Services.tsx](components/Services.tsx)
+  - [components/Work.tsx](components/Work.tsx)
+  - [components/Pricing.tsx](components/Pricing.tsx)
+  - [components/ContactPage.tsx](components/ContactPage.tsx)
+  - [components/Footer.tsx](components/Footer.tsx)

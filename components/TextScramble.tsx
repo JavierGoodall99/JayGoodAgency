@@ -6,6 +6,7 @@ interface TextScrambleProps {
     trigger?: 'hover' | 'visible' | 'both';
     speed?: number;
     scrambleChars?: string;
+    forceHover?: boolean;
 }
 
 const CHARS = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -16,6 +17,7 @@ const TextScramble: React.FC<TextScrambleProps> = ({
     trigger = 'both',
     speed = 30,
     scrambleChars = CHARS,
+    forceHover = false,
 }) => {
     const [displayText, setDisplayText] = useState(text);
     const [isRevealed, setIsRevealed] = useState(false);
@@ -99,14 +101,20 @@ const TextScramble: React.FC<TextScrambleProps> = ({
         return () => observer.unobserve(element);
     }, [trigger, scramble, text, scrambleChars]); // removed isRevealed from deps
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = useCallback(() => {
         if (trigger === 'hover' || trigger === 'both') {
             if (frameRef.current) window.clearTimeout(frameRef.current);
             iterationRef.current = 0;
             setIsRevealed(false);
             scramble();
         }
-    };
+    }, [trigger, scramble]);
+
+    useEffect(() => {
+        if (forceHover) {
+            handleMouseEnter();
+        }
+    }, [forceHover, handleMouseEnter]);
 
     return (
         <span

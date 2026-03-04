@@ -43,24 +43,24 @@ const ServicesPage: React.FC = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20">
             <SEO
-                title="Services"
-                description="Our services include high-end web design, full-stack development, e-commerce solutions, and digital strategy. We build digital products that dominate."
+                title="Services | Web Design Agency | JayGood"
+                description="Our services include high-end web design, full-stack development, e-commerce solutions, and digital strategy. We build digital products that dominate as a premier Web Design Agency."
                 canonical="https://jaygood.com/services"
             />
 
             {/* HERO */}
-            <section className="px-6 mb-32">
+            <section className="px-6 mb-20 md:mb-32">
                 <div className="container mx-auto">
-                    <div className="flex flex-col md:flex-row items-end justify-between mb-12">
-                        <h1 className="font-display font-bold text-[12vw] leading-[0.8] tracking-tighter mix-blend-difference">
-                            DIGITAL <br />
-                            <span className="text-brand-lime ml-[5vw]">ARSENAL</span>
+                    <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-8 lg:mb-12 gap-8 lg:gap-0">
+                        <h1 className="font-display font-bold text-[16vw] lg:text-[12vw] leading-[0.85] tracking-tighter mix-blend-difference">
+                            DIGITAL <br className="hidden sm:block" />
+                            <span className="text-brand-lime ml-0 sm:ml-[5vw]">ARSENAL</span>
                         </h1>
-                        <div className="hidden md:block text-right mb-4">
-                            <p className="font-mono text-xs uppercase tracking-widest text-gray-500 mb-2">
+                        <div className="lg:text-right mb-4 border-l-2 lg:border-l-0 border-brand-lime pl-4 lg:pl-0">
+                            <p className="font-mono text-[10px] lg:text-xs uppercase tracking-widest text-gray-400 lg:text-gray-500 mb-2">
                                 // CAPABILITIES
                             </p>
-                            <p className="max-w-xs text-gray-400 text-sm">
+                            <p className="max-w-xs text-gray-300 lg:text-gray-400 text-sm">
                                 Comprehensive solutions for ambitious brands. From napkin sketch to global scale.
                             </p>
                         </div>
@@ -69,32 +69,47 @@ const ServicesPage: React.FC = () => {
             </section>
 
             {/* INTERACTIVE SERVICE LIST */}
-            <section className="px-6 mb-32">
+            <section className="px-6 mb-20 md:mb-32">
                 <div className="container mx-auto flex flex-col lg:flex-row gap-16">
 
                     {/* Left: Navigation/List */}
-                    <div className="lg:w-1/2 flex flex-col">
+                    <div className="w-full lg:w-1/2 flex flex-col">
                         {services.map((s, idx) => (
                             <div
                                 key={s.id}
                                 className={`
-                                    border-t border-white/10 py-10 cursor-interactive group transition-all duration-500
+                                    border-t border-white/10 py-6 md:py-10 cursor-interactive group transition-all duration-500
                                     ${activeService === idx ? 'opacity-100' : 'opacity-40 hover:opacity-100'}
                                 `}
                                 onMouseEnter={() => setActiveService(idx)}
                                 onClick={() => setActiveService(idx)}
                             >
                                 <div className="flex items-center justify-between mb-4">
-                                    <div className="flex items-center gap-6">
-                                        <span className="font-mono text-brand-lime">/{s.id}</span>
-                                        <h2 className="font-display font-bold text-4xl md:text-5xl">{s.category}</h2>
+                                    <div className="flex items-center gap-4 md:gap-6">
+                                        <span className="font-mono text-sm md:text-base text-brand-lime">/{s.id}</span>
+                                        <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl">{s.category}</h2>
                                     </div>
                                     <ArrowUpRight className={`transition-transform duration-300 ${activeService === idx ? 'rotate-45 text-brand-lime' : 'text-white'}`} />
                                 </div>
-                                <div className={`overflow-hidden transition-all duration-500 ${activeService === idx ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                                    <p className="text-gray-400 text-lg leading-relaxed max-w-md pl-12">
+                                <div className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${activeService === idx ? 'max-h-[800px] opacity-100 mt-4 md:mt-0' : 'max-h-0 opacity-0'}`}>
+                                    <p className="text-gray-400 text-base md:text-lg leading-relaxed max-w-sm md:max-w-md pl-0 md:pl-12">
                                         {s.description}
                                     </p>
+
+                                    {/* Mobile Detail View embedded in accordion */}
+                                    <div className="lg:hidden pl-0 md:pl-12 mt-6 mb-4">
+                                        <div className="bg-white/[0.03] border border-white/10 p-5 md:p-6">
+                                            <h3 className="font-mono text-xs md:text-sm uppercase tracking-widest text-brand-lime mb-4">Included in {s.category}</h3>
+                                            <ul className="space-y-3">
+                                                {s.items.map((item, i) => (
+                                                    <li key={i} className="flex items-center gap-3 text-sm sm:text-base font-light">
+                                                        <CheckCircle2 size={16} className="text-gray-500 flex-shrink-0" />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -102,7 +117,7 @@ const ServicesPage: React.FC = () => {
                     </div>
 
                     {/* Right: Details/Preview */}
-                    <div className="lg:w-1/2 relative min-h-[50vh] hidden md:block">
+                    <div className="lg:w-1/2 relative min-h-[50vh] hidden lg:block">
                         {services.map((s, idx) => (
                             <div
                                 key={s.id}
@@ -135,60 +150,45 @@ const ServicesPage: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* Mobile Detail View (Simplified) */}
-                    <div className="md:hidden">
-                        <div className="bg-white/[0.03] border border-white/10 p-6">
-                            <h3 className="font-mono text-sm uppercase tracking-widest text-brand-lime mb-4">Included in {services[activeService].category}</h3>
-                            <ul className="space-y-3">
-                                {services[activeService].items.map((item, i) => (
-                                    <li key={i} className="flex items-center gap-3 text-lg font-light">
-                                        <CheckCircle2 size={16} className="text-gray-500" />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
             </section>
 
             {/* TECH STACK MARQUEE */}
-            <section className="py-20 border-y border-white/10 bg-brand-lime text-black overflow-hidden mb-32">
-                <div className="container mx-auto px-6 mb-8">
-                    <span className="font-mono text-xs uppercase tracking-widest border-b border-black/20 pb-1">Our Toolbelt</span>
+            <section className="py-12 md:py-20 border-y border-white/10 bg-brand-lime text-black overflow-hidden mb-20 md:mb-32">
+                <div className="container mx-auto px-6 mb-6 md:mb-8">
+                    <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest border-b border-black/20 pb-1">Our Toolbelt</span>
                 </div>
-                <div className="flex gap-12 animate-marquee whitespace-nowrap">
+                <div className="flex gap-8 md:gap-12 animate-marquee whitespace-nowrap items-center">
                     {[...techStack, ...techStack, ...techStack].map((tech, i) => (
-                        <div key={i} className="flex items-center gap-12">
-                            <span className="font-display font-bold text-6xl md:text-8xl opacity-80">{tech}</span>
-                            <div className="w-4 h-4 bg-black rounded-full"></div>
+                        <div key={i} className="flex items-center gap-8 md:gap-12">
+                            <span className="font-display font-bold text-4xl md:text-6xl lg:text-8xl opacity-80">{tech}</span>
+                            <div className="w-2 h-2 md:w-4 md:h-4 bg-black rounded-full"></div>
                         </div>
                     ))}
                 </div>
             </section>
 
             {/* PROCESS */}
-            <section className="px-6 mb-20">
+            <section className="px-6 mb-20 md:mb-32">
                 <div className="container mx-auto">
-                    <div className="flex flex-col md:flex-row gap-16">
-                        <div className="md:w-1/3">
-                            <h2 className="font-display font-bold text-5xl md:text-6xl mb-6">HOW WE<br />WORK</h2>
-                            <p className="text-gray-400 text-lg">
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+                        <div className="lg:w-1/3">
+                            <h2 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 lg:mb-6">HOW WE<br className="hidden lg:block" />WORK</h2>
+                            <p className="text-gray-400 text-base md:text-lg max-w-md lg:max-w-none">
                                 Chaos to clarity. Our process is a refined loop of exploration, definition, and execution.
                             </p>
                         </div>
-                        <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
                             {[
                                 { step: '01', title: 'DISCOVERY', text: 'Immersion workshops, stakeholder interviews, and data analysis to find the "why".' },
                                 { step: '02', title: 'DEFINITION', text: 'Establishing the visual direction, technical architecture, and content strategy.' },
                                 { step: '03', title: 'CREATION', text: 'Iterative design and development sprints. Frequent demos. Radical transparency.' },
                                 { step: '04', title: 'DEPLOYMENT', text: 'QA testing, performance tuning, and the go-live sequence. We ensure a smooth lift-off.' }
                             ].map((p, i) => (
-                                <div key={i} className="border border-white/10 p-8 hover:bg-white/[0.02] transition-colors group">
-                                    <span className="block font-mono text-brand-lime text-xl mb-4">/{p.step}</span>
-                                    <h3 className="font-display font-bold text-2xl mb-4 group-hover:translate-x-2 transition-transform">{p.title}</h3>
-                                    <p className="text-gray-400 font-light">{p.text}</p>
+                                <div key={i} className="border border-white/10 p-6 md:p-8 hover:bg-white/[0.02] transition-colors group">
+                                    <span className="block font-mono text-brand-lime text-sm md:text-xl mb-3 md:mb-4">/{p.step}</span>
+                                    <h3 className="font-display font-bold text-xl md:text-2xl mb-3 md:mb-4 group-hover:translate-x-2 transition-transform">{p.title}</h3>
+                                    <p className="text-gray-400 font-light text-sm md:text-base">{p.text}</p>
                                 </div>
                             ))}
                         </div>

@@ -8,7 +8,7 @@ interface Award {
     id: string;
     title: string;
     category: string;
-    project: string;
+    work: string;
     image: string;
 }
 
@@ -17,28 +17,28 @@ const awards: Award[] = [
         id: '01',
         title: 'BEST UI DESIGN',
         category: 'CSS Design Awards',
-        project: 'JayGood Agency',
+        work: 'JayGood Agency',
         image: '/awards/cssda-best-ui-white.png'
     },
     {
         id: '02',
         title: 'BEST UX DESIGN',
         category: 'CSS Design Awards',
-        project: 'JayGood Agency',
+        work: 'JayGood Agency',
         image: '/awards/cssda-best-ux-white.png'
     },
     {
         id: '03',
         title: 'BEST INNOVATION',
         category: 'CSS Design Awards',
-        project: 'JayGood Agency',
+        work: 'JayGood Agency',
         image: '/awards/cssda-best-inn-white.png'
     },
     {
         id: '04',
         title: 'SPECIAL KUDOS',
         category: 'CSS Design Awards',
-        project: 'JayGood Agency',
+        work: 'JayGood Agency',
         image: '/awards/cssda-special-kudos-white.png'
     }
 ];

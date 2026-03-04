@@ -1,42 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
 interface LoaderProps {
   onComplete: () => void;
 }
 
-const bootText = [
-  "INITIALIZING KERNEL...",
-  "LOADING ASSETS...",
-  "OPTIMIZING WEBGL...",
-  "ESTABLISHING SECURE CONNECTION...",
-  "RENDERING VIEWPORT...",
-  "SYSTEM READY"
-];
+// ── Character Scramble Helper ────────────────────────────────────
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
-  const [textIndex, setTextIndex] = useState(0);
-  const [isExiting, setIsExiting] = useState(false);
+const useScrambleText = (target: string, trigger: number) => {
+  const [text, setText] = useState('');
+  const frameRef = useRef<number>(0);
 
-  // Spring-animated progress value
-  const rawProgress = useMotionValue(0);
-  const springProgress = useSpring(rawProgress, { damping: 30, stiffness: 100, mass: 0.8 });
-  const displayProgress = useTransform(springProgress, (v) => Math.round(v));
-  const [displayValue, setDisplayValue] = useState(0);
-
-  // Subscribe to display value changes
   useEffect(() => {
-    const unsubscribe = displayProgress.on('change', (v) => {
-      setDisplayValue(v);
+    let iteration = 0;
+    const maxIterations = target.length * 3;
 
-      // Update text based on progress
-      const index = Math.min(Math.floor((v / 100) * bootText.length), bootText.length - 1);
-      setTextIndex(index);
+    const animate = () => {
+      iteration++;
+      const result = target
+        .split('')
+        .map((char, i) => {
+          if (char === ' ') return ' ';
+          if (iteration / 3 > i) return char;
+          return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        })
+        .join('');
+
+      setText(result);
+
+      if (iteration < maxIterations) {
+        frameRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    frameRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [target, trigger]);
+
+  return text;
+};
+
+// ── Main Loader ──────────────────────────────────────────────────
+const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
+  const [isExiting, setIsExiting] = useState(false);
+  const [displayValue, setDisplayValue] = useState(0);
+  const [phase, setPhase] = useState<'boot' | 'loading' | 'ready'>('boot');
+
+  const rawProgress = useMotionValue(0);
+  const springProgress = useSpring(rawProgress, { damping: 50, stiffness: 200, mass: 0.5 });
+
+  // Phase-based status text
+  const statusLabel =
+    phase === 'boot' ? 'INITIALIZING' :
+      phase === 'ready' ? 'READY' : 'LOADING';
+
+  const scrambledStatus = useScrambleText(statusLabel, phase === 'boot' ? 0 : phase === 'loading' ? 1 : 2);
+
+  // Subscribe to spring progress
+  useEffect(() => {
+    const unsub = springProgress.on('change', (v) => {
+      const val = Math.round(v);
+      setDisplayValue(val);
+      if (val > 5 && phase === 'boot') setPhase('loading');
+      if (val >= 100) setPhase('ready');
     });
-    return () => unsubscribe();
-  }, [displayProgress]);
+    return () => unsub();
+  }, [springProgress, phase]);
 
-  // Drive progress smoothly
+  // Drive the progress
   useEffect(() => {
     let frame: number;
     let current = 0;
@@ -44,104 +76,172 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
     const tick = () => {
       if (current >= 100) {
         rawProgress.set(100);
-        // Complete sequence
-        const timeout = setTimeout(() => {
+        const t = setTimeout(() => {
           setIsExiting(true);
           setTimeout(onComplete, 1000);
         }, 500);
-        return () => clearTimeout(timeout);
+        return () => clearTimeout(t);
       }
 
-      // Organic acceleration: slow start, ramp up, slow finish
-      const normalizedProgress = current / 100;
-      const speed = normalizedProgress < 0.3
-        ? 0.8 + Math.random() * 1.2
-        : normalizedProgress < 0.8
-          ? 1.5 + Math.random() * 2.5
-          : 0.5 + Math.random() * 0.8;
+      const n = current / 100;
+      let speed: number;
+      if (n < 0.2) speed = 0.4 + Math.random() * 0.6;
+      else if (n < 0.6) speed = 1.5 + Math.random() * 2.0;
+      else if (n < 0.85) speed = 2.0 + Math.random() * 2.5;
+      else speed = 0.3 + Math.random() * 0.5;
 
       current = Math.min(current + speed, 100);
       rawProgress.set(current);
-
       frame = requestAnimationFrame(tick);
     };
 
-    // Small delay before starting for dramatic effect
-    const startDelay = setTimeout(() => {
+    const delay = setTimeout(() => {
       frame = requestAnimationFrame(tick);
-    }, 300);
+    }, 400);
 
     return () => {
       cancelAnimationFrame(frame);
-      clearTimeout(startDelay);
+      clearTimeout(delay);
     };
   }, [onComplete, rawProgress]);
 
+  // Format digits
+  const digits = String(displayValue).padStart(3, ' ');
+
   return (
     <motion.div
-      className={`fixed inset-0 z-[100] bg-[#050505] flex flex-col justify-between px-6 py-8 md:p-12 transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isExiting ? '-translate-y-full' : 'translate-y-0'
-        }`}
+      className={`fixed inset-0 z-[100] flex flex-col transition-transform duration-[900ms]`}
+      style={{
+        background: '#050505',
+        transitionTimingFunction: 'cubic-bezier(0.76, 0, 0.24, 1)',
+        transform: isExiting ? 'translateY(-100%)' : 'translateY(0%)',
+      }}
+      role="progressbar"
+      aria-valuenow={displayValue}
+      aria-valuemin={0}
+      aria-valuemax={100}
     >
-      {/* Animated grid background */}
+      {/* ─── Subtle vignette ─── */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10 pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          maskImage: `radial-gradient(circle at 50% 50%, black ${displayValue}%, transparent ${displayValue + 20}%)`,
-          WebkitMaskImage: `radial-gradient(circle at 50% 50%, black ${displayValue}%, transparent ${displayValue + 20}%)`,
+          background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%)',
         }}
       />
 
-      {/* Horizontal sweep line */}
+      {/* ─── Full-width top line ─── */}
       <motion.div
-        className="absolute left-0 h-px bg-brand-lime z-10"
+        className="absolute top-0 left-0 h-px"
         style={{
-          top: `${100 - displayValue}%`,
-          width: '100%',
-          opacity: displayValue < 100 ? 0.6 : 0,
-          boxShadow: '0 0 20px rgba(204, 255, 0, 0.4)',
+          width: `${displayValue}%`,
+          background: '#ccff00',
+          boxShadow: '0 0 20px rgba(204,255,0,0.3)',
+          transition: 'width 0.15s ease-out',
         }}
       />
 
-      {/* Top Bar */}
-      <div className="flex justify-between items-start opacity-50 relative z-20">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-brand-lime rounded-full animate-pulse"></div>
-          <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">JayGood.agency</span>
+      {/* ─── Top Section ─── */}
+      <motion.div
+        className="relative z-10 flex justify-between items-start px-6 pt-6 md:px-10 md:pt-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ duration: 1, delay: 0.2 }}
+      >
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-[6px] h-[6px] rounded-full"
+            style={{
+              background: '#ccff00',
+              boxShadow: '0 0 6px rgba(204,255,0,0.5)',
+            }}
+          />
+          <span className="font-mono text-[10px] text-white/60 tracking-[0.3em] uppercase">
+            JayGood
+          </span>
         </div>
-        <div className="hidden md:block font-mono text-xs text-white uppercase tracking-widest text-right">
-          <div>Mem: 64GB OK</div>
-          <div>Gpu: DETECTED</div>
-        </div>
-      </div>
 
-      {/* Center Percentage — Spring Animated */}
-      <div className="relative z-20">
-        <h1 className="font-display font-bold text-[20vw] md:text-[18rem] leading-none text-white mix-blend-difference select-none tabular-nums">
-          {displayValue}%
-        </h1>
-        {/* Decorative Grid Line */}
-        <div className="absolute top-1/2 left-0 w-full h-px bg-white/10 -z-10"></div>
-      </div>
+        <span className="font-mono text-[10px] text-white/30 tracking-[0.2em] uppercase hidden md:block">
+          ©{new Date().getFullYear()}
+        </span>
+      </motion.div>
 
-      {/* Bottom Info */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-4 relative z-20">
-        <div className="w-full md:w-64">
-          <div className="font-mono text-xs text-brand-lime mb-2 tracking-widest uppercase animate-pulse">
-            {">"} {bootText[textIndex]}
+      {/* ─── Center: The Number ─── */}
+      <div className="flex-1 flex items-center justify-center relative z-10 px-6">
+        <div className="relative">
+          {/* Main number */}
+          <div className="overflow-hidden">
+            <motion.h1
+              className="font-display font-bold leading-[0.85] select-none tabular-nums text-center"
+              style={{
+                fontSize: 'clamp(8rem, 28vw, 22rem)',
+                color: '#ffffff',
+                letterSpacing: '-0.04em',
+              }}
+              initial={{ y: '100%' }}
+              animate={{ y: '0%' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            >
+              {digits}
+            </motion.h1>
           </div>
-          {/* Progress Bar */}
-          <div className="w-full h-1 bg-white/10 overflow-hidden">
-            <motion.div
-              className="h-full bg-brand-lime"
-              style={{ width: springProgress.get() + '%' }}
-            />
-          </div>
-        </div>
 
-        <div className="font-mono text-xs text-gray-500 uppercase tracking-widest hidden md:block">
-          v3.0.0 // AWWWARDS EDITION {new Date().getFullYear()}
+          {/* Accent line under the number */}
+          <motion.div
+            className="mx-auto mt-4 md:mt-6"
+            style={{
+              height: '1px',
+              width: `${Math.max(displayValue, 2)}%`,
+              background: 'linear-gradient(90deg, transparent, rgba(204,255,0,0.4), transparent)',
+              transition: 'width 0.2s ease-out',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          />
         </div>
       </div>
+
+      {/* ─── Bottom Section ─── */}
+      <motion.div
+        className="relative z-10 px-6 pb-6 md:px-10 md:pb-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.4 }}
+      >
+        <div className="flex justify-between items-end">
+          {/* Left: Status */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <motion.span
+                className="font-mono text-[10px] tracking-[0.3em] uppercase"
+                style={{ color: 'rgba(204,255,0,0.6)' }}
+                animate={{ opacity: displayValue < 100 ? [1, 0.3, 1] : 1 }}
+                transition={{ duration: 1.2, repeat: displayValue < 100 ? Infinity : 0 }}
+              >
+                {scrambledStatus}
+              </motion.span>
+            </div>
+
+            {/* Progress bar */}
+            <div className="relative overflow-hidden" style={{ width: '160px', height: '1px' }}>
+              <div className="absolute inset-0 bg-white/[0.06]" />
+              <motion.div
+                className="absolute inset-y-0 left-0"
+                style={{
+                  width: `${displayValue}%`,
+                  background: '#ccff00',
+                  transition: 'width 0.15s ease-out',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Right: Meta */}
+          <span className="font-mono text-[10px] text-white/20 tracking-[0.2em] uppercase hidden md:block">
+            Digital Experience Agency
+          </span>
+        </div>
+      </motion.div>
     </motion.div>
   );
 };

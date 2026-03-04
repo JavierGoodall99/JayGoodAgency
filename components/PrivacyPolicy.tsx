@@ -22,7 +22,7 @@ const PrivacyPolicy: React.FC = () => {
                     <p>We use essential cookies to ensure the website functions correctly. You can control cookie preferences through your browser settings.</p>
 
                     <h3>4. Contact</h3>
-                    <p>For any privacy concerns, please contact us at <a href="mailto:javiergoodall@outlook.com" className="text-brand-lime">javiergoodall@outlook.com</a>.</p>
+                    <p>For any privacy concerns, please contact us at <a href="mailto: hello@jaygood.com" className="text-brand-lime"> hello@jaygood.com</a>.</p>
                 </div>
             </div>
         </div>

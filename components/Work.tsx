@@ -1,70 +1,82 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { ProjectItem } from '../types';
+import { WorkItem } from '../types';
 import { motion } from 'framer-motion';
 
-const projects: ProjectItem[] = [
+const work: WorkItem[] = [
     {
         id: '01',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
-        image: '/projects/cloakly.png',
+        image: '/work/devices/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
     {
         id: '02',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
-        image: '/projects/newgenmarketing.png',
+        image: '/work/devices/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
     },
     {
         id: '03',
         title: 'RETRO RISE',
         category: 'RETRO GAME / ARCADE',
-        image: '/projects/retrorise.png',
+        image: '/work/devices/retrorise.png',
         link: 'https://fliply-dba75.web.app/'
 
     },
     {
         id: '04',
-        title: 'STUDIOS ELEVEN',
-        category: 'AGENCY / CREATIVE',
-        image: '/projects/studioseleven.png',
-        link: 'https://studioeleven.vercel.app/'
+        title: 'BEDDING & GOWNS',
+        category: 'ECOMMERCE / FASHION',
+        image: '/work/devices/beddingandgowns.png',
+        link: 'https://bedding-and-gowns.vercel.app'
 
     },
     {
         id: '05',
-        title: 'ZENITH',
-        category: 'ECOMMERCE / FASHION',
-        image: '/projects/zenith.png',
-        link: 'https://zenithboutique.vercel.app/'
+        title: 'STUDIOS ELEVEN',
+        category: 'AGENCY / CREATIVE',
+        image: '/work/studioseleven.png',
+        link: 'https://studioeleven.vercel.app/'
+
     },
     {
         id: '06',
-        title: 'RUIL MIJN WONING',
-        category: 'REAL ESTATE / PLATFORM',
-        image: '/projects/ruilmijnwoning.png',
-        link: 'https://www.ruilmijnwoning.nl/'
+        title: 'ZENITH',
+        category: 'ECOMMERCE / FASHION',
+        image: '/work/zenith.png',
+        link: 'https://zenithboutique.vercel.app/'
     },
     {
         id: '07',
-        title: 'VELORA',
-        category: 'AI MARKETING / SAAS',
-        image: '/projects/velora.png',
-        link: 'https://messagemarketingai.vercel.app/'
+        title: 'RUIL MIJN WONING',
+        category: 'REAL ESTATE / PLATFORM',
+        image: '/work/ruilmijnwoning.png',
+        link: 'https://www.ruilmijnwoning.nl/'
     },
     {
         id: '08',
+        title: 'VELORA',
+        category: 'AI MARKETING / SAAS',
+        image: '/work/velora.png',
+        link: 'https://messagemarketingai.vercel.app/'
+    },
+    {
+        id: '09',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
-        image: '/projects/javiergoodallportfolio.png',
+        image: '/work/javiergoodallportfolio.png',
         link: 'https://javiergoodall.vercel.app/'
     }
 ];
 
-const Work: React.FC = () => {
+interface WorkProps {
+    onNavigate?: (page: string) => void;
+}
+
+const Work: React.FC<WorkProps> = ({ onNavigate }) => {
     const sectionRef = useRef<HTMLElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -149,7 +161,7 @@ const Work: React.FC = () => {
             <div className="block md:hidden py-10 px-6">
                 <div className="mb-12">
                     <h2 className="font-display font-bold text-5xl text-white leading-none mb-4">
-                        LATEST <span className="text-brand-lime">WORK</span>
+                        FEATURED <span className="text-brand-lime">WORK</span>
                     </h2>
                     <p className="font-mono text-sm uppercase tracking-widest text-gray-500">
                         Case Studies
@@ -157,29 +169,29 @@ const Work: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-16">
-                    {projects.map((project) => (
+                    {work.slice(0, 4).map((work) => (
                         <a
-                            key={project.id}
-                            href={project.link}
+                            key={work.id}
+                            href={work.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group block"
-                            data-cursor="project"
+                            data-cursor="work"
                         >
                             <div className="relative aspect-video overflow-hidden mb-6 border border-white/10">
                                 <img
-                                    src={project.image}
-                                    alt={project.title}
+                                    src={work.image}
+                                    alt={work.title}
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full">
-                                    <span className="font-mono text-[10px] text-white uppercase tracking-widest">{project.category}</span>
+                                    <span className="font-mono text-[10px] text-white uppercase tracking-widest">{work.category}</span>
                                 </div>
                             </div>
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <span className="text-brand-lime font-mono text-xs mb-1 block">/{project.id}</span>
-                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{project.title}</h3>
+                                    <span className="text-brand-lime font-mono text-xs mb-1 block">/{work.id}</span>
+                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{work.title}</h3>
                                 </div>
                                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                                     <ArrowUpRight size={18} className="text-white" />
@@ -188,6 +200,23 @@ const Work: React.FC = () => {
                         </a>
                     ))}
 
+                    <a
+                        href="/work"
+                        onClick={(e) => {
+                            if (onNavigate) {
+                                e.preventDefault();
+                                onNavigate('work');
+                            }
+                        }}
+                        className="group flex flex-col items-center justify-center border border-white/10 hover:border-brand-lime py-16 transition-colors duration-500 bg-white/5 hover:bg-white/10"
+                    >
+                        <h3 className="font-display font-bold text-3xl text-white group-hover:text-brand-lime transition-colors duration-300 mb-6 uppercase">
+                            View All
+                        </h3>
+                        <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
+                            <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -199,12 +228,12 @@ const Work: React.FC = () => {
                     <div className="container mx-auto px-6 pt-10 md:pt-20 flex justify-between items-end shrink-0 relative z-20">
                         <div>
                             <h2 className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-none">
-                                LATEST <span className="text-brand-lime">WORK</span>
+                                FEATURED <span className="text-brand-lime">WORK</span>
                             </h2>
                         </div>
                         <div className="hidden md:block text-right">
                             <p className="font-mono text-sm uppercase tracking-widest text-gray-500 mb-2">
-                                Projects
+                                Work
                             </p>
                             <div className="text-brand-lime font-mono text-xs">
                                 ( Scroll )
@@ -216,44 +245,44 @@ const Work: React.FC = () => {
                     <div className="flex-grow flex items-center relative z-10 w-full">
                         <div
                             ref={trackRef}
-                            className="flex gap-12 md:gap-24 pl-6 md:pl-32 items-center w-max will-change-transform"
+                            className="flex gap-12 md:gap-24 px-6 md:px-32 items-center w-max will-change-transform"
                             style={{
                                 transform: `translate3d(-${scrollProgress * maxTranslate}%, 0, 0) skewX(${Math.max(-5, Math.min(5, scrollVelocity * -0.08))}deg)`,
                                 transition: 'transform 0.05s linear',
                             }}
                         >
-                            {projects.map((project, index) => (
+                            {work.slice(0, 4).map((work, index) => (
                                 <a
-                                    key={project.id}
-                                    href={project.link}
+                                    key={work.id}
+                                    href={work.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="relative group w-[85vw] md:w-[60vw] lg:w-[50vw] flex-shrink-0 block"
-                                    data-cursor="project"
+                                    data-cursor="work"
                                 >
                                     {/* Image Container */}
                                     <div className="relative aspect-video overflow-hidden mb-8 border border-white/10 bg-brand-dark">
-                                        <div className="absolute inset-0 bg-brand-lime/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+
                                         <motion.img
-                                            src={project.image}
-                                            alt={project.title}
-                                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                                            src={work.image}
+                                            alt={work.title}
+                                            className="w-full h-full object-cover transition-all duration-700 ease-out"
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                         />
 
                                         {/* Floating Badge */}
                                         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full z-20">
-                                            <span className="font-mono text-xs text-white uppercase tracking-widest">{project.category}</span>
+                                            <span className="font-mono text-xs text-white uppercase tracking-widest">{work.category}</span>
                                         </div>
                                     </div>
 
                                     {/* Info */}
                                     <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-pointer">
                                         <div>
-                                            <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
+                                            <span className="block font-mono text-sm text-brand-lime mb-2">/{work.id}</span>
                                             <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
-                                                {project.title}
+                                                {work.title}
                                             </h3>
                                         </div>
                                         <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
@@ -263,7 +292,25 @@ const Work: React.FC = () => {
                                 </a>
                             ))}
 
-
+                            {/* View All Work Block */}
+                            <a
+                                href="/work"
+                                onClick={(e) => {
+                                    if (onNavigate) {
+                                        e.preventDefault();
+                                        onNavigate('work');
+                                    }
+                                }}
+                                className="relative group w-[85vw] md:w-[60vw] lg:w-[40vw] flex-shrink-0 flex flex-col items-center justify-center aspect-[4/3] md:aspect-video border border-white/10 hover:border-brand-lime transition-colors duration-500 bg-white/5 hover:bg-white/10"
+                                data-cursor="work"
+                            >
+                                <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300 mb-6 text-center">
+                                    VIEW ALL
+                                </h3>
+                                <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
+                                    <ArrowUpRight className="text-white group-hover:text-black transition-colors" />
+                                </div>
+                            </a>
                         </div>
                     </div>
 

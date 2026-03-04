@@ -19,6 +19,12 @@ const ScrollManager: React.FC = () => {
 
         setLenis(lenisInstance);
 
+        const handleScrollToTop = () => {
+            lenisInstance.scrollTo(0, { duration: 1.5 });
+        };
+
+        window.addEventListener('scroll-to-top', handleScrollToTop);
+
         function raf(time: number) {
             lenisInstance.raf(time);
             requestAnimationFrame(raf);
@@ -27,6 +33,7 @@ const ScrollManager: React.FC = () => {
         requestAnimationFrame(raf);
 
         return () => {
+            window.removeEventListener('scroll-to-top', handleScrollToTop);
             lenisInstance.destroy();
         };
     }, []);

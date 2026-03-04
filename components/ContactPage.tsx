@@ -7,24 +7,24 @@ const ContactPage: React.FC = () => {
         {
             id: '01',
             label: 'EMAIL',
-            value: 'javiergoodall@outlook.com',
-            href: 'mailto:javiergoodall@outlook.com',
+            value: ' hello@jaygood.com',
+            href: 'mailto: hello@jaygood.com',
             icon: <Mail className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'For inquiries, pitches, and love letters.'
         },
         {
             id: '02',
             label: 'WHATSAPP',
-            value: '+27 67 143 5160',
-            href: 'https://wa.me/27671435160',
+            value: '+27 84 2909 844',
+            href: 'https://wa.me/27842909844',
             icon: <MessageCircle className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Quick comms. Encrypted end-to-end.'
         },
         {
             id: '03',
             label: 'PHONE',
-            value: '+27 67 143 5160',
-            href: 'tel:+27671435160',
+            value: '+27 84 2909 844',
+            href: 'tel:+27842909844',
             icon: <Phone className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Emergency / Direct Line.'
         }
@@ -33,8 +33,8 @@ const ContactPage: React.FC = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20 flex flex-col">
             <SEO
-                title="Contact"
-                description="Ready to disrupt? Contact JayGood Agency for your next web project. Direct lines only, no forms."
+                title="Contact | Web Design Agency | JayGood"
+                description="Ready to disrupt? Contact JayGood, the premier Web Design Agency, for your next web work. Direct lines only, no forms."
                 canonical="https://jaygood.com/contact"
             />
 

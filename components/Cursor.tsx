@@ -71,13 +71,13 @@ const Cursor: React.FC = () => {
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const isInteractive = target.closest('a, button, input, textarea, .cursor-interactive');
-      const isProject = target.closest('[data-cursor="project"]');
+      const isWork = target.closest('[data-cursor="work"]');
       const isDrag = target.closest('[data-cursor="drag"]');
       const isEmail = target.closest('[href^="mailto:"]');
 
       setIsHovering(!!isInteractive);
 
-      if (isProject) {
+      if (isWork) {
         setCursorText('VIEW');
       } else if (isDrag) {
         setCursorText('DRAG');
