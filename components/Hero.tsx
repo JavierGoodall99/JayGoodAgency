@@ -272,7 +272,7 @@ const Hero: React.FC = () => {
                         initial="hidden"
                         animate="visible"
                     >
-                        <h1 className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] whitespace-nowrap flex">
+                        <h1 className="font-display font-bold text-[12vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-[#1a1a1a] whitespace-nowrap flex">
                             {"BUILDING THE".split('').map((char, index) => (
                                 <motion.span key={index} variants={itemVariants} className="inline-block relative">
                                     {char === ' ' ? '\u00A0' : char}
@@ -287,7 +287,7 @@ const Hero: React.FC = () => {
                         initial="hidden"
                         animate="visible"
                     >
-                        <span className="font-display font-bold text-[10vw] leading-[0.85] tracking-tighter text-white whitespace-nowrap flex">
+                        <span className="font-display font-bold text-[12vw] sm:text-[10vw] leading-[0.85] tracking-tighter text-white whitespace-nowrap flex">
                             {"MODERN WEB".split('').map((char, index) => (
                                 <motion.span key={index} variants={itemVariants} className="inline-block relative">
                                     {char === ' ' ? '\u00A0' : char}
@@ -303,7 +303,7 @@ const Hero: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.2, duration: 0.8 }}
                 >
-                    <p className="font-mono text-gray-500 text-sm uppercase tracking-widest leading-loose">
+                    <p className="font-mono text-gray-500 text-xs sm:text-sm uppercase tracking-widest leading-loose">
                         Engineering digital gravity.<br />
                         <span className="text-brand-lime">Strum the chords of the web.</span>
                     </p>
@@ -332,7 +332,7 @@ const Hero: React.FC = () => {
 
             {/* Floating Status Badges — glassmorphism */}
             <motion.div
-                className="absolute top-24 right-8 md:top-32 md:right-16 z-20 flex flex-col gap-3 items-end"
+                className="absolute top-24 right-4 md:top-32 md:right-16 z-20 flex flex-col gap-3 items-end"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.8, duration: 0.8 }}
@@ -340,7 +340,7 @@ const Hero: React.FC = () => {
             >
                 <motion.a
                     href="/contact"
-                    className="px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer hover:bg-brand-lime/10 transition-colors pointer-events-auto"
+                    className="px-4 py-2 sm:px-6 sm:py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer hover:bg-brand-lime/10 transition-colors pointer-events-auto"
                     animate={{ y: [0, -6, 0] }}
                     transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
                     onClick={(e) => {

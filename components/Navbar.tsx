@@ -150,7 +150,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         {isOpen && (
           <motion.div
             ref={menuContainerRef}
-            className="fixed inset-0 z-[80] bg-[#050505] text-white overflow-hidden"
+            className="fixed inset-0 z-[80] bg-[#050505] text-white overflow-y-auto overflow-x-hidden scrollbar-hide flex flex-col"
             initial="closed"
             animate="open"
             exit="closed"
@@ -203,7 +203,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
             </AnimatePresence>
 
             {/* ── Content ── */}
-            <div className="container mx-auto px-6 lg:px-12 w-full max-w-[1400px] h-full flex flex-col lg:flex-row pt-28 md:pt-32 pb-8 relative z-10">
+            <div className="container mx-auto px-6 lg:px-12 w-full max-w-[1400px] flex-grow flex flex-col lg:flex-row pt-28 pb-12 md:pt-32 md:pb-24 relative z-10 shrink-0">
 
               {/* LEFT: Nav Links */}
               <div className="w-full lg:w-7/12 flex flex-col justify-center" style={{ perspective: '1000px' }}>
@@ -233,7 +233,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
 
 
                           {/* Counter */}
-                          <span className="font-mono text-[10px] md:text-sm text-brand-lime/60 tracking-widest translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 min-w-[2.5rem]">
+                          <span className="hidden md:block font-mono text-[10px] md:text-sm text-brand-lime/60 tracking-widest translate-y-8 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 min-w-[2.5rem]">
                             ({link.id})
                           </span>
 
@@ -252,7 +252,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
                           </span>
 
                           {/* Arrow that slides in */}
-                          <span className="ml-auto mr-4 opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                          <span className="hidden md:block ml-auto mr-4 opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-brand-lime">
                               <path d="M8 16H24M24 16L18 10M24 16L18 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -265,8 +265,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
               </div>
 
               {/* RIGHT: Info Column */}
-              <div className="w-full lg:w-5/12 flex flex-col justify-end lg:items-end lg:text-right mt-12 lg:mt-0 lg:pb-8">
-                <div className="flex flex-row lg:flex-col gap-10 lg:gap-14">
+              <div className="w-full lg:w-5/12 flex flex-col justify-end lg:items-end lg:text-right mt-12 mb-8 lg:mb-0 lg:mt-0 lg:pb-8">
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-10 sm:gap-6 lg:gap-14 justify-between sm:justify-start">
 
                   <motion.div custom={0} variants={fadeUp} initial="closed" animate="open" exit="closed">
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-600 mb-3">Say hello</p>
@@ -320,7 +320,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/[0.06]"
+              className="w-full mt-auto z-20 border-t border-white/[0.06] shrink-0 bg-[#050505] relative"
             >
               <div className="container mx-auto px-6 lg:px-12 w-full max-w-[1400px] py-5 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p className="font-mono text-[10px] text-gray-600 uppercase tracking-widest">

@@ -299,7 +299,7 @@ const CarouselView: React.FC<{ work: WorkItem[] }> = ({ work: items }) => {
             </div>
 
             {/* Thumbnail strip */}
-            <div className="mt-6 md:mt-8 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
+            <div className="mt-6 md:mt-8 flex overflow-x-auto snap-x md:grid md:grid-cols-6 lg:grid-cols-9 gap-2 pb-4 md:pb-0 scrollbar-hide">
                 {items.map((item, idx) => (
                     <button
                         key={item.id}
@@ -307,7 +307,7 @@ const CarouselView: React.FC<{ work: WorkItem[] }> = ({ work: items }) => {
                             setDirection(idx > current ? 1 : -1);
                             setCurrent(idx);
                         }}
-                        className={`relative aspect-[4/3] overflow-hidden border transition-all duration-500 cursor-pointer ${idx === current
+                        className={`relative w-24 md:w-auto flex-shrink-0 snap-start aspect-[4/3] overflow-hidden border transition-all duration-500 cursor-pointer ${idx === current
                             ? 'border-brand-lime ring-1 ring-brand-lime/30'
                             : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/30'
                             }`}
@@ -396,9 +396,10 @@ const WorkPage: React.FC = () => {
                                 <button
                                     key={mode}
                                     onClick={() => setViewMode(mode)}
-                                    className={`p-2.5 md:p-3 transition-all duration-300 cursor-pointer relative ${viewMode === mode
-                                        ? 'text-brand-lime'
-                                        : 'text-gray-500 hover:text-white'
+                                    className={`p-2.5 md:p-3 transition-all duration-300 cursor-pointer relative ${mode === 'three-col' ? 'hidden md:block' : ''
+                                        } ${viewMode === mode
+                                            ? 'text-brand-lime'
+                                            : 'text-gray-500 hover:text-white'
                                         }`}
                                     aria-label={`Switch to ${label} view`}
                                     title={label}
@@ -447,7 +448,7 @@ const WorkPage: React.FC = () => {
                                 transition={{ duration: 0.3 }}
                                 className={`grid gap-5 md:gap-6 transition-all duration-500 ${viewMode === 'two-col'
                                     ? 'grid-cols-1 md:grid-cols-2'
-                                    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
                                     }`}
                             >
                                 {work.map((work, index) => (
