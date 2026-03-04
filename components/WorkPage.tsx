@@ -1,70 +1,70 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ProjectItem } from '../types';
+import { WorkItem } from '../types';
 
-const projects: ProjectItem[] = [
+const work: WorkItem[] = [
     {
         id: '01',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
-        image: '/projects/devices/cloakly.png',
+        image: '/work/devices/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
     {
         id: '02',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
-        image: '/projects/devices/newgenmarketing.png',
+        image: '/work/devices/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
     },
     {
         id: '03',
         title: 'RETRO RISE',
         category: 'RETRO GAME / ARCADE',
-        image: '/projects/devices/retrorise.png',
+        image: '/work/devices/retrorise.png',
         link: 'https://fliply-dba75.web.app/'
     },
     {
         id: '04',
         title: 'BEDDING & GOWNS',
         category: 'ECOMMERCE / FASHION',
-        image: '/projects/devices/beddingandgowns.png',
+        image: '/work/devices/beddingandgowns.png',
         link: 'https://bedding-and-gowns.vercel.app'
     },
     {
         id: '05',
         title: 'STUDIOS ELEVEN',
         category: 'AGENCY / CREATIVE',
-        image: '/projects/studioseleven.png',
+        image: '/work/studioseleven.png',
         link: 'https://studioeleven.vercel.app/'
     },
     {
         id: '06',
         title: 'ZENITH',
         category: 'ECOMMERCE / FASHION',
-        image: '/projects/zenith.png',
+        image: '/work/zenith.png',
         link: 'https://zenithboutique.vercel.app/'
     },
     {
         id: '07',
         title: 'RUIL MIJN WONING',
         category: 'REAL ESTATE / PLATFORM',
-        image: '/projects/ruilmijnwoning.png',
+        image: '/work/ruilmijnwoning.png',
         link: 'https://www.ruilmijnwoning.nl/'
     },
     {
         id: '08',
         title: 'VELORA',
         category: 'AI MARKETING / SAAS',
-        image: '/projects/velora.png',
+        image: '/work/velora.png',
         link: 'https://messagemarketingai.vercel.app/'
     },
     {
         id: '09',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
-        image: '/projects/javiergoodallportfolio.png',
+        image: '/work/javiergoodallportfolio.png',
         link: 'https://javiergoodall.vercel.app/'
     }
 ];
@@ -95,8 +95,8 @@ const ThreeColIcon = () => (
     </svg>
 );
 
-/* ─── Project Card (Grid View) ─── */
-const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMode }> = ({ project, index, viewMode }) => {
+/* ─── Work Card (Grid View) ─── */
+const GridCard: React.FC<{ work: WorkItem; index: number; viewMode: ViewMode }> = ({ work, index, viewMode }) => {
     return (
         <motion.div
             layout
@@ -107,10 +107,10 @@ const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMo
             className="group relative"
         >
             <a
-                href={project.link}
+                href={work.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="project"
+                data-cursor="work"
                 className="block"
             >
                 {/* Image Container */}
@@ -119,8 +119,8 @@ const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMo
                     <div className="absolute inset-0 bg-brand-lime/0 group-hover:bg-brand-lime/10 transition-colors duration-700 z-10 pointer-events-none mix-blend-overlay" />
 
                     <motion.img
-                        src={project.image}
-                        alt={project.title}
+                        src={work.image}
+                        alt={work.title}
                         className="w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                     />
 
@@ -132,7 +132,7 @@ const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMo
                     {/* Category badge */}
                     <div className="absolute bottom-4 left-4 z-20">
                         <span className="font-mono text-[10px] md:text-xs text-white/60 uppercase tracking-widest bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/5">
-                            {project.category}
+                            {work.category}
                         </span>
                     </div>
                 </div>
@@ -141,10 +141,10 @@ const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMo
                 <div className="pt-3 pb-2 flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1">
-                            <span className="font-mono text-[10px] text-brand-lime">/{project.id}</span>
+                            <span className="font-mono text-[10px] text-brand-lime">/{work.id}</span>
                         </div>
                         <h3 className={`font-display font-bold text-white uppercase tracking-tight leading-tight group-hover:text-brand-lime transition-colors duration-500 ${viewMode === 'three-col' ? 'text-sm md:text-base' : 'text-base md:text-lg lg:text-xl'}`}>
-                            {project.title}
+                            {work.title}
                         </h3>
                     </div>
                 </div>
@@ -154,7 +154,7 @@ const GridCard: React.FC<{ project: ProjectItem; index: number; viewMode: ViewMo
 };
 
 /* ─── Carousel View ─── */
-const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }) => {
+const CarouselView: React.FC<{ work: WorkItem[] }> = ({ work: items }) => {
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(0);
 
@@ -178,7 +178,7 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [paginate]);
 
-    const project = items[current];
+    const work = items[current];
 
     const slideVariants = {
         enter: (dir: number) => ({
@@ -212,16 +212,16 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
                         initial="enter"
                         animate="center"
                         exit="exit"
-                        href={project.link}
+                        href={work.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        data-cursor="project"
+                        data-cursor="work"
                         className="absolute inset-0 block group"
                     >
                         {/* Image */}
                         <img
-                            src={project.image}
-                            alt={project.title}
+                            src={work.image}
+                            alt={work.title}
                             className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                         />
 
@@ -240,12 +240,12 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
                         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
                             <div className="flex items-end justify-between gap-8">
                                 <div>
-                                    <span className="font-mono text-xs text-brand-lime mb-3 block tracking-widest">/{project.id}</span>
+                                    <span className="font-mono text-xs text-brand-lime mb-3 block tracking-widest">/{work.id}</span>
                                     <h2 className="font-display font-bold text-3xl md:text-5xl lg:text-7xl text-white uppercase tracking-tighter leading-[0.9] group-hover:text-brand-lime transition-colors duration-500">
-                                        {project.title}
+                                        {work.title}
                                     </h2>
                                     <p className="font-mono text-xs md:text-sm text-white/50 mt-3 uppercase tracking-widest">
-                                        {project.category}
+                                        {work.category}
                                     </p>
                                 </div>
                             </div>
@@ -274,7 +274,7 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
                             }}
                             className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${idx === current ? 'w-8 bg-brand-lime' : 'w-3 bg-white/20 hover:bg-white/40'
                                 }`}
-                            aria-label={`Go to project ${idx + 1}`}
+                            aria-label={`Go to work ${idx + 1}`}
                         />
                     ))}
                 </div>
@@ -284,14 +284,14 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
                     <button
                         onClick={() => paginate(-1)}
                         className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-lime hover:border-brand-lime hover:text-black transition-all duration-300 text-white cursor-pointer group"
-                        aria-label="Previous project"
+                        aria-label="Previous work"
                     >
                         <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     </button>
                     <button
                         onClick={() => paginate(1)}
                         className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-lime hover:border-brand-lime hover:text-black transition-all duration-300 text-white cursor-pointer group"
-                        aria-label="Next project"
+                        aria-label="Next work"
                     >
                         <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     </button>
@@ -333,7 +333,7 @@ const CarouselView: React.FC<{ projects: ProjectItem[] }> = ({ projects: items }
 
 
 /* ─── Main Page ─── */
-const ProjectsPage: React.FC = () => {
+const WorkPage: React.FC = () => {
     const [viewMode, setViewMode] = useState<ViewMode>('carousel');
 
     useEffect(() => {
@@ -383,10 +383,10 @@ const ProjectsPage: React.FC = () => {
                         transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                         className="flex items-center justify-between border-t border-b border-white/10 py-4"
                     >
-                        {/* Left: Project count */}
+                        {/* Left: Work count */}
                         <div className="flex items-center gap-6">
                             <p className="font-mono text-xs md:text-sm text-gray-400 uppercase tracking-widest">
-                                {projects.length} Projects
+                                {work.length} work
                             </p>
                         </div>
 
@@ -436,7 +436,7 @@ const ProjectsPage: React.FC = () => {
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <CarouselView projects={projects} />
+                                <CarouselView work={work} />
                             </motion.div>
                         ) : (
                             <motion.div
@@ -450,8 +450,8 @@ const ProjectsPage: React.FC = () => {
                                     : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                                     }`}
                             >
-                                {projects.map((project, index) => (
-                                    <GridCard key={project.id} project={project} index={index} viewMode={viewMode} />
+                                {work.map((work, index) => (
+                                    <GridCard key={work.id} work={work} index={index} viewMode={viewMode} />
                                 ))}
                             </motion.div>
                         )}
@@ -462,4 +462,4 @@ const ProjectsPage: React.FC = () => {
     );
 };
 
-export default ProjectsPage;
+export default WorkPage;

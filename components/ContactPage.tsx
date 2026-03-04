@@ -34,7 +34,7 @@ const ContactPage: React.FC = () => {
         <div className="bg-brand-dark min-h-screen text-white pt-32 pb-20 flex flex-col">
             <SEO
                 title="Contact"
-                description="Ready to disrupt? Contact JayGood Agency for your next web project. Direct lines only, no forms."
+                description="Ready to disrupt? Contact JayGood Agency for your next web work. Direct lines only, no forms."
                 canonical="https://jaygood.com/contact"
             />
 

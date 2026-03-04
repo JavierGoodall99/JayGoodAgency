@@ -1,28 +1,28 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { ProjectItem } from '../types';
+import { WorkItem } from '../types';
 import { motion } from 'framer-motion';
 
-const projects: ProjectItem[] = [
+const work: WorkItem[] = [
     {
         id: '01',
         title: 'CLOAKLY',
         category: 'APP / PRIVACY',
-        image: '/projects/devices/cloakly.png',
+        image: '/work/devices/cloakly.png',
         link: 'https://www.getcloakly.com/'
     },
     {
         id: '02',
         title: 'NEW GEN MARKETING',
         category: 'DIGITAL MARKETING',
-        image: '/projects/devices/newgenmarketing.png',
+        image: '/work/devices/newgenmarketing.png',
         link: 'https://newgenmarketingzw.com/'
     },
     {
         id: '03',
         title: 'RETRO RISE',
         category: 'RETRO GAME / ARCADE',
-        image: '/projects/devices/retrorise.png',
+        image: '/work/devices/retrorise.png',
         link: 'https://fliply-dba75.web.app/'
 
     },
@@ -30,7 +30,7 @@ const projects: ProjectItem[] = [
         id: '04',
         title: 'BEDDING & GOWNS',
         category: 'ECOMMERCE / FASHION',
-        image: '/projects/devices/beddingandgowns.png',
+        image: '/work/devices/beddingandgowns.png',
         link: 'https://bedding-and-gowns.vercel.app'
 
     },
@@ -38,7 +38,7 @@ const projects: ProjectItem[] = [
         id: '05',
         title: 'STUDIOS ELEVEN',
         category: 'AGENCY / CREATIVE',
-        image: '/projects/studioseleven.png',
+        image: '/work/studioseleven.png',
         link: 'https://studioeleven.vercel.app/'
 
     },
@@ -46,28 +46,28 @@ const projects: ProjectItem[] = [
         id: '06',
         title: 'ZENITH',
         category: 'ECOMMERCE / FASHION',
-        image: '/projects/zenith.png',
+        image: '/work/zenith.png',
         link: 'https://zenithboutique.vercel.app/'
     },
     {
         id: '07',
         title: 'RUIL MIJN WONING',
         category: 'REAL ESTATE / PLATFORM',
-        image: '/projects/ruilmijnwoning.png',
+        image: '/work/ruilmijnwoning.png',
         link: 'https://www.ruilmijnwoning.nl/'
     },
     {
         id: '08',
         title: 'VELORA',
         category: 'AI MARKETING / SAAS',
-        image: '/projects/velora.png',
+        image: '/work/velora.png',
         link: 'https://messagemarketingai.vercel.app/'
     },
     {
         id: '09',
         title: 'JAVIER GOODALL',
         category: 'PORTFOLIO / PERSONAL',
-        image: '/projects/javiergoodallportfolio.png',
+        image: '/work/javiergoodallportfolio.png',
         link: 'https://javiergoodall.vercel.app/'
     }
 ];
@@ -169,29 +169,29 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="flex flex-col gap-16">
-                    {projects.slice(0, 4).map((project) => (
+                    {work.slice(0, 4).map((work) => (
                         <a
-                            key={project.id}
-                            href={project.link}
+                            key={work.id}
+                            href={work.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group block"
-                            data-cursor="project"
+                            data-cursor="work"
                         >
                             <div className="relative aspect-video overflow-hidden mb-6 border border-white/10">
                                 <img
-                                    src={project.image}
-                                    alt={project.title}
+                                    src={work.image}
+                                    alt={work.title}
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full">
-                                    <span className="font-mono text-[10px] text-white uppercase tracking-widest">{project.category}</span>
+                                    <span className="font-mono text-[10px] text-white uppercase tracking-widest">{work.category}</span>
                                 </div>
                             </div>
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <span className="text-brand-lime font-mono text-xs mb-1 block">/{project.id}</span>
-                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{project.title}</h3>
+                                    <span className="text-brand-lime font-mono text-xs mb-1 block">/{work.id}</span>
+                                    <h3 className="font-display font-bold text-3xl text-white mb-2">{work.title}</h3>
                                 </div>
                                 <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
                                     <ArrowUpRight size={18} className="text-white" />
@@ -201,11 +201,11 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
                     ))}
 
                     <a
-                        href="/projects"
+                        href="/work"
                         onClick={(e) => {
                             if (onNavigate) {
                                 e.preventDefault();
-                                onNavigate('projects');
+                                onNavigate('work');
                             }
                         }}
                         className="group flex flex-col items-center justify-center border border-white/10 hover:border-brand-lime py-16 transition-colors duration-500 bg-white/5 hover:bg-white/10"
@@ -233,7 +233,7 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
                         </div>
                         <div className="hidden md:block text-right">
                             <p className="font-mono text-sm uppercase tracking-widest text-gray-500 mb-2">
-                                Projects
+                                Work
                             </p>
                             <div className="text-brand-lime font-mono text-xs">
                                 ( Scroll )
@@ -251,21 +251,21 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
                                 transition: 'transform 0.05s linear',
                             }}
                         >
-                            {projects.slice(0, 4).map((project, index) => (
+                            {work.slice(0, 4).map((work, index) => (
                                 <a
-                                    key={project.id}
-                                    href={project.link}
+                                    key={work.id}
+                                    href={work.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="relative group w-[85vw] md:w-[60vw] lg:w-[50vw] flex-shrink-0 block"
-                                    data-cursor="project"
+                                    data-cursor="work"
                                 >
                                     {/* Image Container */}
                                     <div className="relative aspect-video overflow-hidden mb-8 border border-white/10 bg-brand-dark">
 
                                         <motion.img
-                                            src={project.image}
-                                            alt={project.title}
+                                            src={work.image}
+                                            alt={work.title}
                                             className="w-full h-full object-cover transition-all duration-700 ease-out"
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -273,16 +273,16 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
 
                                         {/* Floating Badge */}
                                         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full z-20">
-                                            <span className="font-mono text-xs text-white uppercase tracking-widest">{project.category}</span>
+                                            <span className="font-mono text-xs text-white uppercase tracking-widest">{work.category}</span>
                                         </div>
                                     </div>
 
                                     {/* Info */}
                                     <div className="flex justify-between items-end border-b border-white/20 pb-6 group-hover:border-brand-lime transition-colors duration-500 cursor-pointer">
                                         <div>
-                                            <span className="block font-mono text-sm text-brand-lime mb-2">/{project.id}</span>
+                                            <span className="block font-mono text-sm text-brand-lime mb-2">/{work.id}</span>
                                             <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300">
-                                                {project.title}
+                                                {work.title}
                                             </h3>
                                         </div>
                                         <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-brand-lime group-hover:border-brand-lime transition-all duration-300">
@@ -292,17 +292,17 @@ const Work: React.FC<WorkProps> = ({ onNavigate }) => {
                                 </a>
                             ))}
 
-                            {/* View All Projects Block */}
+                            {/* View All Work Block */}
                             <a
-                                href="/projects"
+                                href="/work"
                                 onClick={(e) => {
                                     if (onNavigate) {
                                         e.preventDefault();
-                                        onNavigate('projects');
+                                        onNavigate('work');
                                     }
                                 }}
                                 className="relative group w-[85vw] md:w-[60vw] lg:w-[40vw] flex-shrink-0 flex flex-col items-center justify-center aspect-[4/3] md:aspect-video border border-white/10 hover:border-brand-lime transition-colors duration-500 bg-white/5 hover:bg-white/10"
-                                data-cursor="project"
+                                data-cursor="work"
                             >
                                 <h3 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-brand-lime transition-colors duration-300 mb-6 text-center">
                                     VIEW ALL

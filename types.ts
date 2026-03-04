@@ -5,7 +5,7 @@ export interface ServiceItem {
   tags: string[];
 }
 
-export interface ProjectItem {
+export interface WorkItem {
   id: string;
   title: string;
   category: string;

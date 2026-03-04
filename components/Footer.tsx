@@ -170,7 +170,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                         <div>
                             <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold mb-3 opacity-40">Navigation</p>
                             <ul className="flex flex-col gap-1.5">
-                                {['Home', 'About', 'Projects', 'Services'].map((page) => (
+                                {['Home', 'About', 'Work', 'Services'].map((page) => (
                                     <li key={page}>
                                         <button
                                             onClick={() => onNavigate(page.toLowerCase())}

@@ -12,7 +12,7 @@ import ServicesPage from './components/ServicesPage';
 import ContactPage from './components/ContactPage';
 import ScrollManager from './components/ScrollManager';
 import TrustBar from './components/TrustBar';
-import ProjectsPage from './components/ProjectsPage';
+import WorkPage from './components/WorkPage';
 import { HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -59,11 +59,27 @@ const App: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const pendingPageRef = useRef<string | null>(null);
 
+  // Lock scroll to top during loading — prevent any scroll offset
+  useEffect(() => {
+    if (loading) {
+      window.scrollTo(0, 0);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [loading]);
+
   // Handle URL synchronization
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.substring(1) || 'home';
-      if (['home', 'about', 'projects', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
+      if (['home', 'about', 'work', 'services', 'contact', 'privacy', 'terms'].includes(path)) {
         setCurrentPage(path);
       }
     };
@@ -72,7 +88,7 @@ const App: React.FC = () => {
 
     // Initial check
     const initialPath = window.location.pathname.substring(1) || 'home';
-    if (['home', 'about', 'projects', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
+    if (['home', 'about', 'work', 'services', 'contact', 'privacy', 'terms'].includes(initialPath)) {
       if (initialPath !== 'home') {
         setCurrentPage(initialPath);
       }
@@ -119,8 +135,8 @@ const App: React.FC = () => {
         );
       case 'about':
         return <About />;
-      case 'projects':
-        return <ProjectsPage />;
+      case 'work':
+        return <WorkPage />;
       case 'services':
         return <ServicesPage />;
       case 'contact':
@@ -142,7 +158,7 @@ const App: React.FC = () => {
           <Cursor />
           {!loading && <ScrollManager />}
           <AnimatePresence mode="wait">
-            {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
+            {loading && <Loader key="loader" onComplete={() => { window.scrollTo(0, 0); setLoading(false); }} />}
           </AnimatePresence>
 
           {/* Cinematic Page Transition Curtain */}
@@ -206,7 +222,7 @@ const App: React.FC = () => {
                       }}
                     >
                       <span className="font-display font-bold text-6xl md:text-9xl text-black uppercase tracking-tighter inline-block px-4">
-                        {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current === 'projects' ? 'WORK' : pendingPageRef.current?.toUpperCase()}
+                        {pendingPageRef.current === 'home' ? 'JAYGOOD' : pendingPageRef.current === 'work' ? 'WORK' : pendingPageRef.current?.toUpperCase()}
                       </span>
                     </motion.div>
                   </div>
@@ -232,7 +248,7 @@ const App: React.FC = () => {
             )}
           </AnimatePresence>
 
-          <Navbar onNavigate={handleNavigation} currentPage={currentPage} />
+          {!loading && <Navbar onNavigate={handleNavigation} currentPage={currentPage} />}
 
           <main id="main-content" className="flex-grow relative" role="main" tabIndex={-1}>
             <AnimatePresence mode="wait">
