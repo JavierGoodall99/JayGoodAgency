@@ -98,7 +98,12 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigation = useCallback((page: string) => {
-    if (page === currentPage || isTransitioning) return;
+    if (page === currentPage || isTransitioning) {
+      if (page === currentPage && !isTransitioning) {
+        window.dispatchEvent(new CustomEvent('scroll-to-top'));
+      }
+      return;
+    }
 
     // Start the curtain transition
     setIsTransitioning(true);

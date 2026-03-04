@@ -192,9 +192,14 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
                 {/* ─── Bottom Banner: Giant Logo & Copyright ─── */}
                 <div className="w-full flex justify-center overflow-hidden mb-6 md:mb-8">
-                    <h1 className="font-display font-bold text-[19vw] leading-[0.75] tracking-tighter uppercase text-center w-full">
-                        JAYGOOD<span className="text-white" style={{ WebkitTextStroke: 'max(2px, 0.5vw) black' }}>.</span>
-                    </h1>
+                    <button
+                        onClick={() => onNavigate('home')}
+                        className="w-full"
+                    >
+                        <h1 className="font-display font-bold text-[19vw] leading-[0.75] tracking-tighter uppercase text-center w-full hover:italic transition-all duration-300">
+                            JAYGOOD<span className="text-white" style={{ WebkitTextStroke: 'max(2px, 0.5vw) black' }}>.</span>
+                        </h1>
+                    </button>
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] px-2 md:px-0">

@@ -65,9 +65,13 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
   }, []);
 
   const handleNavigation = (pageName: string) => {
-    setIsOpen(false);
-    setActiveIndex(null);
-    setTimeout(() => onNavigate(pageName), 700);
+    if (isOpen) {
+      setIsOpen(false);
+      setActiveIndex(null);
+      setTimeout(() => onNavigate(pageName), 700);
+    } else {
+      onNavigate(pageName);
+    }
   };
 
   // ─── VARIANTS ───
@@ -108,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         {/* Left: Logo */}
         <div className="pointer-events-auto w-1/3">
           <button
-            onClick={() => { if (isOpen) setIsOpen(false); else onNavigate('home'); }}
+            onClick={() => handleNavigation('home')}
             className="font-display font-bold text-2xl tracking-tighter group hover:italic transition-all duration-300"
           >
             JAYGOOD<span className="text-brand-lime group-hover:opacity-50 transition-opacity">.</span>
