@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight, Mail, Phone, Globe, MessageCircle } from 'lucide-react';
 import SEO from './SEO';
+import BusinessCard from './BusinessCard';
 
 const ContactPage: React.FC = () => {
     const contactMethods = [
@@ -39,15 +40,21 @@ const ContactPage: React.FC = () => {
             />
 
             <section className="px-6 mb-16 md:mb-24">
-                <div className="container mx-auto">
-                    <h1 className="font-display font-bold text-[12vw] leading-[0.8] tracking-tighter mix-blend-difference mb-8">
-                        CONTACT <br />
-                        <span className="text-brand-lime ml-[10vw]">UPLINK</span>
-                    </h1>
-                    <p className="font-mono text-gray-500 text-sm md:text-base uppercase tracking-widest max-w-xl">
-                        We don't do forms. We do direct connections. <br />
-                        Choose your frequency.
-                    </p>
+                <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+                    <div className="w-full lg:w-1/2">
+                        <h1 className="font-display font-bold text-[12vw] lg:text-[8vw] leading-[0.8] tracking-tighter mix-blend-difference mb-8">
+                            CONTACT <br />
+                            <span className="text-brand-lime ml-[5vw] lg:ml-0">UPLINK</span>
+                        </h1>
+                        <p className="font-mono text-gray-500 text-sm md:text-base uppercase tracking-widest max-w-xl">
+                            We don't do forms. We do direct connections. <br />
+                            Choose your frequency.
+                        </p>
+                    </div>
+
+                    <div className="w-full lg:w-1/2 flex justify-center lg:justify-end perspective-1000">
+                        <BusinessCard />
+                    </div>
                 </div>
             </section>
 
