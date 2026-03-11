@@ -24,7 +24,7 @@ const ContactPage: React.FC = () => {
         {
             id: '03',
             label: 'PHONE',
-            value: '+27 84 2909 844',
+            value: '+27 67 143 5160',
             href: 'tel:+27671435160',
             icon: <Phone className="w-8 h-8 md:w-12 md:h-12" />,
             subtext: 'Emergency / Direct Line.'
@@ -100,34 +100,6 @@ const ContactPage: React.FC = () => {
                                 </div>
                             </a>
                         ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="px-6 mt-20">
-                <div className="container mx-auto">
-                    <div className="border border-white/10 p-8 md:p-12 bg-white/[0.01] flex flex-col md:flex-row items-center gap-8 md:gap-16">
-                        <div className="relative w-24 h-24 flex-shrink-0 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-brand-lime/20 rounded-full blur-xl animate-pulse"></div>
-                            <Globe className="text-white relative z-10 animate-spin-slow" size={48} strokeWidth={1} />
-                        </div>
-
-                        <div className="text-center md:text-left">
-                            <h3 className="font-mono text-xs uppercase tracking-widest text-brand-lime mb-2">Physical Coordinates</h3>
-                            <p className="font-display text-2xl md:text-3xl text-white mb-2">
-                                1200 Digital Blvd, Suite 404 <span className="text-gray-500 mx-2">//</span> Cape Town, South Africa
-                            </p>
-                            <p className="text-gray-500 font-mono text-sm">
-                                33.9249° S, 18.4241° E
-                            </p>
-                        </div>
-
-                        <div className="md:ml-auto">
-                            <div className="px-4 py-2 border border-brand-lime/30 bg-brand-lime/10 rounded-full flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></div>
-                                <span className="font-mono text-xs text-brand-lime tracking-widest uppercase">Open Now</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
